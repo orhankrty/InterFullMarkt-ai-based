@@ -13,22 +13,22 @@ public sealed class League : BaseEntity, IAuditEntity, ISoftDelete
     /// <summary>
     /// Ligin adı (İspanyol Ligi, Bundesliga, vb.)
     /// </summary>
-    public required string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Ligin bulunduğu ülke
     /// </summary>
-    public required Nationality Country { get; set; }
+    public Nationality Country { get; set; } = null!;
 
     /// <summary>
     /// Ligin seviyesi (1 = En yüksek lig, 2 = İkinci lig, vb.)
     /// </summary>
-    public required int Tier { get; set; }
+    public int Tier { get; set; }
 
     /// <summary>
     /// UEFA/Uluslararası başarı katsayısı (0.0 - 10.0)
     /// </summary>
-    public required decimal Coefficient { get; set; }
+    public decimal Coefficient { get; set; }
 
     /// <summary>
     /// Ligin slogan veya açıklaması

@@ -2,6 +2,7 @@ namespace InterFullMarkt.Domain.Entities;
 
 using InterFullMarkt.Domain.Common;
 using InterFullMarkt.Domain.ValueObjects;
+using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
 /// Transfer varlığı - Projenin en kritik 'Transaction' noktasıdır.
@@ -54,7 +55,11 @@ public sealed class Transfer : BaseEntity, IAuditEntity, ISoftDelete
     public DateTime? DeletedDate { get; set; }
     public string? DeletedByUserId { get; set; }
 
-    private Transfer() { }
+    [SetsRequiredMembers]
+    private Transfer() 
+    { 
+        Fee = null!;
+    }
 
     /// <summary>
     /// Yeni transfer oluşturur
@@ -65,6 +70,7 @@ public sealed class Transfer : BaseEntity, IAuditEntity, ISoftDelete
     /// <param name="fee">Transfer ücreti</param>
     /// <param name="transferDate">Transfer tarihi</param>
     /// <param name="transferType">Transfer tipi</param>
+    [SetsRequiredMembers]
     public Transfer(
         Guid fromClubId,
         Guid toClubId,
@@ -128,8 +134,8 @@ public sealed class Transfer : BaseEntity, IAuditEntity, ISoftDelete
             throw new InvalidOperationException($"{toClub.Name} kadrosu dolu!");
 
         // 4. Alan kulübün bütçesi yeterli mi?
-        if (toClub.Budget != null && Fee > toClub.Budget)
-            throw new InvalidOperationException($"{toClub.Name} bütçesi yetersiz! Tersiyorum: {Fee}, Mevcut: {toClub.Budget}");
+        if (toClub.Budget is Money budget && Fee > budget)
+            throw new InvalidOperationException($"{toClub.Name} bütçesi yetersiz! Transfer Ücreti: {Fee}, Mevcut: {budget}");
 
         // 5. Transfer ücreti negatif mi?
         if (Fee.Amount < 0)
@@ -139,6 +145,9 @@ public sealed class Transfer : BaseEntity, IAuditEntity, ISoftDelete
     /// <summary>
     /// Transferi tamamlar (oyuncu ve kulüpleri günceller)
     /// </summary>
+    /// <param name="player">Transfer edilecek oyuncu</param>
+    /// <param name="fromClub">Gönderen kulüp</param>
+    /// <param name="toClub">Alan kulüp</param>
     public void CompleteTransfer(Player player, Club fromClub, Club toClub)
     {
         ValidateTransfer(player, fromClub, toClub);
@@ -162,6 +171,7 @@ public sealed class Transfer : BaseEntity, IAuditEntity, ISoftDelete
     /// <summary>
     /// Transfer bilgisini string olarak döndürür
     /// </summary>
+    /// <returns>Transfer bilgisi string formatında</returns>
     public override string ToString()
         => $"{FromClubId} -> {ToClubId}: {PlayerId} ({Fee})";
 

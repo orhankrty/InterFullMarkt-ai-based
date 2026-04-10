@@ -10,6 +10,11 @@ using InterFullMarkt.Domain.Entities;
 public interface IDbContext
 {
     /// <summary>
+    /// Kullanıcılar DbSet'i
+    /// </summary>
+    DbSet<User> Users { get; }
+
+    /// <summary>
     /// Futbolcular DbSet'i
     /// </summary>
     DbSet<Player> Players { get; }
@@ -39,4 +44,3 @@ public interface IDbContext
     /// </summary>
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
-

@@ -10,7 +10,7 @@ public abstract class BaseEntity<TId> where TId : notnull
     /// <summary>
     /// Varlık kimliği
     /// </summary>
-    public TId Id { get; protected set; } = default!;
+    public TId Id { get; set; } = default!;
 
     /// <summary>
     /// Varlığın oluşturulma tarihi (UTC)

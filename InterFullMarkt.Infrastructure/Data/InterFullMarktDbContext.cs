@@ -3,7 +3,6 @@ namespace InterFullMarkt.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using InterFullMarkt.Domain;
 using InterFullMarkt.Domain.Entities;
-using InterFullMarkt.Infrastructure.Data.Configurations;
 using InterFullMarkt.Infrastructure.Data.Seeds;
 using InterFullMarkt.Application.Abstractions;
 
@@ -15,24 +14,29 @@ using InterFullMarkt.Application.Abstractions;
 public sealed class InterFullMarktDbContext(DbContextOptions<InterFullMarktDbContext> options) : DbContext(options), IDbContext
 {
     /// <summary>
+    /// Kullanıcılar tablosu
+    /// </summary>
+    public DbSet<User> Users { get; set; } = null!;
+
+    /// <summary>
     /// Futbolcular tablosu
     /// </summary>
-    public required DbSet<Player> Players { get; set; }
+    public DbSet<Player> Players { get; set; } = null!;
 
     /// <summary>
     /// Kulüpler tablosu
     /// </summary>
-    public required DbSet<Club> Clubs { get; set; }
+    public DbSet<Club> Clubs { get; set; } = null!;
 
     /// <summary>
     /// Ligler tablosu
     /// </summary>
-    public required DbSet<League> Leagues { get; set; }
+    public DbSet<League> Leagues { get; set; } = null!;
 
     /// <summary>
     /// Transferler tablosu
     /// </summary>
-    public required DbSet<Transfer> Transfers { get; set; }
+    public DbSet<Transfer> Transfers { get; set; } = null!;
 
     /// <summary>
     /// DbContext konfigürasyonu:
@@ -45,10 +49,7 @@ public sealed class InterFullMarktDbContext(DbContextOptions<InterFullMarktDbCon
         base.OnModelCreating(modelBuilder);
 
         // Entity Configurations
-        modelBuilder.ApplyConfiguration(new PlayerConfiguration());
-        modelBuilder.ApplyConfiguration(new ClubConfiguration());
-        modelBuilder.ApplyConfiguration(new LeagueConfiguration());
-        modelBuilder.ApplyConfiguration(new TransferConfiguration());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(InterFullMarktDbContext).Assembly);
 
         // Global Query Filters
         ApplyGlobalQueryFilters(modelBuilder);
@@ -65,25 +66,27 @@ public sealed class InterFullMarktDbContext(DbContextOptions<InterFullMarktDbCon
     {
         var softDeleteEntities = modelBuilder.Model
             .GetEntityTypes()
-            .Where(et => typeof(ISoftDelete).IsAssignableFrom(et.ClrType))
+            .Where(et => et.ClrType != null && typeof(ISoftDelete).IsAssignableFrom(et.ClrType))
             .ToList();
 
         foreach (var entityType in softDeleteEntities)
         {
-            var parameter = System.Linq.Expressions.Expression.Parameter(entityType.ClrType);
+            var parameter = System.Linq.Expressions.Expression.Parameter(entityType.ClrType!);
             var filterExpression = System.Linq.Expressions.Expression.Lambda(
                 System.Linq.Expressions.Expression.Equal(
                     System.Linq.Expressions.Expression.Property(parameter, nameof(ISoftDelete.IsDeleted)),
                     System.Linq.Expressions.Expression.Constant(false, typeof(bool))),
                 parameter);
 
-            modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filterExpression);
+            modelBuilder.Entity(entityType.ClrType!).HasQueryFilter(filterExpression);
         }
     }
 
     /// <summary>
     /// SaveChanges öncesinde Audit bilgilerini doldurur.
     /// </summary>
+    /// <param name="acceptAllChangesOnSuccess">Başarılı olursa kabul et</param>
+    /// <returns>Etkilenen satır sayısı</returns>
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
         UpdateAuditableEntities();
@@ -93,6 +96,9 @@ public sealed class InterFullMarktDbContext(DbContextOptions<InterFullMarktDbCon
     /// <summary>
     /// SaveChangesAsync öncesinde Audit bilgilerini doldurur.
     /// </summary>
+    /// <param name="acceptAllChangesOnSuccess">Başarılı olursa kabul et</param>
+    /// <param name="cancellationToken">İptal tokeni</param>
+    /// <returns>Etkilenen satır sayısı</returns>
     public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {
         UpdateAuditableEntities();
@@ -122,13 +128,15 @@ public sealed class InterFullMarktDbContext(DbContextOptions<InterFullMarktDbCon
             {
                 auditEntity.CreatedDate = now;
                 auditEntity.UpdatedDate = now;
-                auditEntity.CreatedByUserId ??= "System";
+                if (string.IsNullOrEmpty(auditEntity.CreatedByUserId))
+                    auditEntity.CreatedByUserId = "System";
             }
 
             if (entry.State == EntityState.Modified)
             {
                 auditEntity.UpdatedDate = now;
-                auditEntity.UpdatedByUserId ??= "System";
+                if (string.IsNullOrEmpty(auditEntity.UpdatedByUserId))
+                    auditEntity.UpdatedByUserId = "System";
             }
         }
     }

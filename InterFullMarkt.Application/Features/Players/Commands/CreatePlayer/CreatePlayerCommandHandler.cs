@@ -1,7 +1,6 @@
 namespace InterFullMarkt.Application.Features.Players.Commands.CreatePlayer;
 
 using MediatR;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using InterFullMarkt.Domain.Entities;
 using InterFullMarkt.Domain.Enums;
@@ -15,17 +14,22 @@ using InterFullMarkt.Application.Abstractions;
 public sealed class CreatePlayerCommandHandler : IRequestHandler<CreatePlayerCommand, CreatePlayerResult>
 {
     private readonly IDbContext _dbContext;
-    private readonly IMapper _mapper;
 
-    public CreatePlayerCommandHandler(IDbContext dbContext, IMapper mapper)
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="dbContext">Veritabanı konteksti</param>
+    public CreatePlayerCommandHandler(IDbContext dbContext)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     /// <summary>
     /// Yeni oyuncu oluşturur ve veri tabanına kaydeder.
     /// </summary>
+    /// <param name="request">Komut isteği</param>
+    /// <param name="cancellationToken">İptal tokeni</param>
+    /// <returns>İşlem sonucu</returns>
     public async Task<CreatePlayerResult> Handle(CreatePlayerCommand request, CancellationToken cancellationToken)
     {
         try
@@ -34,7 +38,7 @@ public sealed class CreatePlayerCommandHandler : IRequestHandler<CreatePlayerCom
             var playerData = request.PlayerData;
 
             // 2. Milliyeti bulur
-            var nationality = Nationality.GetByCode(playerData.NationalityCode);
+            var nationality = Nationality.CreateByCode(playerData.NationalityCode);
             if (nationality is null)
                 return CreatePlayerResult.FailureResult(
                     $"'{playerData.NationalityCode}' kodu için milliyeti bulunamadı.",

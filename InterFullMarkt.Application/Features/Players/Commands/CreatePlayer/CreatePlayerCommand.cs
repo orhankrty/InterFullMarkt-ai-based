@@ -2,6 +2,7 @@ namespace InterFullMarkt.Application.Features.Players.Commands.CreatePlayer;
 
 using MediatR;
 using InterFullMarkt.Application.DTOs;
+using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
 /// Yeni oyuncu oluşturma komutu (MediatR Command).
@@ -19,8 +20,17 @@ public sealed class CreatePlayerCommand : IRequest<CreatePlayerResult>
     /// </summary>
     public string CreatedByUserId { get; set; } = "System";
 
+    /// <summary>
+    /// Parametresiz kurucu
+    /// </summary>
     public CreatePlayerCommand() { }
 
+    /// <summary>
+    /// Parametreli kurucu
+    /// </summary>
+    /// <param name="playerData">Oyuncu verisi</param>
+    /// <param name="createdByUserId">Oluşturan kullanıcı</param>
+    [SetsRequiredMembers]
     public CreatePlayerCommand(CreatePlayerDto playerData, string createdByUserId = "System")
     {
         PlayerData = playerData;

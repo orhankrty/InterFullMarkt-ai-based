@@ -17,11 +17,11 @@ public sealed class PlayerProfile : Profile
             .ForMember(dest => dest.Position,
                 opt => opt.MapFrom(src => src.Position.ToString()))
             .ForMember(dest => dest.Nationality,
-                opt => opt.MapFrom(src => $"{src.Nationality.FlagEmoji} {src.Nationality.CountryName}"))
+                opt => opt.MapFrom(src => src.Nationality != null! ? $"{src.Nationality.FlagEmoji} {src.Nationality.CountryName}" : null!))
             .ForMember(dest => dest.Age,
                 opt => opt.MapFrom(src => src.GetAge()))
             .ForMember(dest => dest.MarketValue,
-                opt => opt.MapFrom(src => src.MarketValue != null ? $"{src.MarketValue.Amount} {src.MarketValue.Currency}" : null))
+                opt => opt.MapFrom(src => src.MarketValue != null! ? $"{src.MarketValue.Amount} {src.MarketValue.Currency}" : null!))
             .ForMember(dest => dest.CurrentClubName,
                 opt => opt.MapFrom(src => src.CurrentClub != null ? src.CurrentClub.Name : null));
 

@@ -17,6 +17,12 @@ public sealed class GetAllPlayersQueryHandler : IRequestHandler<GetAllPlayersQue
     private readonly IMapper _mapper;
     private readonly ILogger<GetAllPlayersQueryHandler> _logger;
 
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="dbContext">Veritabanı</param>
+    /// <param name="mapper">AutoMapper nesnesi</param>
+    /// <param name="logger">Logger nesnesi</param>
     public GetAllPlayersQueryHandler(
         IDbContext dbContext,
         IMapper mapper,
@@ -27,6 +33,12 @@ public sealed class GetAllPlayersQueryHandler : IRequestHandler<GetAllPlayersQue
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    /// <summary>
+    /// Sorguyu işler
+    /// </summary>
+    /// <param name="request">Sorgu isteği</param>
+    /// <param name="cancellationToken">İptal tokeni</param>
+    /// <returns>Oyuncu listesi sonucu</returns>
     public async Task<GetAllPlayersResult> Handle(GetAllPlayersQuery request, CancellationToken cancellationToken)
     {
         try
@@ -46,10 +58,10 @@ public sealed class GetAllPlayersQueryHandler : IRequestHandler<GetAllPlayersQue
             // 2. Arama filtresi
             if (!string.IsNullOrWhiteSpace(request.SearchTerm))
             {
-                var searchLower = request.SearchTerm.ToLower().Trim();
+                var searchLower = request.SearchTerm!.ToLower().Trim();
                 query = query.Where(p =>
-                    p.FullName.ToLower().Contains(searchLower) ||
-                    p.Nationality.CountryName.ToLower().Contains(searchLower) ||
+                    (p.FullName != null && p.FullName.ToLower().Contains(searchLower)) ||
+                    (p.Nationality != null! && p.Nationality.CountryName.ToLower().Contains(searchLower)) ||
                     (p.CurrentClub != null && p.CurrentClub.Name.ToLower().Contains(searchLower)));
             }
 
@@ -115,8 +127,8 @@ public sealed class GetAllPlayersQueryHandler : IRequestHandler<GetAllPlayersQue
                 : query.OrderBy(p => p.DateOfBirth),
 
             "marketvalue" => isDescending
-                ? query.OrderByDescending(p => p.MarketValue != null ? p.MarketValue.Amount : 0)
-                : query.OrderBy(p => p.MarketValue != null ? p.MarketValue.Amount : 0),
+                ? query.OrderByDescending(p => p.MarketValue != null! ? p.MarketValue.Amount : 0m)
+                : query.OrderBy(p => p.MarketValue != null! ? p.MarketValue.Amount : 0m),
 
             "position" => isDescending
                 ? query.OrderByDescending(p => p.Position)

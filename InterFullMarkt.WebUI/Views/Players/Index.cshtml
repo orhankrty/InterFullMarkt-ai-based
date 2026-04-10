@@ -17,6 +17,56 @@
     </div>
 </div>
 
+<!-- Kayan Haber Bülteni (Carousel) -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div id="footballNewsCarousel" class="carousel slide shadow-lg rounded-4 overflow-hidden" data-bs-ride="carousel" style="border: 1px solid var(--border-color);">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#footballNewsCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Haber 1"></button>
+                <button type="button" data-bs-target="#footballNewsCarousel" data-bs-slide-to="1" aria-label="Haber 2"></button>
+                <button type="button" data-bs-target="#footballNewsCarousel" data-bs-slide-to="2" aria-label="Haber 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <!-- Haber 1 -->
+                <div class="carousel-item active" data-bs-interval="5000">
+                    <img src="https://images.unsplash.com/photo-1518605368461-1e1252220a4c?w=1200&q=80" class="d-block w-100" alt="Şampiyonlar Ligi" style="height: 350px; object-fit: cover; filter: brightness(0.5);">
+                    <div class="carousel-caption d-none d-md-block text-start" style="bottom: 2rem;">
+                        <span class="badge bg-danger mb-2 p-2 fs-6 shadow">🔥 Sıcak Gelişme</span>
+                        <h2 class="fw-bold text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">Şampiyonlar Ligi'nde Erken Final!</h2>
+                        <p class="fs-5 text-light" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">Devler Ligi çeyrek final eşleşmeleri belli oldu. Avrupa'nın devleri kupaya uzanmak için kıyasıya mücadele edecek.</p>
+                    </div>
+                </div>
+                <!-- Haber 2 -->
+                <div class="carousel-item" data-bs-interval="5000">
+                    <img src="https://images.unsplash.com/photo-1574629810360-7efbb2278458?w=1200&q=80" class="d-block w-100" alt="Transfer Haberleri" style="height: 350px; object-fit: cover; filter: brightness(0.5);">
+                    <div class="carousel-caption d-none d-md-block text-start" style="bottom: 2rem;">
+                        <span class="badge bg-warning text-dark mb-2 p-2 fs-6 shadow">💼 Transfer Dosyası</span>
+                        <h2 class="fw-bold text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">Yılın Transfer Bombası Patladı</h2>
+                        <p class="fs-5 text-light" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">Aylardır süren transfer görüşmeleri sonuçlandı, dünya yıldızı rekor bir bonservis bedeliyle yeni kulübüne imzayı attı.</p>
+                    </div>
+                </div>
+                <!-- Haber 3 -->
+                <div class="carousel-item" data-bs-interval="5000">
+                    <img src="https://images.unsplash.com/photo-1614632537423-1e6c2e7e0aab?w=1200&q=80" class="d-block w-100" alt="Altın Top" style="height: 350px; object-fit: cover; filter: brightness(0.5);">
+                    <div class="carousel-caption d-none d-md-block text-start" style="bottom: 2rem;">
+                        <span class="badge bg-success mb-2 p-2 fs-6 shadow">🏆 Ödül Töreni</span>
+                        <h2 class="fw-bold text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">Altın Top Sahibini Buldu</h2>
+                        <p class="fs-5 text-light" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">Sezonun en iyi oyuncusuna verilen prestijli ödül, görkemli bir törenle sahibine teslim edildi.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#footballNewsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Önceki</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#footballNewsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Sonraki</span>
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Arama ve Filtreleme -->
 <div class="row mb-4">
     <div class="col-md-6">
@@ -32,10 +82,10 @@
     </div>
     <div class="col-md-6">
         <select name="sortBy" class="form-select form-select-lg border-0" onchange="this.form.submit()" style="background-color: #0f1326;">
-            <option value="name" @(ViewData["SortBy"]?.ToString() == "name" ? "selected" : "")>İsme Göre Sırala</option>
-            <option value="age" @(ViewData["SortBy"]?.ToString() == "age" ? "selected" : "")>Yaşa Göre Sırala</option>
-            <option value="marketvalue" @(ViewData["SortBy"]?.ToString() == "marketvalue" ? "selected" : "")>Piyasa Değerine Göre Sırala</option>
-            <option value="position" @(ViewData["SortBy"]?.ToString() == "position" ? "selected" : "")>Pozisyona Göre Sırala</option>
+            <!option value="name" @(ViewData["SortBy"]?.ToString() == "name" ? "selected" : "")>İsme Göre Sırala</!option>
+            <!option value="age" @(ViewData["SortBy"]?.ToString() == "age" ? "selected" : "")>Yaşa Göre Sırala</!option>
+            <!option value="marketvalue" @(ViewData["SortBy"]?.ToString() == "marketvalue" ? "selected" : "")>Piyasa Değerine Göre Sırala</!option>
+            <!option value="position" @(ViewData["SortBy"]?.ToString() == "position" ? "selected" : "")>Pozisyona Göre Sırala</!option>
         </select>
     </div>
 </div>

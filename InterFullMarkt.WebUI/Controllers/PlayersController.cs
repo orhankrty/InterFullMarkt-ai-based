@@ -1,9 +1,12 @@
 namespace InterFullMarkt.WebUI.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MediatR;
+using FluentValidation;
 using InterFullMarkt.Application.Features.Players.Commands.CreatePlayer;
 using InterFullMarkt.Application.Features.Players.Queries.GetAllPlayers;
+using InterFullMarkt.Application.Features.Players.Queries.GetPlayerById;
 using InterFullMarkt.Application.DTOs;
 
 /// <summary>
@@ -15,6 +18,11 @@ public sealed class PlayersController : Controller
     private readonly IMediator _mediator;
     private readonly ILogger<PlayersController> _logger;
 
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="mediator">MediatR arayüzü</param>
+    /// <param name="logger">Logger arayüzü</param>
     public PlayersController(IMediator mediator, ILogger<PlayersController> logger)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
@@ -24,6 +32,10 @@ public sealed class PlayersController : Controller
     /// <summary>
     /// Tüm oyuncuları listeler.
     /// </summary>
+    /// <param name="page">Sayfa numarası (varsayılan: 1)</param>
+    /// <param name="search">Arama terimi</param>
+    /// <param name="sortBy">Sıralama kriteri</param>
+    /// <returns>Oyuncuların listelendiği görünüm</returns>
     [HttpGet]
     public async Task<IActionResult> Index(int page = 1, string? search = null, string? sortBy = null)
     {
@@ -64,15 +76,26 @@ public sealed class PlayersController : Controller
     /// <summary>
     /// Yeni oyuncu oluşturma formunu gösterir.
     /// </summary>
+    /// <returns>Yeni oyuncu oluşturma formu görünümü</returns>
     [HttpGet]
     public IActionResult Create()
     {
-        return View(new CreatePlayerDto());
+        return View(new CreatePlayerDto
+        {
+            FullName = string.Empty,
+            Position = 1,
+            NationalityCode = string.Empty,
+            DateOfBirth = DateTime.Today.AddYears(-20),
+            Height = 170,
+            Weight = 70
+        });
     }
 
     /// <summary>
     /// Yeni oyuncu oluşturur.
     /// </summary>
+    /// <param name="createPlayerDto">Oyuncu verileri</param>
+    /// <returns>İşlem sonucu görünümü</returns>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreatePlayerDto createPlayerDto)
@@ -100,7 +123,7 @@ public sealed class PlayersController : Controller
 
             return RedirectToAction("Index");
         }
-        catch (FluentValidation.ValidationException ex)
+        catch (ValidationException ex)
         {
             _logger.LogWarning("Validasyon hatası: {Message}", ex.Message);
             
@@ -122,17 +145,30 @@ public sealed class PlayersController : Controller
     /// <summary>
     /// Oyuncu detaylarını gösterir.
     /// </summary>
-    [HttpGet("{id:guid}")]
+    /// <param name="id">Oyuncu benzersiz kimliği (GUID)</param>
+    /// <returns>Oyuncu detay görünümü</returns>
+    [HttpGet]
     public async Task<IActionResult> Details(Guid id)
     {
         try
         {
-            // TODO: GetPlayerByIdQuery oluştur
-            return Ok("Oyuncu detayları henüz implementasyonda değildir.");
+            _logger.LogInformation("Oyuncu detayları istendi: {PlayerId}", id);
+
+            var query = new GetPlayerByIdQuery(id);
+            var result = await _mediator.Send(query);
+
+            return View(result);
+        }
+        catch (KeyNotFoundException)
+        {
+            _logger.LogWarning("Oyuncu bulunamadı: {PlayerId}", id);
+            TempData["Error"] = "Oyuncu bulunamadı.";
+            return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Oyuncu detaylarını getirirken hata");
+            TempData["Error"] = "Oyuncu detaylarını yüklerken bir hata oluştu.";
             return RedirectToAction("Index");
         }
     }

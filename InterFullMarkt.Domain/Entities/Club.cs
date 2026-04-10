@@ -15,32 +15,32 @@ public sealed class Club : BaseEntity, IAuditEntity, ISoftDelete
     /// <summary>
     /// Kulübün tam adı (Manchester United Football Club)
     /// </summary>
-    public required string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Kulübün kısa adı (MAN)
     /// </summary>
-    public required string ShortName { get; set; }
+    public string ShortName { get; set; } = string.Empty;
 
     /// <summary>
     /// Kulübün kuruluş yılı
     /// </summary>
-    public required int FoundingYear { get; set; }
+    public int FoundingYear { get; set; }
 
     /// <summary>
     /// Stadyumun adı
     /// </summary>
-    public required string StadiumName { get; set; }
+    public string StadiumName { get; set; } = string.Empty;
 
     /// <summary>
     /// Kulüp renkleri (virgülle ayrılmış, örn: "Red,White")
     /// </summary>
-    public required string Colors { get; set; }
+    public string Colors { get; set; } = string.Empty;
 
     /// <summary>
     /// Ligin ID'si
     /// </summary>
-    public required Guid LeagueId { get; set; }
+    public Guid LeagueId { get; set; }
 
     /// <summary>
     /// Ligin navigasyon özelliği
@@ -181,7 +181,7 @@ public sealed class Club : BaseEntity, IAuditEntity, ISoftDelete
         if (Budget is null)
             throw new InvalidOperationException("Kulübün bütçesi tanımlanmamış!");
 
-        if (transferFee > Budget)
+        if (transferFee > Budget!)
             throw new InvalidOperationException($"Bütçe yetersiz! Kulüp bütçesi: {Budget}, Transfer ücreti: {transferFee}");
 
         Budget = Budget.Subtract(transferFee);
@@ -203,7 +203,7 @@ public sealed class Club : BaseEntity, IAuditEntity, ISoftDelete
     /// </summary>
     public Money? CalculateTotalSquadValue()
     {
-        var activePlayers = Players.Where(p => !p.IsDeleted && p.MarketValue != null).ToList();
+        var activePlayers = Players.Where(p => !p.IsDeleted && p.MarketValue is not null).ToList();
 
         if (!activePlayers.Any())
             return null;

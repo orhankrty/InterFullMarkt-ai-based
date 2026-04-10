@@ -1,0 +1,404 @@
+@model InterFullMarkt.Application.Features.Players.Queries.GetPlayerById.GetPlayerByIdResult
+
+@{
+    ViewData["Title"] = $"{Model.FullName} - Oyuncu Detayları";
+    var age = Model.Age;
+}
+
+<style>
+    :root {
+        --primary-color: #0066ff;
+        --secondary-color: #ffd700;
+        --dark-bg: #0a0e27;
+        --card-bg: #1a1f3a;
+        --text-light: #e0e0e0;
+    }
+
+    .player-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        padding: 3rem 1rem;
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .player-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        font-weight: bold;
+        border: 3px solid white;
+    }
+
+    .stat-card {
+        background-color: var(--card-bg);
+        border-left: 4px solid var(--primary-color);
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .stat-card h6 {
+        color: var(--text-light);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-card .value {
+        font-size: 1.75rem;
+        font-weight: bold;
+        color: var(--secondary-color);
+    }
+
+    .market-value-highlight {
+        background-color: rgba(255, 215, 0, 0.1);
+        border-left-color: var(--secondary-color) !important;
+    }
+
+    .chart-container {
+        background-color: var(--card-bg);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .tabs {
+        display: flex;
+        gap: 0;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .tab-button {
+        flex: 1;
+        padding: 1rem;
+        background: transparent;
+        border: none;
+        color: var(--text-light);
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+    }
+
+    .tab-button.active {
+        color: var(--secondary-color);
+        border-bottom-color: var(--secondary-color);
+    }
+
+    .tab-button:hover {
+        color: var(--primary-color);
+    }
+
+    .transfer-table {
+        width: 100%;
+        background-color: var(--card-bg);
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    .transfer-table thead {
+        background-color: rgba(0, 102, 255, 0.15);
+    }
+
+    .transfer-table td {
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        color: var(--text-light);
+    }
+
+    .transfer-table tbody tr:hover {
+        background-color: rgba(0, 102, 255, 0.05);
+    }
+
+    .position-badge {
+        display: inline-block;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 2rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary-color);
+        text-decoration: none;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .back-button:hover {
+        color: var(--secondary-color);
+        transform: translateX(-3px);
+    }
+</style>
+
+<div class="container mt-4">
+    <a href="@Url.Action("Index")" class="back-button">
+        <i class="bi bi-arrow-left"></i> Oyunculara Dön
+    </a>
+
+    <!-- Player Header -->
+    <div class="player-header">
+        <div class="row align-items-center">
+            <div class="col-md-2 text-center mb-3 mb-md-0">
+                <div class="player-avatar">
+                    @Model.FullName.First().ToString().ToUpper()
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div>
+                        <h1 class="mb-2">
+                            @Model.FullName
+                            <span class="position-badge">@Model.Position</span>
+                        </h1>
+                        <p class="mb-1" style="font-size: 1.1rem;">
+                            <span style="font-size: 2rem;">@Model.NationalityFlag</span>
+                            @Model.Nationality
+                        </p>
+                        @if (!string.IsNullOrEmpty(Model.ClubName))
+                        {
+                            <p class="mb-0" style="opacity: 0.9;">
+                                <i class="bi bi-building"></i> @Model.ClubName
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6>Yaş</h6>
+                <div class="value">@Model.Age</div>
+                <small class="text-muted">@Model.DateOfBirth.ToString("d MMMM yyyy")</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6>Boy</h6>
+                <div class="value">@Model.Height cm</div>
+                <small class="text-muted">Kilo: @Model.Weight kg</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6>Tercih Edilen Ayak</h6>
+                <div class="value">@Model.PreferredFoot</div>
+                <small class="text-muted">Dominant foot</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card market-value-highlight">
+                <h6>Piyasa Değeri</h6>
+                <div class="value">@Model.MarketValue</div>
+                <small class="text-muted">Son güncelleme: @Model.CreatedDate.ToString("d MMMM yyyy")</small>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.JerseyNumber.HasValue)
+    {
+        <div class="alert alert-info mb-4" style="background-color: rgba(0, 102, 255, 0.1); border-left: 4px solid var(--primary-color);">
+            <strong>Forma No:</strong> #@Model.JerseyNumber
+        </div>
+    }
+
+    <!-- Tabs Navigation -->
+    <div style="background-color: var(--card-bg); border-radius: 1rem; padding: 1rem; margin-bottom: 2rem;">
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('market-history')">
+                <i class="bi bi-graph-up"></i> Piyasa Tarihi
+            </button>
+            <button class="tab-button" onclick="showTab('transfers')">
+                <i class="bi bi-shuffle"></i> Transfer Geçmişi
+            </button>
+            <button class="tab-button" onclick="showTab('stats')">
+                <i class="bi bi-bar-chart"></i> Statistikler
+            </button>
+        </div>
+    </div>
+
+    <!-- Tab Contents -->
+
+    <!-- Market Value History Chart -->
+    <div id="market-history" class="tab-content" style="display: block;">
+        <div class="chart-container">
+            <h3 class="mb-4">Piyasa Değeri Tarihi (Son 12 Ay)</h3>
+            <canvas id="marketValueChart" style="max-height: 400px;"></canvas>
+        </div>
+    </div>
+
+    <!-- Transfer History -->
+    <div id="transfers" class="tab-content" style="display: none;">
+        <div class="chart-container">
+            <h3 class="mb-4">Transfer Geçmişi</h3>
+            @if (Model.TransferHistory.Count > 0)
+            {
+                <table class="transfer-table">
+                    <thead>
+                        <tr>
+                            <td><strong>Tarih</strong></td>
+                            <td><strong>Kaynak Kulüp</strong></td>
+                            <td><strong>Hedef Kulüp</strong></td>
+                            <td><strong>Bedel</strong></td>
+                            <td><strong>Tür</strong></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var transfer in Model.TransferHistory)
+                        {
+                            <tr>
+                                <td>@transfer.TransferDate.ToString("d MMMM yyyy")</td>
+                                <td>@transfer.FromClub</td>
+                                <td>@transfer.ToClub</td>
+                                <td><strong>@transfer.Fee</strong></td>
+                                <td><span class="badge bg-primary">@transfer.TransferType</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-info" style="background-color: rgba(0, 102, 255, 0.1); border-left: 4px solid var(--primary-color);">
+                    <i class="bi bi-info-circle"></i> Henüz transfer geçmişi bulunmamaktadır.
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div id="stats" class="tab-content" style="display: none;">
+        <div class="chart-container">
+            <h3 class="mb-4">Detaylı Bilgiler</h3>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <strong>Milliyeti:</strong> @Model.Nationality (@Model.NationalityFlag)
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Mevkii:</strong> @Model.Position
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Boy:</strong> @Model.Height cm
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Kilo:</strong> @Model.Weight kg
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Ayağı:</strong> @Model.PreferredFoot
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Piyasa Değeri:</strong> @Model.MarketValue
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+    <script>
+        // Market Value Chart
+        const ctx = document.getElementById('marketValueChart').getContext('2d');
+        const marketHistory = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MarketValueHistory));
+        
+        const labels = marketHistory.map(m => m.month);
+        const data = marketHistory.map(m => m.value / 1_000_000); // Convert to millions
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Piyasa Değeri (€M)',
+                    data: data,
+                    borderColor: '#0066ff',
+                    backgroundColor: 'rgba(0, 102, 255, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#ffd700',
+                    pointBorderColor: '#0066ff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: '#e0e0e0',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#e0e0e0',
+                            callback: function(value) {
+                                return '€' + value + 'M';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: '#e0e0e0'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(t => t.style.display = 'none');
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(b => b.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).style.display = 'block';
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+}

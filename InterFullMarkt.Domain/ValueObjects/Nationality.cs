@@ -76,6 +76,9 @@ public sealed class Nationality : IEquatable<Nationality>
         { "GR", ("Greece", "🇬🇷") },
         { "CZ", ("Czech Republic", "🇨🇿") },
         { "PL", ("Poland", "🇵🇱") },
+        { "UY", ("Uruguay", "🇺🇾") },
+        { "CO", ("Colombia", "🇨🇴") },
+        { "MA", ("Morocco", "🇲🇦") },
     };
 
     /// <summary>
@@ -104,9 +107,12 @@ public sealed class Nationality : IEquatable<Nationality>
     public override string ToString()
         => $"{FlagEmoji} {CountryName} ({CountryCode})";
 
-    public static bool operator ==(Nationality left, Nationality right)
-        => left.Equals(right);
+    public static bool operator ==(Nationality? left, Nationality? right)
+    {
+        if (left is null) return right is null;
+        return left.Equals(right);
+    }
 
-    public static bool operator !=(Nationality left, Nationality right)
-        => !left.Equals(right);
+    public static bool operator !=(Nationality? left, Nationality? right)
+        => !(left == right);
 }

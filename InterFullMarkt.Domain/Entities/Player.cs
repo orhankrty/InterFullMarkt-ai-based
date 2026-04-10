@@ -49,7 +49,7 @@ public sealed class Player : BaseEntity, IAuditEntity, ISoftDelete
     /// <summary>
     /// Mevcut piyasa değeri
     /// </summary>
-    public Money? MarketValue { get; private set; }
+    public Money? MarketValue { get; set; }
 
     /// <summary>
     /// Forması tutuğu numara

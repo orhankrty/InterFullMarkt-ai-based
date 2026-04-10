@@ -1,6 +1,8 @@
 using InterFullMarkt.Application;
 using InterFullMarkt.Infrastructure;
 using InterFullMarkt.WebUI.Middleware;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +14,21 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(connectionString);
 
+// 🩺 Health Checks Kaydı (Sistemin canlılığını izlemek için)
+builder.Services.AddHealthChecks();
+
 // 🎨 Add MVC support
 builder.Services.AddControllersWithViews();
+
+// 🔐 Add Authentication (Cookie based)
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";
+        options.LogoutPath = "/Auth/Logout";
+        options.AccessDeniedPath = "/Auth/AccessDenied";
+        options.Cookie.Name = "InterFullMarkt.Auth";
+    });
 
 // 📝 Logging configuration
 builder.Logging.ClearProviders();
@@ -38,7 +53,22 @@ else
 }
 
 // 🗄️ Initialize database and apply migrations
-app.UseInfrastructure();
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<InterFullMarkt.Infrastructure.Data.InterFullMarktDbContext>();
+        await dbContext.Database.MigrateAsync();
+
+        // 🦁 Seed Galatasaray Data (Tabloları ve Efsane Kadroyu Doldur)
+        await InterFullMarkt.Infrastructure.Data.Seeds.DbInitializer.SeedGalatasarayAsync(dbContext);
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogCritical(ex, "Veritabanı oluşturulurken veya Migration uygulanırken kritik bir hata oluştu!");
+    }
+}
 
 // 🌐 HTTP Middleware
 app.UseHttpsRedirection();
@@ -46,6 +76,7 @@ app.UseRouting();
 app.UseStaticFiles();
 
 // 🔐 Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 // 🛣️ Route configurations
@@ -60,6 +91,8 @@ app.MapControllerRoute(
     name: "error",
     pattern: "Error/{statusCode}");
 
+// 🩺 Health Check Uç Noktası (DevOps ve Monitoring araçları için /health)
+app.MapHealthChecks("/health");
+
 // 🚀 Start application
-_=app.RunAsync();
 app.Run();
