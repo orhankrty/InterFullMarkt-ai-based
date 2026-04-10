@@ -35,9 +35,14 @@ public sealed class PlayersController : Controller
     /// <param name="page">Sayfa numarası (varsayılan: 1)</param>
     /// <param name="search">Arama terimi</param>
     /// <param name="sortBy">Sıralama kriteri</param>
+    /// <param name="positions">Pozisyon filtresi (virgüllle ayrılmış)</param>
+    /// <param name="nationalities">Milliyet filtresi (virgüllle ayrılmış)</param>
+    /// <param name="minValue">Minimum piyasa değeri</param>
+    /// <param name="maxValue">Maksimum piyasa değeri</param>
     /// <returns>Oyuncuların listelendiği görünüm</returns>
     [HttpGet]
-    public async Task<IActionResult> Index(int page = 1, string? search = null, string? sortBy = null)
+    public async Task<IActionResult> Index(int page = 1, string? search = null, string? sortBy = null,
+        string? positions = null, string? nationalities = null, decimal? minValue = null, decimal? maxValue = null)
     {
         try
         {
@@ -48,7 +53,11 @@ public sealed class PlayersController : Controller
                 PageIndex = page - 1,
                 PageSize = 12,
                 SearchTerm = search,
-                SortBy = sortBy ?? "name"
+                SortBy = sortBy ?? "name",
+                Positions = positions,
+                Nationalities = nationalities,
+                MinMarketValue = minValue,
+                MaxMarketValue = maxValue
             };
 
             var result = await _mediator.Send(query);
@@ -62,6 +71,10 @@ public sealed class PlayersController : Controller
             ViewData["CurrentPage"] = page;
             ViewData["SearchTerm"] = search;
             ViewData["SortBy"] = sortBy ?? "name";
+            ViewData["Positions"] = positions;
+            ViewData["Nationalities"] = nationalities;
+            ViewData["MinValue"] = minValue;
+            ViewData["MaxValue"] = maxValue;
 
             return View(result);
         }

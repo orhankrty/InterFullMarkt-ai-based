@@ -1,25 +1,36 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace InterFullMarkt.Domain.ValueObjects;
 
 /// <summary>
 /// Ülke ve bayrak kodu kombinasyonnu temsil eden değer nesnesi.
 /// Immutable yapıdadır.
 /// </summary>
+[ComplexType]
 public sealed class Nationality : IEquatable<Nationality>
 {
     /// <summary>
     /// Ülke adı
     /// </summary>
-    public string CountryName { get; }
+    public string CountryName { get; private set; }
 
     /// <summary>
     /// Ülke kodu (ISO 3166-1 alpha-2, örn: TR, DE, FR)
     /// </summary>
-    public string CountryCode { get; }
+    public string CountryCode { get; private set; }
 
     /// <summary>
     /// Bayrak emoji'si
     /// </summary>
-    public string FlagEmoji { get; }
+    public string FlagEmoji { get; private set; }
+
+    // EF CORE İÇİN EKLENMESİ GEREKEN KISIM:
+    private Nationality() 
+    { 
+        CountryName = null!; 
+        CountryCode = null!; 
+        FlagEmoji = null!; 
+    }
 
     private Nationality(string countryName, string countryCode, string flagEmoji)
     {
@@ -54,31 +65,30 @@ public sealed class Nationality : IEquatable<Nationality>
     /// <summary>
     /// Bilinen ülkelerin önceden tanımlanmış listesi
     /// </summary>
-    private static readonly Dictionary<string, (string Name, string Flag)> KnownCountries = new()
+    private static readonly Dictionary<string, (string Name, string Flag)> KnownCountries = new(StringComparer.OrdinalIgnoreCase)
     {
-        { "TR", ("Turkey", "🇹🇷") },
-        { "DE", ("Germany", "🇩🇪") },
-        { "ES", ("Spain", "🇪🇸") },
-        { "IT", ("Italy", "🇮🇹") },
-        { "FR", ("France", "🇫🇷") },
-        { "GB", ("United Kingdom", "🇬🇧") },
-        { "PT", ("Portugal", "🇵🇹") },
-        { "NL", ("Netherlands", "🇳🇱") },
-        { "BR", ("Brazil", "🇧🇷") },
-        { "AR", ("Argentina", "🇦🇷") },
-        { "FR", ("France", "🇫🇷") },
-        { "BE", ("Belgium", "🇧🇪") },
-        { "AT", ("Austria", "🇦🇹") },
-        { "CH", ("Switzerland", "🇨🇭") },
-        { "SE", ("Sweden", "🇸🇪") },
-        { "NO", ("Norway", "🇳🇴") },
-        { "DK", ("Denmark", "🇩🇰") },
-        { "GR", ("Greece", "🇬🇷") },
-        { "CZ", ("Czech Republic", "🇨🇿") },
-        { "PL", ("Poland", "🇵🇱") },
-        { "UY", ("Uruguay", "🇺🇾") },
-        { "CO", ("Colombia", "🇨🇴") },
-        { "MA", ("Morocco", "🇲🇦") },
+        ["TR"] =  ("Turkey", "🇹🇷") ,
+        ["DE"] =  ("Germany", "🇩🇪") ,
+        ["ES"] =  ("Spain", "🇪🇸") ,
+        ["IT"] =  ("Italy", "🇮🇹") ,
+        ["FR"] =  ("France", "🇫🇷") ,
+        ["GB"] =  ("United Kingdom", "🇬🇧") ,
+        ["PT"] =  ("Portugal", "🇵🇹") ,
+        ["NL"] =  ("Netherlands", "🇳🇱") ,
+        ["BR"] =  ("Brazil", "🇧🇷") ,
+        ["AR"] =  ("Argentina", "🇦🇷") ,
+        ["BE"] =  ("Belgium", "🇧🇪") ,
+        ["AT"] =  ("Austria", "🇦🇹") ,
+        ["CH"] =  ("Switzerland", "🇨🇭") ,
+        ["SE"] =  ("Sweden", "🇸🇪") ,
+        ["NO"] =  ("Norway", "🇳🇴") ,
+        ["DK"] =  ("Denmark", "🇩🇰") ,
+        ["GR"] =  ("Greece", "🇬🇷") ,
+        ["CZ"] =  ("Czech Republic", "🇨🇿") ,
+        ["PL"] =  ("Poland", "🇵🇱") ,
+        ["UY"] =  ("Uruguay", "🇺🇾") ,
+        ["CO"] =  ("Colombia", "🇨🇴") ,
+        ["MA"] =  ("Morocco", "🇲🇦") ,
     };
 
     /// <summary>

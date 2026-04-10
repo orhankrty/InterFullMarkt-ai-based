@@ -82,11 +82,123 @@
     </div>
     <div class="col-md-6">
         <select name="sortBy" class="form-select form-select-lg border-0" onchange="this.form.submit()" style="background-color: #0f1326;">
-            <!option value="name" @(ViewData["SortBy"]?.ToString() == "name" ? "selected" : "")>İsme Göre Sırala</!option>
-            <!option value="age" @(ViewData["SortBy"]?.ToString() == "age" ? "selected" : "")>Yaşa Göre Sırala</!option>
-            <!option value="marketvalue" @(ViewData["SortBy"]?.ToString() == "marketvalue" ? "selected" : "")>Piyasa Değerine Göre Sırala</!option>
-            <!option value="position" @(ViewData["SortBy"]?.ToString() == "position" ? "selected" : "")>Pozisyona Göre Sırala</!option>
+            @{
+                var sortBy = ViewData["SortBy"]?.ToString() ?? "name";
+            }
+            <option value="name" selected="@(sortBy == "name" ? "selected" : null)">İsme Göre Sırala</option>
+            <option value="age" selected="@(sortBy == "age" ? "selected" : null)">Yaşa Göre Sırala</option>
+            <option value="marketvalue" selected="@(sortBy == "marketvalue" ? "selected" : null)">Piyasa Değerine Göre Sırala</option>
+            <option value="position" selected="@(sortBy == "position" ? "selected" : null)">Pozisyona Göre Sırala</option>
         </select>
+    </div>
+</div>
+
+<!-- Gelişmiş Filtreleme -->
+<div class="card mb-4 border-0" style="background-color: #1a1f3a;">
+    <div class="card-header bg-transparent border-bottom border-secondary p-3">
+        <h5 class="mb-0">
+            <i class="bi bi-funnel"></i> Gelişmiş Filtreleme
+            <a href="?search=&sortBy=name" class="float-end btn btn-sm btn-outline-secondary">
+                <i class="bi bi-arrow-clockwise"></i> Sıfırla
+            </a>
+        </h5>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <!-- Arama terimi -->
+            <div class="col-md-6">
+                <label class="form-label">Arama</label>
+                <input type="text" name="search" class="form-control" placeholder="İsim, ülke veya kulüp..." value="@ViewData["SearchTerm"]">
+            </div>
+
+            <!-- Sıralama -->
+            <div class="col-md-6">
+                <label class="form-label">Sıralama</label>
+                <select name="sortBy" class="form-select">
+                    <option value="name">İsme Göre</option>
+                    <option value="age">Yaşa Göre</option>
+                    <option value="marketvalue">Piyasa Değerine Göre</option>
+                    <option value="position">Pozisyona Göre</option>
+                </select>
+            </div>
+
+            <!-- Pozisyon Filtresi -->
+            <div class="col-md-6">
+                <label class="form-label">Pozisyon</label>
+                <div class="d-flex flex-wrap gap-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="positions" value="GK" id="posGK"
+                            @(ViewData["Positions"]?.ToString().Contains("GK") == true ? "checked" : "")>
+                        <label class="form-check-label" for="posGK">Kaleci (GK)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="positions" value="CB" id="posCB"
+                            @(ViewData["Positions"]?.ToString().Contains("CB") == true ? "checked" : "")>
+                        <label class="form-check-label" for="posCB">Savunmacı (CB)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="positions" value="CM" id="posCM"
+                            @(ViewData["Positions"]?.ToString().Contains("CM") == true ? "checked" : "")>
+                        <label class="form-check-label" for="posCM">Orta Saha (CM)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="positions" value="ST" id="posST"
+                            @(ViewData["Positions"]?.ToString().Contains("ST") == true ? "checked" : "")>
+                        <label class="form-check-label" for="posST">Hücum (ST)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Piyasa Değeri Aralığı -->
+            <div class="col-md-6">
+                <label class="form-label">Piyasa Değeri Aralığı</label>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <input type="number" name="minValue" class="form-control" placeholder="Min (€)" value="@ViewData["MinValue"]">
+                    </div>
+                    <div class="col-6">
+                        <input type="number" name="maxValue" class="form-control" placeholder="Max (€)" value="@ViewData["MaxValue"]">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ülke Filtresi (örnek) -->
+            <div class="col-md-6">
+                <label class="form-label">Ülkeler</label>
+                <div class="d-flex flex-wrap gap-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="nationalities" value="TR" id="natTR"
+                            @(ViewData["Nationalities"]?.ToString().Contains("TR") == true ? "checked" : "")>
+                        <label class="form-check-label" for="natTR">🇹🇷 Türkiye</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="nationalities" value="ES" id="natES"
+                            @(ViewData["Nationalities"]?.ToString().Contains("ES") == true ? "checked" : "")>
+                        <label class="form-check-label" for="natES">🇪🇸 İspanya</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="nationalities" value="NO" id="natNO"
+                            @(ViewData["Nationalities"]?.ToString().Contains("NO") == true ? "checked" : "")>
+                        <label class="form-check-label" for="natNO">🇳🇴 Norveç</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="nationalities" value="GB" id="natGB"
+                            @(ViewData["Nationalities"]?.ToString().Contains("GB") == true ? "checked" : "")>
+                        <label class="form-check-label" for="natGB">🇬🇧 İngiltere</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Butonlar -->
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i> Filtrele
+                </button>
+                <a href="?search=&sortBy=name" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-clockwise"></i> Sıfırla
+                </a>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -104,90 +216,95 @@ else
         @foreach (var player in Model.Players)
         {
             <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm" style="background-color: #1a1f3a;">
-                    <div class="card-body">
-                        <!-- Başlık -->
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div>
-                                <h5 class="card-title fw-bold mb-0">@player.FullName</h5>
-                                <p class="text-secondary small mb-0">@player.Nationality</p>
-                            </div>
-                            <span class="badge bg-primary">
-                                <i class="bi bi-music-note-beamed"></i> @player.Position
-                            </span>
-                        </div>
-
-                        <!-- Fiziksel Bilgiler -->
-                        <div class="row g-2 mb-3 small">
-                            <div class="col-6">
-                                <div class="text-secondary">Yaş</div>
-                                <div class="fw-bold">@player.Age yaşında</div>
-                            </div>
-                            <div class="col-6">
-                                <div class="text-secondary">Boy/Kilo</div>
-                                <div class="fw-bold">@player.Height cm / @player.Weight kg</div>
-                            </div>
-                        </div>
-
-                        <!-- Piyasa Değeri -->
-                        @if (!string.IsNullOrEmpty(player.MarketValue))
-                        {
-                            <div class="d-flex align-items-center gap-2 mb-3 p-2" style="background-color: rgba(0, 102, 255, 0.1); border-radius: 0.5rem;">
-                                <i class="bi bi-cash-coin" style="color: #ffd700; font-size: 1.5rem;"></i>
+                <a href="@Url.Action("Details", "Players", new { id = player.Id })" style="text-decoration: none; color: inherit;">
+                    <div class="card h-100 border-0 shadow-sm" style="background-color: #1a1f3a; cursor: pointer; transition: all 0.3s ease;">
+                        <div class="card-body">
+                            <!-- Başlık -->
+                            <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div>
-                                    <div class="text-secondary small">Piyasa Değeri</div>
-                                    <div class="fw-bold" style="color: #ffd700;">@player.MarketValue</div>
+                                    <h5 class="card-title fw-bold mb-0">@player.FullName</h5>
+                                    <p class="text-secondary small mb-0">@player.Nationality</p>
                                 </div>
-                            </div>
-                        }
-
-                        <!-- Kulüp Bilgisi -->
-                        @if (!string.IsNullOrEmpty(player.CurrentClubName))
-                        {
-                            <div class="d-flex align-items-center gap-2 mb-3 p-2" style="background-color: rgba(0, 102, 255, 0.1); border-radius: 0.5rem;">
-                                <i class="bi bi-building" style="color: #0066ff;"></i>
-                                <div>
-                                    <div class="text-secondary small">Kulüp</div>
-                                    <div class="fw-bold">@player.CurrentClubName</div>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="d-flex align-items-center gap-2 mb-3 p-2" style="background-color: rgba(255, 215, 0, 0.1); border-radius: 0.5rem;">
-                                <i class="bi bi-exclamation-circle" style="color: #ffd700;"></i>
-                                <div>
-                                    <div class="text-secondary small">Durum</div>
-                                    <div class="fw-bold" style="color: #ffd700;">Kulüpsüz</div>
-                                </div>
-                            </div>
-                        }
-
-                        <!-- Ayak Bilgisi -->
-                        <div class="text-center mt-3 pt-3 border-top border-secondary">
-                            <small class="text-secondary">
-                                <i class="bi bi-shoe"></i> Tercih Edilen Ayak: <strong>@player.PreferredFoot</strong>
-                            </small>
-                        </div>
-
-                        @if (player.JerseyNumber.HasValue)
-                        {
-                            <div class="text-center mt-2">
-                                <span class="badge bg-warning text-dark">
-                                    <i class="bi bi-tag"></i> Forma No: @player.JerseyNumber
+                                <span class="badge bg-primary">
+                                    <i class="bi bi-music-note-beamed"></i> @player.Position
                                 </span>
                             </div>
-                        }
-                    </div>
 
-                    <!-- Card Footer -->
-                    <div class="card-footer bg-transparent border-top border-secondary">
-                        <small class="text-secondary">
-                            <i class="bi bi-calendar-event"></i> 
-                            Oluşturulma: @player.CreatedDate.ToString("dd/MM/yyyy")
-                        </small>
+                            <!-- Fiziksel Bilgiler -->
+                            <div class="row g-2 mb-3 small">
+                                <div class="col-6">
+                                    <div class="text-secondary">Yaş</div>
+                                    <div class="fw-bold">@player.Age yaşında</div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-secondary">Boy/Kilo</div>
+                                    <div class="fw-bold">@player.Height cm / @player.Weight kg</div>
+                                </div>
+                            </div>
+
+                            <!-- Piyasa Değeri -->
+                            @if (!string.IsNullOrEmpty(player.MarketValue))
+                            {
+                                <div class="d-flex align-items-center gap-2 mb-3 p-2" style="background-color: rgba(0, 102, 255, 0.1); border-radius: 0.5rem;">
+                                    <i class="bi bi-cash-coin" style="color: #ffd700; font-size: 1.5rem;"></i>
+                                    <div>
+                                        <div class="text-secondary small">Piyasa Değeri</div>
+                                        <div class="fw-bold" style="color: #ffd700;">@player.MarketValue</div>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- Kulüp Bilgisi -->
+                            @if (!string.IsNullOrEmpty(player.CurrentClubName))
+                            {
+                                <div class="d-flex align-items-center gap-2 mb-3 p-2" style="background-color: rgba(0, 102, 255, 0.1); border-radius: 0.5rem;">
+                                    <i class="bi bi-building" style="color: #0066ff;"></i>
+                                    <div>
+                                        <div class="text-secondary small">Kulüp</div>
+                                        <div class="fw-bold">@player.CurrentClubName</div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center gap-2 mb-3 p-2" style="background-color: rgba(255, 215, 0, 0.1); border-radius: 0.5rem;">
+                                    <i class="bi bi-exclamation-circle" style="color: #ffd700;"></i>
+                                    <div>
+                                        <div class="text-secondary small">Durum</div>
+                                        <div class="fw-bold" style="color: #ffd700;">Kulüpsüz</div>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- Ayak Bilgisi -->
+                            <div class="text-center mt-3 pt-3 border-top border-secondary">
+                                <small class="text-secondary">
+                                    <i class="bi bi-shoe"></i> Tercih Edilen Ayak: <strong>@player.PreferredFoot</strong>
+                                </small>
+                            </div>
+
+                            @if (player.JerseyNumber.HasValue)
+                            {
+                                <div class="text-center mt-2">
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="bi bi-tag"></i> Forma No: @player.JerseyNumber
+                                    </span>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="card-footer bg-transparent border-top border-secondary d-flex justify-content-between align-items-center p-3">
+                            <div class="small text-secondary">
+                                <i class="bi bi-graph-up-arrow text-success"></i> Potansiyel: Yüksek
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3" 
+                                    onclick="openTransferModal('@player.Id', '@player.FullName', '@player.MarketValue', '@player.CurrentClubName')">
+                                <i class="bi bi-arrow-left-right"></i> Transfer
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         }
     </div>
@@ -249,3 +366,63 @@ else
         </nav>
     }
 }
+
+<!-- Etkileşimli Transfer Modalı -->
+<div class="modal fade" id="transferModal" tabindex="-1" aria-labelledby="transferModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="background-color: #1a1f3a; color: white;">
+            <div class="modal-header border-bottom border-secondary">
+                <h5 class="modal-title" id="transferModalLabel"><i class="bi bi-arrow-left-right text-success"></i> Transfer Teklifi</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="transferForm">
+                    <input type="hidden" id="modalPlayerId" name="playerId">
+                    <div class="mb-3">
+                        <label class="text-secondary small">Oyuncu</label>
+                        <h4 id="modalPlayerName" class="fw-bold mb-0"></h4>
+                        <small id="modalCurrentClub" class="text-warning"></small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary">Mevcut Piyasa Değeri</label>
+                        <input type="text" id="modalMarketValue" class="form-control bg-dark border-secondary text-white" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary">Hedef Kulüp</label>
+                        <select class="form-select bg-dark border-secondary text-white" id="targetClubId" required>
+                            <option value="">Kulüp Seçiniz...</option>
+                            <!-- Bu liste Controller'dan ViewBag ile gelmeli -->
+                            <option value="1">Real Madrid</option>
+                            <option value="2">Manchester City</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary">Teklif Edilen Tutar (€)</label>
+                        <input type="number" class="form-control bg-dark border-secondary text-white" id="offerAmount" required placeholder="Örn: 50000000">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top border-secondary">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-success" onclick="submitTransfer()">Teklifi Gönder</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openTransferModal(id, name, marketValue, currentClub) {
+        document.getElementById('modalPlayerId').value = id;
+        document.getElementById('modalPlayerName').innerText = name;
+        document.getElementById('modalCurrentClub').innerText = currentClub ? currentClub + " oyuncusu" : "Serbest Statüde";
+        document.getElementById('modalMarketValue').value = marketValue || "Değer biçilmedi";
+        
+        var myModal = new bootstrap.Modal(document.getElementById('transferModal'));
+        myModal.show();
+    }
+
+    function submitTransfer() {
+        // İleride buraya Fetch API/AJAX kodu eklenerek arka plandaki CQRS "TransferCommand" tetiklenecek.
+        alert("Transfer teklifi arka plana (CQRS Command) gönderiliyor...");
+    }
+</script>

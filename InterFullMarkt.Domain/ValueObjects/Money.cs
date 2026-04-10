@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace InterFullMarkt.Domain.ValueObjects;
 
 /// <summary>
@@ -5,17 +7,21 @@ namespace InterFullMarkt.Domain.ValueObjects;
 /// Para birimi ve miktar bilgisini birlikte tutar.
 /// Immutable yapıdadır - bir kez oluşturulduktan sonra değiştirilmez.
 /// </summary>
+[ComplexType]
 public sealed class Money : IEquatable<Money>
 {
     /// <summary>
     /// Para miktarı
     /// </summary>
-    public decimal Amount { get; }
+    public decimal Amount { get; private set; }
 
     /// <summary>
     /// Para birimi (EUR, USD, GBP, vb.)
     /// </summary>
-    public string Currency { get; }
+    public string Currency { get; private set; }
+
+    // EF CORE İÇİN EKLENMESİ GEREKEN KISIM:
+    private Money() { Currency = null!; }
 
     private Money(decimal amount, string currency)
     {

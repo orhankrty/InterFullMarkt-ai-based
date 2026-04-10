@@ -30,6 +30,26 @@ public sealed class GetAllPlayersQuery : IRequest<GetAllPlayersResult>
     public string? SortBy { get; set; }
 
     /// <summary>
+    /// Pozisyon filtresi (virgüllle ayrılmış: "GK,CB,CM")
+    /// </summary>
+    public string? Positions { get; set; }
+
+    /// <summary>
+    /// Milliyet filtresi (virgüllle ayrılmış koddur: "TR,ES,GB")
+    /// </summary>
+    public string? Nationalities { get; set; }
+
+    /// <summary>
+    /// Minimum piyasa değeri
+    /// </summary>
+    public decimal? MinMarketValue { get; set; }
+
+    /// <summary>
+    /// Maksimum piyasa değeri
+    /// </summary>
+    public decimal? MaxMarketValue { get; set; }
+
+    /// <summary>
     /// Sıralama yönü (opsiyonel: "asc", "desc")
     /// </summary>
     public string? SortDirection { get; set; } = "asc";

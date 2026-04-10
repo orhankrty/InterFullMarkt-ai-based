@@ -3,6 +3,7 @@ namespace InterFullMarkt.Application.Features.Players.Queries.GetPlayerById;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using InterFullMarkt.Application.Abstractions;
+using InterFullMarkt.Application.Services;
 
 /// <summary>
 /// Handler for GetPlayerByIdQuery
@@ -61,6 +62,16 @@ public sealed class GetPlayerByIdQueryHandler : IRequestHandler<GetPlayerByIdQue
             // Transfer history (currently empty, will be extended when Transfer query implemented)
             TransferHistory = new List<TransferHistoryPoint>()
         };
+
+        // 🤖 AI Price Forecast
+        var aiForecastService = new AIPricePredictionService();
+        var leagueCoeff = player.CurrentClub?.League?.Coefficient ?? 8.0m;
+        var forecast = aiForecastService.PredictMarketValue(player, leagueCoeff);
+
+        result.AiPredictedValue = forecast.PredictedValueFormatted;
+        result.AiPredictionChange = forecast.ChangePercentage;
+        result.AiPredictionReasoning = forecast.Reasoning;
+        result.AiPredictionConfidence = forecast.Confidence;
 
         // 🤖 AI Forecast Calculation (UI'da göstermek üzere DTO'ya eklenebilir)
         // İpucu: GetPlayerByIdResult sınıfına 'AiForecastFormatted' özelliğini ekleyerek bunu View'e aktarabilirsiniz.

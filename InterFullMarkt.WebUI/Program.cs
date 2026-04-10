@@ -3,51 +3,65 @@ using InterFullMarkt.Infrastructure;
 using InterFullMarkt.WebUI.Middleware;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+// 📝 Serilog Configuration
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .WriteTo.File("logs/interfullmarkt-.txt", rollingInterval: RollingInterval.Day)
+    .Enrich.FromLogContext()
+    .Enrich.WithProperty("Application", "InterFullMarkt")
+    .CreateLogger();
 
-// 🔧 Configuration from appsettings
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("ConnectionString 'DefaultConnection' bulunamadı.");
+try
+{
+    Log.Information("🚀 InterFullMarkt uygulaması başlatılıyor...");
 
-// 📦 Register Application and Infrastructure layers
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(connectionString);
+    var builder = WebApplication.CreateBuilder(args);
 
-// 🩺 Health Checks Kaydı (Sistemin canlılığını izlemek için)
-builder.Services.AddHealthChecks();
+    // Add Serilog
+    builder.Host.UseSerilog();
 
-// 🎨 Add MVC support
-builder.Services.AddControllersWithViews();
+    // 🔧 Configuration from appsettings
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException("ConnectionString 'DefaultConnection' bulunamadı.");
 
-// 🔐 Add Authentication (Cookie based)
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
+    // 📦 Register Application and Infrastructure layers
+    builder.Services.AddApplication();
+    builder.Services.AddInfrastructure(connectionString);
+
+    // 🩺 Health Checks Kaydı (Sistemin canlılığını izlemek için)
+    builder.Services.AddHealthChecks();
+
+    // 🎨 Add MVC support
+    builder.Services.AddControllersWithViews();
+
+    // 🔐 Add Authentication (Cookie based)
+    builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(options =>
+        {
+            options.LoginPath = "/Auth/Login";
+            options.LogoutPath = "/Auth/Logout";
+            options.AccessDeniedPath = "/Auth/AccessDenied";
+            options.Cookie.Name = "InterFullMarkt.Auth";
+        });
+
+    var app = builder.Build();
+
+    Log.Information("📦 Bağımlılıklar kaydedildi");
+
+    // 🔍 Global Exception Handling Middleware (FIRST MIDDLEWARE)
+    app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
+    // 📋 Configure the HTTP request pipeline
+    if (!app.Environment.IsDevelopment())
     {
-        options.LoginPath = "/Auth/Login";
-        options.LogoutPath = "/Auth/Logout";
-        options.AccessDeniedPath = "/Auth/AccessDenied";
-        options.Cookie.Name = "InterFullMarkt.Auth";
-    });
-
-// 📝 Logging configuration
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-builder.Logging.AddDebug();
-
-var app = builder.Build();
-
-// 🔍 Global Exception Handling Middleware (FIRST MIDDLEWARE)
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
-
-// 📋 Configure the HTTP request pipeline
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-else
-{
+        app.UseExceptionHandler("/Home/Error");
+        app.UseHsts();
+    }
+    else
+    {
     // Development'ta daha detaylı hata sayfası
     app.UseDeveloperExceptionPage();
 }
@@ -58,7 +72,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<InterFullMarkt.Infrastructure.Data.InterFullMarktDbContext>();
-        await dbContext.Database.MigrateAsync();
+        await dbContext.Database.EnsureCreatedAsync();
 
         // 🦁 Seed Galatasaray Data (Tabloları ve Efsane Kadroyu Doldur)
         await InterFullMarkt.Infrastructure.Data.Seeds.DbInitializer.SeedGalatasarayAsync(dbContext);
@@ -96,3 +110,12 @@ app.MapHealthChecks("/health");
 
 // 🚀 Start application
 app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

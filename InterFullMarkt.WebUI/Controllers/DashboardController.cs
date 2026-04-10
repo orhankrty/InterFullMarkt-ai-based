@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InterFullMarkt.WebUI.Controllers;
 
-public class StoreController : Controller
+public class DashboardController : Controller
 {
     public IActionResult Index()
     {

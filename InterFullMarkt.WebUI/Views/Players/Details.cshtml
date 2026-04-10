@@ -227,13 +227,13 @@
     <!-- Tabs Navigation -->
     <div style="background-color: var(--card-bg); border-radius: 1rem; padding: 1rem; margin-bottom: 2rem;">
         <div class="tabs">
-            <button class="tab-button active" onclick="showTab('market-history')">
+            <button class="tab-button active" onclick="showTab(event, 'market-history')">
                 <i class="bi bi-graph-up"></i> Piyasa Tarihi
             </button>
-            <button class="tab-button" onclick="showTab('transfers')">
+            <button class="tab-button" onclick="showTab(event, 'transfers')">
                 <i class="bi bi-shuffle"></i> Transfer Geçmişi
             </button>
-            <button class="tab-button" onclick="showTab('stats')">
+            <button class="tab-button" onclick="showTab(event, 'stats')">
                 <i class="bi bi-bar-chart"></i> Statistikler
             </button>
         </div>
@@ -385,7 +385,7 @@
         });
 
         // Tab switching
-        function showTab(tabName) {
+        function showTab(event, tabName) {
             // Hide all tabs
             const tabs = document.querySelectorAll('.tab-content');
             tabs.forEach(t => t.style.display = 'none');
@@ -397,8 +397,10 @@
             // Show selected tab
             document.getElementById(tabName).style.display = 'block';
 
-            // Add active class to clicked button
-            event.target.classList.add('active');
+            // Add active class to clicked button (currentTarget ensures icon clicks do not break behavior)
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
         }
     </script>
 }

@@ -65,19 +65,49 @@ public sealed class GetAllPlayersQueryHandler : IRequestHandler<GetAllPlayersQue
                     (p.CurrentClub != null && p.CurrentClub.Name.ToLower().Contains(searchLower)));
             }
 
-            // 3. Sıralama
+            // 3. Pozisyon filtresi
+            if (!string.IsNullOrWhiteSpace(request.Positions))
+            {
+                var positionList = request.Positions!.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(p => p.Trim().ToLower())
+                    .ToList();
+                
+                query = query.Where(p => positionList.Contains(p.Position.ToString().ToLower()));
+            }
+
+            // 4. Milliyet filtresi
+            if (!string.IsNullOrWhiteSpace(request.Nationalities))
+            {
+                var nationalityList = request.Nationalities!.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(n => n.Trim().ToUpper())
+                    .ToList();
+                
+                query = query.Where(p => p.Nationality != null && nationalityList.Contains(p.Nationality.CountryCode));
+            }
+
+            // 5. Piyasa değeri aralığı filtresi
+            if (request.MinMarketValue.HasValue)
+            {
+                query = query.Where(p => p.MarketValue != null && p.MarketValue.Amount >= request.MinMarketValue.Value);
+            }
+            if (request.MaxMarketValue.HasValue)
+            {
+                query = query.Where(p => p.MarketValue != null && p.MarketValue.Amount <= request.MaxMarketValue.Value);
+            }
+
+            // 6. Sıralama
             query = ApplySorting(query, request.SortBy, request.SortDirection);
 
-            // 4. Toplam sayı
+            // 7. Toplam sayı
             var totalCount = await query.CountAsync(cancellationToken);
 
-            // 5. Sayfalama
+            // 8. Sayfalama
             var players = await query
                 .Skip(request.PageIndex * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            // 6. DTO'ya dönüştür
+            // 9. DTO'ya dönüştür
             var playerDtos = _mapper.Map<List<PlayerDto>>(players);
 
             _logger.LogInformation(

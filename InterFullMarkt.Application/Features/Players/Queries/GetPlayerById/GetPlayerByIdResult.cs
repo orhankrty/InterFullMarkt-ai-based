@@ -41,6 +41,26 @@ public sealed class GetPlayerByIdResult
     /// Transfer history
     /// </summary>
     public List<TransferHistoryPoint> TransferHistory { get; set; } = new();
+    
+    /// <summary>
+    /// AI-predicted market value (12 months forward)
+    /// </summary>
+    public string? AiPredictedValue { get; set; }
+    
+    /// <summary>
+    /// AI prediction change percentage
+    /// </summary>
+    public decimal AiPredictionChange { get; set; } = 0;
+    
+    /// <summary>
+    /// AI prediction reasoning/explanation
+    /// </summary>
+    public string? AiPredictionReasoning { get; set; }
+    
+    /// <summary>
+    /// Confidence level of AI prediction (Low, Medium, High)
+    /// </summary>
+    public string AiPredictionConfidence { get; set; } = "Medium";
 }
 
 /// <summary>

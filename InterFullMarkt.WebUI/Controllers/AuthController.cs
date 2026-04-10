@@ -1,74 +1,86 @@
-namespace InterFullMarkt.WebUI.Controllers;
-
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using MediatR;
 using System.Security.Claims;
-using InterFullMarkt.Application.Features.Auth.Commands.Login;
-using InterFullMarkt.Application.Features.Auth.Commands.Register;
+
+namespace InterFullMarkt.WebUI.Controllers;
 
 public class AuthController : Controller
 {
-    private readonly IMediator _mediator;
-
-    public AuthController(IMediator mediator)
+    [HttpGet]
+    public IActionResult Login()
     {
-        _mediator = mediator;
+        // Eğer kullanıcı zaten giriş yapmışsa ana sayfaya yönlendir
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+            return RedirectToAction("Index", "Players");
+            
+        return View();
     }
 
-    [HttpGet]
-    public IActionResult Login() => View();
-
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(string email, string password)
+    public async Task<IActionResult> Login(string username, string password)
     {
-        var result = await _mediator.Send(new LoginCommand(email, password));
-        
-        if (!result.IsSuccess)
+        // Mock (Sahte) Giriş İşlemi - İleride veritabanı (Identity) ile değiştirilecek
+        if (username == "admin" && password == "123456")
         {
-            ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Giriş başarısız.");
-            return View();
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, "Admin")
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme, 
+                new ClaimsPrincipal(claimsIdentity));
+
+            return RedirectToAction("Index", "Players");
         }
 
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, result.UserId.ToString()),
-            new Claim(ClaimTypes.Name, result.Username),
-            new Claim(ClaimTypes.Email, email),
-            new Claim(ClaimTypes.Role, result.Role)
-        };
-
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
-
-        return RedirectToAction("Index", "Home");
+        ViewData["Error"] = "Kullanıcı adı veya şifre hatalı!";
+        return View();
     }
 
     [HttpGet]
-    public IActionResult Register() => View();
+    public IActionResult Register()
+    {
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+            return RedirectToAction("Index", "Players");
+
+        return View();
+    }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(string username, string email, string password)
     {
-        var result = await _mediator.Send(new RegisterCommand(username, email, password));
-
-        if (!result.IsSuccess)
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(email))
         {
-            ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Kayıt başarısız.");
+            ViewData["Error"] = "Lütfen tüm alanları doldurun!";
             return View();
         }
 
-        TempData["Success"] = "Kayıt başarılı! Lütfen giriş yapın.";
-        return RedirectToAction("Login");
+        // Mock (Sahte) Kayıt ve Giriş İşlemi - İleride veritabanı eklenecek
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, username),
+            new Claim(ClaimTypes.Email, email),
+            new Claim(ClaimTypes.Role, "User")
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme, 
+            new ClaimsPrincipal(claimsIdentity));
+
+        TempData["Success"] = "Kayıt başarılı! Sisteme hoş geldiniz.";
+        return RedirectToAction("Index", "Players");
     }
 
-    [HttpPost]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index", "Players");
     }
 }
