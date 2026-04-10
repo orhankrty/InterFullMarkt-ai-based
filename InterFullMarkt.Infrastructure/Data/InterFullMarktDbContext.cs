@@ -3,6 +3,7 @@ namespace InterFullMarkt.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using InterFullMarkt.Domain;
 using InterFullMarkt.Domain.Entities;
+using InterFullMarkt.Domain.ValueObjects;
 using InterFullMarkt.Infrastructure.Data.Seeds;
 using InterFullMarkt.Application.Abstractions;
 
@@ -32,11 +33,11 @@ public sealed class InterFullMarktDbContext(DbContextOptions<InterFullMarktDbCon
     /// Ligler tablosu
     /// </summary>
     public DbSet<League> Leagues { get; set; } = null!;
-
-    /// <summary>
-    /// Transferler tablosu
-    /// </summary>
     public DbSet<Transfer> Transfers { get; set; } = null!;
+    public DbSet<Product> Products { get; set; } = null!;
+    public DbSet<Order> Orders { get; set; } = null!;
+    public DbSet<OrderItem> OrderItems { get; set; } = null!;
+    public DbSet<Address> Addresses { get; set; } = null!;
 
     /// <summary>
     /// DbContext konfigürasyonu:
@@ -50,6 +51,11 @@ public sealed class InterFullMarktDbContext(DbContextOptions<InterFullMarktDbCon
 
         // Entity Configurations
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(InterFullMarktDbContext).Assembly);
+
+        modelBuilder.Entity<Order>().OwnsOne(o => o.TotalAmount);
+        modelBuilder.Entity<OrderItem>().OwnsOne(oi => oi.UnitPrice);
+        modelBuilder.Entity<OrderItem>().OwnsOne(oi => oi.TotalPrice);
+        modelBuilder.Entity<Product>().OwnsOne(p => p.Price);
 
         // Global Query Filters
         ApplyGlobalQueryFilters(modelBuilder);

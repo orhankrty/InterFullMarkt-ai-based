@@ -25,7 +25,7 @@ public sealed class Money : IEquatable<Money>
 
     private Money(decimal amount, string currency)
     {
-        Protect.Against.NegativeOrZero(amount, nameof(amount));
+        Protect.Against.Negative(amount, nameof(amount));
         Protect.Against.NullOrEmpty(currency, nameof(currency));
 
         Amount = amount;

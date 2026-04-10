@@ -17,6 +17,11 @@ public sealed class Player : BaseEntity, IAuditEntity, ISoftDelete
     public string? FullName { get; set; }
 
     /// <summary>
+    /// Futbolcunun profil resmi URL'si
+    /// </summary>
+    public string? ImageUrl { get; set; }
+
+    /// <summary>
     /// Futbolcunun mevkii
     /// </summary>
     public PlayerPosition Position { get; set; }

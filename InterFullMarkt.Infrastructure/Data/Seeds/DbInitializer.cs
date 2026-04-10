@@ -11,7 +11,12 @@ public static class DbInitializer
     {
         // Eğer veritabanında Galatasaray zaten varsa, verileri tekrar ekleme
         if (await context.Clubs.AnyAsync(c => c.Name == "Galatasaray"))
+        {
+            await SeedProductsAsync(context);
             return;
+        }
+
+        await SeedProductsAsync(context);
 
         // 1. Önce Süper Lig'i oluştur (FK bağımlılığı için gerekli)
         var superLig = await context.Leagues.FirstOrDefaultAsync(l => l.Name == "Süper Lig");
@@ -102,6 +107,7 @@ public static class DbInitializer
     {
         var player = new Player(name, pos, Nationality.CreateByCode(country), dob, height, weight)
         {
+            ImageUrl = imageUrl,
             PreferredFoot = foot,
             JerseyNumber = number,
             CurrentClubId = clubId,
@@ -109,5 +115,57 @@ public static class DbInitializer
         };
         player.UpdateMarketValue(Money.Create(value, "EUR"));
         return player;
+    }
+
+    private static async Task SeedProductsAsync(InterFullMarktDbContext context)
+    {
+        if (await context.Products.AnyAsync())
+            return;
+
+        var products = new List<Product>
+        {
+            new Product(
+                "Galatasaray 24/25 İç Saha Forması",
+                "Kulübün ikonik parçalı tasarımıyla hazırlanan, en yeni teknoloji performans forması.",
+                Money.Create(120, "EUR"),
+                "Forma",
+                "https://images.unsplash.com/photo-1580087433295-ab2600c1030e?w=800&q=80",
+                100) { IsFeatured = true, CreatedByUserId = "System" },
+
+            new Product(
+                "Elite Pro Krampon X",
+                "Üst düzey kontrol ve hız için tasarlanmış profesyonel krampon.",
+                Money.Create(249.99m, "EUR"),
+                "Krampon",
+                "https://images.unsplash.com/photo-1628803522204-6294d1d44111?w=800&q=80",
+                50) { IsFeatured = true, CreatedByUserId = "System" },
+
+            new Product(
+                "Şampiyonlar Ligi Resmi Maç Topu",
+                "Resmi maç standartlarında, yüksek dayanıklılık ve mükemmel aerodinamik.",
+                Money.Create(150, "EUR"),
+                "Aksesuar",
+                "https://images.unsplash.com/photo-1553152531-64ebbf48bc05?w=800&q=80",
+                200) { IsFeatured = true, CreatedByUserId = "System" },
+                
+            new Product(
+                "Antrenman Eşofman Takımı",
+                "Hafif ve terletmeyen kumaş yapısıyla profesyonel antrenman takımı.",
+                Money.Create(85, "EUR"),
+                "Giyim",
+                "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=800&q=80",
+                75) { CreatedByUserId = "System" },
+                
+            new Product(
+                "Retro 2000 Koleksiyonu Tişört",
+                "Galatasaray'ın efsanevi 2000 yılı başarısına ithaf edilen özel koleksiyon.",
+                Money.Create(45, "EUR"),
+                "Giyim",
+                "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+                120) { CreatedByUserId = "System" }
+        };
+
+        context.Products.AddRange(products);
+        await context.SaveChangesAsync();
     }
 }

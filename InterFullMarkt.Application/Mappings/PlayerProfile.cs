@@ -21,9 +21,11 @@ public sealed class PlayerProfile : Profile
             .ForMember(dest => dest.Age,
                 opt => opt.MapFrom(src => src.GetAge()))
             .ForMember(dest => dest.MarketValue,
-                opt => opt.MapFrom(src => src.MarketValue != null! ? $"{src.MarketValue.Amount} {src.MarketValue.Currency}" : null!))
+                opt => opt.MapFrom(src => src.MarketValue != null ? $"{src.MarketValue.Amount:N0} {src.MarketValue.Currency}" : null))
             .ForMember(dest => dest.CurrentClubName,
-                opt => opt.MapFrom(src => src.CurrentClub != null ? src.CurrentClub.Name : null));
+                opt => opt.MapFrom(src => src.CurrentClub != null ? src.CurrentClub.Name : null))
+            .ForMember(dest => dest.ImageUrl,
+                opt => opt.MapFrom(src => src.ImageUrl));
 
         // CreatePlayerDto → Player Entity
         // Not: Bu mapping'in Create Handler'da kullanılır

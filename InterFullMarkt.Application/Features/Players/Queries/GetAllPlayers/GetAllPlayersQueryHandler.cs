@@ -98,21 +98,35 @@ public sealed class GetAllPlayersQueryHandler : IRequestHandler<GetAllPlayersQue
             // 6. Sıralama
             query = ApplySorting(query, request.SortBy, request.SortDirection);
 
-            // 7. Toplam sayı
+            // 7. Kulüpleri ara (Eğer arama terimi varsa)
+            var matchingClubs = new List<ClubDto>();
+            if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+            {
+                var searchLower = request.SearchTerm.ToLower().Trim();
+                var clubs = await _dbContext.Clubs
+                    .Where(c => c.Name.ToLower().Contains(searchLower) || c.ShortName.ToLower().Contains(searchLower))
+                    .AsNoTracking()
+                    .ToListAsync(cancellationToken);
+                
+                matchingClubs = _mapper.Map<List<ClubDto>>(clubs);
+            }
+
+            // 8. Toplam sayı
             var totalCount = await query.CountAsync(cancellationToken);
 
-            // 8. Sayfalama
+            // 9. Sayfalama
             var players = await query
                 .Skip(request.PageIndex * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            // 9. DTO'ya dönüştür
+            // 10. DTO'ya dönüştür
             var playerDtos = _mapper.Map<List<PlayerDto>>(players);
 
             _logger.LogInformation(
-                "Başarıyla {Count} oyuncu getirildi (Toplam: {Total})",
+                "Başarıyla {Count} oyuncu ve {ClubCount} kulüp getirildi (Toplam Oyuncu: {Total})",
                 playerDtos.Count,
+                matchingClubs.Count,
                 totalCount);
 
             return new GetAllPlayersResult
@@ -121,6 +135,7 @@ public sealed class GetAllPlayersQueryHandler : IRequestHandler<GetAllPlayersQue
                 PageIndex = request.PageIndex,
                 PageSize = request.PageSize,
                 Players = playerDtos,
+                Clubs = matchingClubs,
                 IsSuccess = true
             };
         }

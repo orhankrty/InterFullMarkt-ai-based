@@ -13,6 +13,7 @@ using InterFullMarkt.Application.DTOs;
 /// Oyuncu yönetimi controller'ı.
 /// MediatR CQRS pattern'ını kullanarak Command ve Query'leri işler.
 /// </summary>
+[Route("Players")]
 public sealed class PlayersController : Controller
 {
     private readonly IMediator _mediator;
@@ -41,6 +42,8 @@ public sealed class PlayersController : Controller
     /// <param name="maxValue">Maksimum piyasa değeri</param>
     /// <returns>Oyuncuların listelendiği görünüm</returns>
     [HttpGet]
+    [Route("")]
+    [Route("Index")]
     public async Task<IActionResult> Index(int page = 1, string? search = null, string? sortBy = null,
         string? positions = null, string? nationalities = null, decimal? minValue = null, decimal? maxValue = null)
     {
@@ -64,8 +67,8 @@ public sealed class PlayersController : Controller
 
             if (!result.IsSuccess)
             {
-                TempData["Error"] = result.ErrorMessage ?? "Oyuncuları yükleme sırasında bir hata oluştu.";
-                return RedirectToAction("Index", "Home");
+                ViewData["ErrorMessage"] = result.ErrorMessage ?? "Oyuncuları yükleme sırasında bir hata oluştu.";
+                return View(result);
             }
 
             ViewData["CurrentPage"] = page;
@@ -81,8 +84,15 @@ public sealed class PlayersController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex, "Oyuncuları listeleyemedi");
-            TempData["Error"] = "Oyuncuları yükleme sırasında bir hata oluştu.";
-            return RedirectToAction("Index", "Home");
+            ViewData["ErrorMessage"] = "Sistemde bir hata oluştu: " + ex.Message;
+            return View(new GetAllPlayersResult 
+            { 
+                Players = new List<PlayerDto>(), 
+                Clubs = new List<ClubDto>(), 
+                TotalCount = 0,
+                PageIndex = 0,
+                PageSize = 12
+            });
         }
     }
 
@@ -91,6 +101,7 @@ public sealed class PlayersController : Controller
     /// </summary>
     /// <returns>Yeni oyuncu oluşturma formu görünümü</returns>
     [HttpGet]
+    [Route("Create")]
     public IActionResult Create()
     {
         return View(new CreatePlayerDto
@@ -110,6 +121,7 @@ public sealed class PlayersController : Controller
     /// <param name="createPlayerDto">Oyuncu verileri</param>
     /// <returns>İşlem sonucu görünümü</returns>
     [HttpPost]
+    [Route("Create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreatePlayerDto createPlayerDto)
     {
@@ -161,6 +173,7 @@ public sealed class PlayersController : Controller
     /// <param name="id">Oyuncu benzersiz kimliği (GUID)</param>
     /// <returns>Oyuncu detay görünümü</returns>
     [HttpGet]
+    [Route("Details/{id:guid}")]
     public async Task<IActionResult> Details(Guid id)
     {
         try

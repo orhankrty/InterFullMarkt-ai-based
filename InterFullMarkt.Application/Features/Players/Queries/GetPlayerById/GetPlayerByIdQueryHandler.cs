@@ -43,6 +43,7 @@ public sealed class GetPlayerByIdQueryHandler : IRequestHandler<GetPlayerByIdQue
             Height = player.Height,
             Weight = player.Weight,
             PreferredFoot = player.PreferredFoot ?? "Belirtilmemiş",
+            ImageUrl = player.ImageUrl,
             
             MarketValue = player.MarketValue is not null 
                 ? $"€{(player.MarketValue.Amount / 1_000_000):F1}M" 

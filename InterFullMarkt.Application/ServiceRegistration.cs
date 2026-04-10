@@ -23,7 +23,7 @@ public static class ServiceRegistration
         services.AddAutoMapper(cfg =>
         {
             cfg.AddProfile<PlayerProfile>();
-            // İleride ek profiller buraya eklenecek
+            cfg.AddProfile<ClubProfile>();
         });
 
         // MediatR Konfigürasyonu

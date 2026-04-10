@@ -86,6 +86,11 @@ public sealed class GetAllPlayersResult
     public required List<PlayerDto> Players { get; set; } = new();
 
     /// <summary>
+    /// Eşleşen kulüpler (Arama terimi varsa dolsun)
+    /// </summary>
+    public List<ClubDto> Clubs { get; set; } = new();
+
+    /// <summary>
     /// Sonuçlara başarıyla ulaşılmış mı?
     /// </summary>
     public bool IsSuccess { get; set; } = true;

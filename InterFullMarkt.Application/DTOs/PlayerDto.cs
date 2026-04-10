@@ -22,6 +22,11 @@ public sealed class PlayerDto
     public required string Position { get; set; }
 
     /// <summary>
+    /// Oyuncu profil resmi URL'si
+    /// </summary>
+    public string? ImageUrl { get; set; }
+
+    /// <summary>
     /// Milliyeti (Ülke ve Bayrak)
     /// </summary>
     public required string Nationality { get; set; }

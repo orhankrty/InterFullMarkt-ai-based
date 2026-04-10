@@ -10,6 +10,7 @@ public sealed class GetPlayerByIdResult
     public string Position { get; set; } = string.Empty;
     public string Nationality { get; set; } = string.Empty;
     public string NationalityFlag { get; set; } = string.Empty;
+    public string? ImageUrl { get; set; }
     
     /// <summary>
     /// Age calculated from DateOfBirth

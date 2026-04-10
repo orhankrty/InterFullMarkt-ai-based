@@ -13,6 +13,16 @@ public sealed class User : BaseEntity, IAuditEntity, ISoftDelete
     public required string PasswordHash { get; set; }
     public string Role { get; set; } = "User";
 
+    // Profil Bilgileri
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string? PhoneNumber { get; set; }
+    public DateTime? DateOfBirth { get; set; }
+
+    // Navigation Properties
+    public ICollection<Address> Addresses { get; set; } = new List<Address>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
+
     public string CreatedByUserId { get; set; } = string.Empty;
     public string? UpdatedByUserId { get; set; }
     public bool IsDeleted { get; set; }

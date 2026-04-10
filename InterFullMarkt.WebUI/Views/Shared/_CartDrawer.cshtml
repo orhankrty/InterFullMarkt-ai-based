@@ -1,0 +1,121 @@
+<div class="offcanvas offcanvas-end bg-dark text-white border-start border-secondary" tabindex="-1" id="cartDrawer" aria-labelledby="cartDrawerLabel" style="width: 400px;">
+    <div class="offcanvas-header border-bottom border-secondary py-4">
+        <h5 class="offcanvas-title fw-bold" id="cartDrawerLabel"><i class="bi bi-cart3 text-primary me-2"></i> Sepetiniz</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <div id="cartItemsContainer" class="p-4">
+            <!-- AJAX will fill this -->
+            <div class="text-center py-5 opacity-50">
+                <i class="bi bi-cart-x display-1 mb-3 d-block"></i>
+                <p>Sepetiniz şu an boş.</p>
+            </div>
+        </div>
+    </div>
+    <div class="offcanvas-footer p-4 border-top border-secondary bg-black bg-opacity-25">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <span class="text-secondary fs-5">Toplam:</span>
+            <span id="cartTotalText" class="fs-3 fw-bold text-warning">0.00 €</span>
+        </div>
+        <div class="d-grid gap-2">
+            <a href="/Checkout" class="btn btn-primary btn-lg rounded-pill fw-bold py-3 shadow-lg">
+                <i class="bi bi-credit-card me-2"></i> Güvenli Ödeme
+            </a>
+            <button onclick="clearCart()" class="btn btn-outline-secondary btn-sm rounded-pill mt-2 border-0 opacity-50 text-decoration-underline">
+                Sepeti Boşalt
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .cart-item {
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        margin-bottom: 1rem;
+    }
+    .cart-item:hover {
+        background: rgba(255, 255, 255, 0.07);
+        transform: translateX(-5px);
+    }
+</style>
+
+<script>
+    async function updateCartUI() {
+        const response = await fetch('/Cart/GetCartSummary');
+        const cart = await response.json();
+        
+        const container = document.getElementById('cartItemsContainer');
+        const totalText = document.getElementById('cartTotalText');
+        const badge = document.getElementById('cartBadge');
+        
+        if (cart.items.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-5 opacity-50">
+                    <i class="bi bi-cart-x display-1 mb-3 d-block"></i>
+                    <p>Sepetiniz şu an boş.</p>
+                </div>
+            `;
+            totalText.innerText = "0.00 €";
+            if (badge) badge.innerText = "0";
+            return;
+        }
+
+        container.innerHTML = cart.items.map(item => `
+            <div class="cart-item p-3 d-flex align-items-center gap-3">
+                <img src="${item.imageUrl}" class="rounded-3 shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
+                <div class="flex-grow-1">
+                    <h6 class="mb-0 text-white fw-bold">${item.productName}</h6>
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <small class="text-secondary">${item.quantity} x ${item.unitPrice} ${item.currency}</small>
+                        <span class="text-warning fw-bold">${item.totalPrice.toFixed(2)} ${item.currency}</span>
+                    </div>
+                </div>
+                <button onclick="removeFromCart('${item.productId}')" class="btn btn-sm text-danger opacity-50 hover-opacity-100">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+        `).join('');
+
+        totalText.innerText = cart.totalAmount.toFixed(2) + " " + cart.currency;
+        if (badge) badge.innerText = cart.totalQuantity;
+    }
+
+    async function addToCart(productId) {
+        const form = new FormData();
+        form.append('productId', productId);
+        
+        const response = await fetch('/Cart/AddToCart', {
+            method: 'POST',
+            body: form
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+            await updateCartUI();
+            const drawer = new bootstrap.Offcanvas(document.getElementById('cartDrawer'));
+            drawer.show();
+        }
+    }
+
+    async function removeFromCart(productId) {
+        const form = new FormData();
+        form.append('productId', productId);
+        
+        await fetch('/Cart/RemoveFromCart', {
+            method: 'POST',
+            body: form
+        });
+        await updateCartUI();
+    }
+
+    async function clearCart() {
+        if (confirm('Sepeti boşaltmak istediğinize emin misiniz?')) {
+            await fetch('/Cart/ClearCart', { method: 'POST' });
+            await updateCartUI();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', updateCartUI);
+</script>

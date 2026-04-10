@@ -33,6 +33,10 @@ public interface IDbContext
     /// Transferler DbSet'i
     /// </summary>
     DbSet<Transfer> Transfers { get; }
+    DbSet<Product> Products { get; }
+    DbSet<Order> Orders { get; }
+    DbSet<OrderItem> OrderItems { get; }
+    DbSet<Address> Addresses { get; }
 
     /// <summary>
     /// Varlık ekler

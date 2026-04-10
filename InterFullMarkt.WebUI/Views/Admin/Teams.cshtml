@@ -1,0 +1,80 @@
+@model List<InterFullMarkt.Application.DTOs.ClubDto>
+@{
+    ViewData["Title"] = "Takım Yönetimi";
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/Admin" class="text-decoration-none text-secondary">Yönetim</a></li>
+                    <li class="breadcrumb-item active text-white" aria-current="page">Takımlar</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold mb-0">Takım Yönetimi</h2>
+        </div>
+        <a href="/Admin/Teams/Create" class="btn btn-primary rounded-pill px-4 py-2">
+            <i class="bi bi-plus-lg me-2"></i> Yeni Takım Ekle
+        </a>
+    </div>
+
+    <div class="card bg-dark border-secondary rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover mb-0 align-middle">
+                <thead class="bg-black">
+                    <tr class="text-secondary">
+                        <th class="ps-4">Logo</th>
+                        <th>Takım Adı</th>
+                        <th>Kısa Ad</th>
+                        <th>Kuruluş</th>
+                        <th>Bütçe</th>
+                        <th>Kadro</th>
+                        <th class="text-end pe-4">Aksiyonlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var club in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <div class="bg-white rounded-2 p-1 d-inline-block" style="width: 40px; height: 40px;">
+                                    <img src="@(club.LogoUrl ?? "/images/default-club.png")" class="img-fluid" alt="">
+                                </div>
+                            </td>
+                            <td><span class="fw-bold">@club.Name</span></td>
+                            <td><span class="badge bg-secondary">@club.ShortName</span></td>
+                            <td>@club.FoundingYear</td>
+                            <td class="text-success fw-semibold">€@((club.BudgetAmount ?? 0).ToString("N0"))</td>
+                            <td>@club.SquadCount Oyuncu</td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group">
+                                    <a href="/Admin/Teams/Edit/@club.Id" class="btn btn-sm btn-outline-info rounded-start-pill px-3">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button onclick="deleteTeam('@club.Id')" class="btn btn-sm btn-outline-danger rounded-end-pill px-3">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function deleteTeam(id) {
+            if (confirm('Bu takımı silmek istediğinize emin misiniz?')) {
+                fetch('/Admin/Teams/Delete/' + id, { method: 'POST' })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) location.reload();
+                    });
+            }
+        }
+    </script>
+}
