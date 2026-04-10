@@ -1,12 +1,11 @@
 namespace InterFullMarkt.Application.Abstractions;
 
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using InterFullMarkt.Domain.Entities;
 
 /// <summary>
-/// Database konteksti abstraksiyon interface'i.
-/// Clean Architecture prensiplerine uygun olarak DbContext'i abstraktlaştırır.
+/// Database konteksti abstraksiyon interface'i.    /// Clean Architecture prensiplerine uygun olarak DbContext'i abstraktlaştırır.
 /// </summary>
 public interface IDbContext
 {
@@ -31,7 +30,13 @@ public interface IDbContext
     DbSet<Transfer> Transfers { get; }
 
     /// <summary>
+    /// Varlık ekler
+    /// </summary>
+    EntityEntry<TEntity> Add<TEntity>(TEntity entity) where TEntity : class;
+
+    /// <summary>
     /// Değişiklikleri veritabanına kaydeder.
     /// </summary>
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
+

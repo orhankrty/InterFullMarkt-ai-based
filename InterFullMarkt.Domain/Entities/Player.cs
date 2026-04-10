@@ -12,19 +12,19 @@ using InterFullMarkt.Domain.ValueObjects;
 public sealed class Player : BaseEntity, IAuditEntity, ISoftDelete
 {
     /// <summary>
-    /// Futbolcunun adı ve soyadı (Required)
+    /// Futbolcunun adı ve soyadı
     /// </summary>
-    public required string FullName { get; set; }
+    public string? FullName { get; set; }
 
     /// <summary>
-    /// Futbolcunun mevkii (Required)
+    /// Futbolcunun mevkii
     /// </summary>
-    public required PlayerPosition Position { get; set; }
+    public PlayerPosition Position { get; set; }
 
     /// <summary>
-    /// Milliyeti (Required)
+    /// Milliyeti
     /// </summary>
-    public required Nationality Nationality { get; set; }
+    public Nationality? Nationality { get; set; }
 
     /// <summary>
     /// Doğum tarihi
@@ -59,9 +59,17 @@ public sealed class Player : BaseEntity, IAuditEntity, ISoftDelete
     /// <summary>
     /// Bulunduğu kulüp ID'si
     /// </summary>
-    public Guid? CurrentClubId { get; private set; }
+    public Guid? CurrentClubId { get; set; }
 
-    // Navigation properties removed - configured in EF Core
+    /// <summary>
+    /// Bulunduğu kulüp navigasyon özelliği
+    /// </summary>
+    public Club? CurrentClub { get; set; }
+
+    /// <summary>
+    /// Transfer geçmişi
+    /// </summary>
+    public ICollection<Transfer> TransfersAsPlayer { get; set; } = new List<Transfer>();
 
     // IAuditEntity implementasyon
     public string CreatedByUserId { get; set; } = string.Empty;

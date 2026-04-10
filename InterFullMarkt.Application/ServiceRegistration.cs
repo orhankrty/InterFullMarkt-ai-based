@@ -35,8 +35,8 @@ public static class ServiceRegistration
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
 
-        // FluentValidation Konfigürasyonu
-        services.AddValidatorsFromAssemblyContaining<ServiceRegistration>(includeInternalTypes: true);
+        // FluentValidation - Manual validator registration
+        services.AddScoped<IValidator<CreatePlayerCommand>, CreatePlayerCommandValidator>();
 
         return services;
     }

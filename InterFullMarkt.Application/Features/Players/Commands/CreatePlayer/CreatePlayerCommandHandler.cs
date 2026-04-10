@@ -2,6 +2,7 @@ namespace InterFullMarkt.Application.Features.Players.Commands.CreatePlayer;
 
 using MediatR;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using InterFullMarkt.Domain.Entities;
 using InterFullMarkt.Domain.Enums;
 using InterFullMarkt.Domain.ValueObjects;
@@ -58,7 +59,6 @@ public sealed class CreatePlayerCommandHandler : IRequestHandler<CreatePlayerCom
             {
                 PreferredFoot = playerData.PreferredFoot,
                 JerseyNumber = playerData.JerseyNumber,
-                CurrentClubId = playerData.CurrentClubId,
                 CreatedByUserId = request.CreatedByUserId
             };
 
@@ -72,25 +72,27 @@ public sealed class CreatePlayerCommandHandler : IRequestHandler<CreatePlayerCom
             // 6. Eğer kulüp ID'si belirtilmişse, kulübün mevcut olup olmadığını kontrol et
             if (playerData.CurrentClubId.HasValue)
             {
-                var club = await _dbContext.Clubs.FindAsync(
-                    new object?[] { playerData.CurrentClubId.Value }, 
-                    cancellationToken: cancellationToken);
+                var club = await _dbContext.Clubs
+                    .FirstOrDefaultAsync(c => c.Id == playerData.CurrentClubId.Value, cancellationToken);
 
                 if (club == null)
                     return CreatePlayerResult.FailureResult(
                         $"ID'si {playerData.CurrentClubId} olan kulüp bulunamadı.",
                         "CLUB_NOT_FOUND");
 
-                // Kulübün kadro limitini kontrol et
-                var squadCount = club.GetSquadCount();
+                // Kulübün kadro limitini kontrol et (23 oyuncu max)
+                var squadCount = club.Players.Count;
                 if (squadCount >= 23)
                     return CreatePlayerResult.FailureResult(
                         $"{club.Name} kadrosu dolu (Max: 23 oyuncu).",
                         "SQUAD_FULL");
+                
+                // Kulüp atanıyor
+                player.CurrentClubId = playerData.CurrentClubId;
             }
 
             // 7. Veri tabanına ekle
-            await _dbContext.Players.AddAsync(player, cancellationToken);
+            _dbContext.Add(player);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             // 8. Başarı sonucu döndür

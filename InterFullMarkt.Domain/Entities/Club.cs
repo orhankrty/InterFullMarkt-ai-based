@@ -45,27 +45,27 @@ public sealed class Club : BaseEntity, IAuditEntity, ISoftDelete
     /// <summary>
     /// Ligin navigasyon özelliği
     /// </summary>
-    public League? League { get; private set; }
+    public League? League { get; set; }
 
     /// <summary>
     /// Kulübün bütçesi
     /// </summary>
-    public Money? Budget { get; private set; }
+    public Money? Budget { get; set; }
 
     /// <summary>
     /// Kulüp kurulu futbolcular
     /// </summary>
-    public ICollection<Player> Players { get; private set; } = new List<Player>();
+    public ICollection<Player> Players { get; set; } = new List<Player>();
 
     /// <summary>
     /// Kulübün gönderdiği transferler (FromClub olarak)
     /// </summary>
-    public ICollection<Transfer> OutgoingTransfers { get; private set; } = new List<Transfer>();
+    public ICollection<Transfer> OutgoingTransfers { get; set; } = new List<Transfer>();
 
     /// <summary>
     /// Kulübün aldığı transferler (ToClub olarak)
     /// </summary>
-    public ICollection<Transfer> IncomingTransfers { get; private set; } = new List<Transfer>();
+    public ICollection<Transfer> IncomingTransfers { get; set; } = new List<Transfer>();
 
     /// <summary>
     /// Kulüp logosu URL'si
