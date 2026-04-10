@@ -16,29 +16,14 @@ public sealed class Transfer : BaseEntity, IAuditEntity, ISoftDelete
     public required Guid FromClubId { get; set; }
 
     /// <summary>
-    /// Transferi gönderen (eski) kulüp navigasyon özelliği
-    /// </summary>
-    public virtual Club? FromClub { get; private set; }
-
-    /// <summary>
     /// Transferi alan (yeni) kulüp ID'si
     /// </summary>
     public required Guid ToClubId { get; set; }
 
     /// <summary>
-    /// Transferi alan (yeni) kulüp navigasyon özelliği
-    /// </summary>
-    public virtual Club? ToClub { get; private set; }
-
-    /// <summary>
     /// Transfer edilen futbolcu ID'si
     /// </summary>
     public required Guid PlayerId { get; set; }
-
-    /// <summary>
-    /// Transfer edilen futbolcu navigasyon özelliği
-    /// </summary>
-    public virtual Player? Player { get; private set; }
 
     /// <summary>
     /// Transfer ücreti (Bedel)

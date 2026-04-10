@@ -1,0 +1,130 @@
+namespace InterFullMarkt.Application.Features.Players.Queries.GetAllPlayers;
+
+using MediatR;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using InterFullMarkt.Application.DTOs;
+using InterFullMarkt.Application.Abstractions;
+
+/// <summary>
+/// GetAllPlayersQuery'yi işleyen handler.
+/// Veritabanından oyuncuları alır, DTO'ya dönüştürür.
+/// </summary>
+public sealed class GetAllPlayersQueryHandler : IRequestHandler<GetAllPlayersQuery, GetAllPlayersResult>
+{
+    private readonly IDbContext _dbContext;
+    private readonly IMapper _mapper;
+    private readonly ILogger<GetAllPlayersQueryHandler> _logger;
+
+    public GetAllPlayersQueryHandler(
+        IDbContext dbContext,
+        IMapper mapper,
+        ILogger<GetAllPlayersQueryHandler> logger)
+    {
+        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    public async Task<GetAllPlayersResult> Handle(GetAllPlayersQuery request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            _logger.LogInformation(
+                "Oyuncuları getiriliyor: PageIndex={PageIndex}, PageSize={PageSize}, SearchTerm={SearchTerm}, SortBy={SortBy}",
+                request.PageIndex,
+                request.PageSize,
+                request.SearchTerm,
+                request.SortBy);
+
+            // 1. Base query
+            var query = _dbContext.Players
+                .Include(p => p.CurrentClub)
+                .AsNoTracking();
+
+            // 2. Arama filtresi
+            if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+            {
+                var searchLower = request.SearchTerm.ToLower().Trim();
+                query = query.Where(p =>
+                    p.FullName.ToLower().Contains(searchLower) ||
+                    p.Nationality.CountryName.ToLower().Contains(searchLower) ||
+                    (p.CurrentClub != null && p.CurrentClub.Name.ToLower().Contains(searchLower)));
+            }
+
+            // 3. Sıralama
+            query = ApplySorting(query, request.SortBy, request.SortDirection);
+
+            // 4. Toplam sayı
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            // 5. Sayfalama
+            var players = await query
+                .Skip(request.PageIndex * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync(cancellationToken);
+
+            // 6. DTO'ya dönüştür
+            var playerDtos = _mapper.Map<List<PlayerDto>>(players);
+
+            _logger.LogInformation(
+                "Başarıyla {Count} oyuncu getirildi (Toplam: {Total})",
+                playerDtos.Count,
+                totalCount);
+
+            return new GetAllPlayersResult
+            {
+                TotalCount = totalCount,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                Players = playerDtos,
+                IsSuccess = true
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Oyuncuları getirirken hata oluştu");
+
+            return new GetAllPlayersResult
+            {
+                TotalCount = 0,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                Players = new List<PlayerDto>(),
+                IsSuccess = false,
+                ErrorMessage = $"Oyuncuları getirirken bir hata oluştu: {ex.Message}"
+            };
+        }
+    }
+
+    /// <summary>
+    /// Query'ye sıralama kurallarını uygular.
+    /// </summary>
+    private static IQueryable<Domain.Entities.Player> ApplySorting(
+        IQueryable<Domain.Entities.Player> query,
+        string? sortBy,
+        string? sortDirection)
+    {
+        var isDescending = sortDirection?.ToLower() == "desc";
+
+        return sortBy?.ToLower() switch
+        {
+            "age" => isDescending
+                ? query.OrderByDescending(p => p.DateOfBirth)
+                : query.OrderBy(p => p.DateOfBirth),
+
+            "marketvalue" => isDescending
+                ? query.OrderByDescending(p => p.MarketValue != null ? p.MarketValue.Amount : 0)
+                : query.OrderBy(p => p.MarketValue != null ? p.MarketValue.Amount : 0),
+
+            "position" => isDescending
+                ? query.OrderByDescending(p => p.Position)
+                : query.OrderBy(p => p.Position),
+
+            "name" or _ => isDescending
+                ? query.OrderByDescending(p => p.FullName)
+                : query.OrderBy(p => p.FullName)
+        };
+    }
+}

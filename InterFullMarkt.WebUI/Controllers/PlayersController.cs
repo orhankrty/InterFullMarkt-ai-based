@@ -3,15 +3,14 @@ namespace InterFullMarkt.WebUI.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using InterFullMarkt.Application.Features.Players.Commands.CreatePlayer;
+using InterFullMarkt.Application.Features.Players.Queries.GetAllPlayers;
 using InterFullMarkt.Application.DTOs;
 
 /// <summary>
-/// Oyuncu yönetimi API endpoint'leri.
-/// MediatR Command Handler'ları üzerinden işlem yapılır.
+/// Oyuncu yönetimi controller'ı.
+/// MediatR CQRS pattern'ını kullanarak Command ve Query'leri işler.
 /// </summary>
-[ApiController]
-[Route("api/[controller]")]
-public sealed class PlayersController : ControllerBase
+public sealed class PlayersController : Controller
 {
     private readonly IMediator _mediator;
     private readonly ILogger<PlayersController> _logger;
@@ -23,57 +22,118 @@ public sealed class PlayersController : ControllerBase
     }
 
     /// <summary>
-    /// Yeni oyuncu oluşturur.
+    /// Tüm oyuncuları listeler.
     /// </summary>
-    /// <param name="createPlayerDto">Oyuncu oluşturma verisi</param>
-    /// <returns>Oluşturulan oyuncu ID'si</returns>
-    /// <response code="200">Oyuncu başarıyla oluşturuldu</response>
-    /// <response code="400">Validasyon hatası</response>
-    /// <response code="500">Sunucu hatası</response>
-    [HttpPost("create")]
-    [ProducesResponseType(typeof(CreatePlayerResult), StatusCodes.Status200OK)]
-    [ProducesResponseType(type: typeof(ProblemDetails), statusCode: StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(type: typeof(ProblemDetails), statusCode: StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreatePlayer([FromBody] CreatePlayerDto createPlayerDto, CancellationToken cancellationToken = default)
+    [HttpGet]
+    public async Task<IActionResult> Index(int page = 1, string? search = null, string? sortBy = null)
     {
-        if (createPlayerDto is null)
-            return BadRequest(new { message = "Oyuncu verisi boş olamaz" });
-
         try
         {
-            _logger.LogInformation(
-                "Yeni oyuncu oluşturma isteği: {FullName}, Pozisyon: {Position}",
-                createPlayerDto.FullName,
-                createPlayerDto.Position);
+            _logger.LogInformation("Oyuncular sayfası istendi: Page={Page}, Search={Search}", page, search);
 
-            var command = new CreatePlayerCommand(createPlayerDto, "Api.Client");
-            var result = await _mediator.Send(command, cancellationToken);
+            var query = new GetAllPlayersQuery
+            {
+                PageIndex = page - 1,
+                PageSize = 12,
+                SearchTerm = search,
+                SortBy = sortBy ?? "name"
+            };
+
+            var result = await _mediator.Send(query);
 
             if (!result.IsSuccess)
-                return BadRequest(new { message = result.ErrorMessage, code = result.ErrorCode });
+            {
+                TempData["Error"] = result.ErrorMessage ?? "Oyuncuları yükleme sırasında bir hata oluştu.";
+                return RedirectToAction("Index", "Home");
+            }
 
+            ViewData["CurrentPage"] = page;
+            ViewData["SearchTerm"] = search;
+            ViewData["SortBy"] = sortBy ?? "name";
+
+            return View(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Oyuncuları listeleyemedi");
+            TempData["Error"] = "Oyuncuları yükleme sırasında bir hata oluştu.";
+            return RedirectToAction("Index", "Home");
+        }
+    }
+
+    /// <summary>
+    /// Yeni oyuncu oluşturma formunu gösterir.
+    /// </summary>
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View(new CreatePlayerDto());
+    }
+
+    /// <summary>
+    /// Yeni oyuncu oluşturur.
+    /// </summary>
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreatePlayerDto createPlayerDto)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(createPlayerDto);
+            }
+
+            _logger.LogInformation("Yeni oyuncu oluşturma isteği: {FullName}", createPlayerDto.FullName);
+
+            var command = new CreatePlayerCommand(createPlayerDto, User?.Identity?.Name ?? "System");
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Oyuncu oluşturulamadı.");
+                return View(createPlayerDto);
+            }
+
+            TempData["Success"] = $"{createPlayerDto.FullName} başarıyla sisteme eklendi!";
             _logger.LogInformation("Oyuncu başarıyla oluşturuldu: {PlayerId}", result.PlayerId);
 
-            return Ok(result);
+            return RedirectToAction("Index");
         }
         catch (FluentValidation.ValidationException ex)
         {
-            _logger.LogWarning("Validasyon hatası: {Errors}", string.Join(", ", ex.Errors.Select(e => e.ErrorMessage)));
-            return BadRequest(new
+            _logger.LogWarning("Validasyon hatası: {Message}", ex.Message);
+            
+            foreach (var error in ex.Errors)
             {
-                message = "Validasyon hatası",
-                errors = ex.Errors.GroupBy(e => e.PropertyName)
-                    .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray())
-            });
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+            }
+
+            return View(createPlayerDto);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Oyuncu oluşturulurken hata: {Message}", ex.Message);
-            return StatusCode(StatusCodes.Status500InternalServerError, new
-            {
-                message = "Sunucuda bir hata oluştu",
-                detail = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development" ? ex.Message : null
-            });
+            ModelState.AddModelError(string.Empty, "Oyuncu oluşturulurken bir hata oluştu.");
+            return View(createPlayerDto);
+        }
+    }
+
+    /// <summary>
+    /// Oyuncu detaylarını gösterir.
+    /// </summary>
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> Details(Guid id)
+    {
+        try
+        {
+            // TODO: GetPlayerByIdQuery oluştur
+            return Ok("Oyuncu detayları henüz implementasyonda değildir.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Oyuncu detaylarını getirirken hata");
+            return RedirectToAction("Index");
         }
     }
 }

@@ -1,39 +1,65 @@
 using InterFullMarkt.Application;
 using InterFullMarkt.Infrastructure;
+using InterFullMarkt.WebUI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add application and infrastructure layers
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+// 🔧 Configuration from appsettings
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("ConnectionString 'DefaultConnection' bulunamadı.");
 
-// Add services to the container.
+// 📦 Register Application and Infrastructure layers
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(connectionString);
+
+// 🎨 Add MVC support
 builder.Services.AddControllersWithViews();
+
+// 📝 Logging configuration
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 🔍 Global Exception Handling Middleware (FIRST MIDDLEWARE)
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
+// 📋 Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+else
+{
+    // Development'ta daha detaylı hata sayfası
+    app.UseDeveloperExceptionPage();
+}
 
-// Initialize database and apply migrations
+// 🗄️ Initialize database and apply migrations
 app.UseInfrastructure();
 
+// 🌐 HTTP Middleware
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseStaticFiles();
 
+// 🔐 Authorization
 app.UseAuthorization();
 
+// 🛣️ Route configurations
 app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Players}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+app.MapControllerRoute(
+    name: "error",
+    pattern: "Error/{statusCode}");
 
+// 🚀 Start application
+_=app.RunAsync();
 app.Run();

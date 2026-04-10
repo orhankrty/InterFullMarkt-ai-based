@@ -5,7 +5,7 @@ using AutoMapper;
 using InterFullMarkt.Domain.Entities;
 using InterFullMarkt.Domain.Enums;
 using InterFullMarkt.Domain.ValueObjects;
-using InterFullMarkt.Infrastructure.Data;
+using InterFullMarkt.Application.Abstractions;
 
 /// <summary>
 /// CreatePlayerCommand'ı işleyen handler.
@@ -13,10 +13,10 @@ using InterFullMarkt.Infrastructure.Data;
 /// </summary>
 public sealed class CreatePlayerCommandHandler : IRequestHandler<CreatePlayerCommand, CreatePlayerResult>
 {
-    private readonly InterFullMarktDbContext _dbContext;
+    private readonly IDbContext _dbContext;
     private readonly IMapper _mapper;
 
-    public CreatePlayerCommandHandler(InterFullMarktDbContext dbContext, IMapper mapper)
+    public CreatePlayerCommandHandler(IDbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

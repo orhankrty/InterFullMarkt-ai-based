@@ -61,15 +61,7 @@ public sealed class Player : BaseEntity, IAuditEntity, ISoftDelete
     /// </summary>
     public Guid? CurrentClubId { get; private set; }
 
-    /// <summary>
-    /// Bulunduğu kulüp navigasyon özelliği
-    /// </summary>
-    public virtual Club? CurrentClub { get; private set; }
-
-    /// <summary>
-    /// Transfer geçmişi
-    /// </summary>
-    public virtual ICollection<Transfer> TransfersAsPlayer { get; private set; } = new List<Transfer>();
+    // Navigation properties removed - configured in EF Core
 
     // IAuditEntity implementasyon
     public string CreatedByUserId { get; set; } = string.Empty;

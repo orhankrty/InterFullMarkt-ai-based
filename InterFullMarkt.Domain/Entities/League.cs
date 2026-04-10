@@ -43,7 +43,7 @@ public sealed class League : BaseEntity, IAuditEntity, ISoftDelete
     /// <summary>
     /// Bu lige ait kulüpler
     /// </summary>
-    public virtual ICollection<Club> Clubs { get; private set; } = new List<Club>();
+    public ICollection<Club> Clubs { get; private set; } = new List<Club>();
 
     // IAuditEntity implementasyon
     public string CreatedByUserId { get; set; } = string.Empty;

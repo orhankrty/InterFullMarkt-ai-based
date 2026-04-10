@@ -15,12 +15,12 @@ public abstract class BaseEntity<TId> where TId : notnull
     /// <summary>
     /// Varlığın oluşturulma tarihi (UTC)
     /// </summary>
-    public DateTime CreatedDate { get; protected set; } = DateTime.UtcNow;
+    public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     /// Varlığın güncellenme tarihi (UTC)
     /// </summary>
-    public DateTime UpdatedDate { get; protected set; } = DateTime.UtcNow;
+    public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
 
     protected BaseEntity() { }
 

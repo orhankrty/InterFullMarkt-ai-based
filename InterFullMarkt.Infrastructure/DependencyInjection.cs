@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using InterFullMarkt.Infrastructure.Data;
 using InterFullMarkt.Infrastructure.Data.Interceptors;
+using InterFullMarkt.Application.Abstractions;
 
 /// <summary>
 /// Infrastructure katmanının Dependency Injection uzantılarını içerir.
@@ -30,6 +31,9 @@ public static class DependencyInjection
                 .EnableDetailedErrors()
                 .EnableSensitiveDataLogging(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development");
         });
+
+        // IDbContext abstraksionu için registration
+        services.AddScoped<IDbContext>(provider => provider.GetRequiredService<InterFullMarktDbContext>());
 
         return services;
     }

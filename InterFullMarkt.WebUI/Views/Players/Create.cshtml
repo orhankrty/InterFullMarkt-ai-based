@@ -1,0 +1,274 @@
+@model InterFullMarkt.Application.DTOs.CreatePlayerDto
+@{
+    ViewData["Title"] = "Yeni Oyuncu Ekle";
+}
+
+<div class="row mb-4">
+    <div class="col-lg-8 mx-auto">
+        <h1 class="display-5 fw-bold mb-2">
+            <i class="bi bi-person-plus"></i> Yeni Oyuncu Ekle
+        </h1>
+        <p class="text-secondary">InterFullMarkt veri tabanına yeni bir oyuncu ekleme formu</p>
+    </div>
+</div>
+
+<!-- Form Container -->
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <form method="post" class="needs-validation" novalidate asp-antiforgery="true">
+            <div class="card border-0 shadow-sm" style="background-color: #1a1f3a;">
+                <div class="card-body p-4">
+
+                    <!-- Genel Bilgiler Başlığı -->
+                    <h5 class="card-title fw-bold mb-4">
+                        <i class="bi bi-info-circle"></i> Genel Bilgiler
+                    </h5>
+
+                    <!-- Adı Soyadı -->
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">
+                            <i class="bi bi-person-fill"></i> Adı Soyadı
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-lg" id="fullName" name="fullName" 
+                               asp-for="FullName" placeholder="Örn: Arda Güler" required>
+                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                        <div class="form-text">Minimum 3, maksimum 150 karakter. Harfler, boşluk, tire ve kesme işareti içerebilir.</div>
+                    </div>
+
+                    <div class="row g-3">
+                        <!-- Pozisyon -->
+                        <div class="col-md-6">
+                            <label for="position" class="form-label">
+                                <i class="bi bi-music-note-beamed"></i> Pozisyon
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select form-select-lg" id="position" name="position" asp-for="Position" required>
+                                <option value="">-- Seç --</option>
+                                <option value="1">GK (Kaleci)</option>
+                                <option value="2">CB (Stoper)</option>
+                                <option value="3">CM (Ortaçalı)</option>
+                                <option value="4">ST (Santrfor)</option>
+                            </select>
+                            <span asp-validation-for="Position" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Milliyeti -->
+                        <div class="col-md-6">
+                            <label for="nationalityCode" class="form-label">
+                                <i class="bi bi-globe"></i> Milliyeti
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select form-select-lg" id="nationalityCode" name="nationalityCode" asp-for="NationalityCode" required>
+                                <option value="">-- Seç --</option>
+                                <option value="TR">🇹🇷 Turkey</option>
+                                <option value="BR">🇧🇷 Brazil</option>
+                                <option value="DE">🇩🇪 Germany</option>
+                                <option value="ES">🇪🇸 Spain</option>
+                                <option value="FR">🇫🇷 France</option>
+                                <option value="GB">🇬🇧 United Kingdom</option>
+                                <option value="AR">🇦🇷 Argentina</option>
+                                <option value="PT">🇵🇹 Portugal</option>
+                                <option value="NO">🇳🇴 Norway</option>
+                            </select>
+                            <span asp-validation-for="NationalityCode" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4 border-secondary">
+
+                    <!-- Biyometrik Bilgiler -->
+                    <h5 class="card-title fw-bold mb-4">
+                        <i class="bi bi-heart-pulse"></i> Biyometrik Bilgiler
+                    </h5>
+
+                    <div class="row g-3">
+                        <!-- Doğum Tarihi -->
+                        <div class="col-md-6">
+                            <label for="dateOfBirth" class="form-label">
+                                <i class="bi bi-calendar-event"></i> Doğum Tarihi
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="date" class="form-control form-control-lg" id="dateOfBirth" 
+                                   name="dateOfBirth" asp-for="DateOfBirth" required>
+                            <span asp-validation-for="DateOfBirth" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Tercih Edilen Ayak -->
+                        <div class="col-md-6">
+                            <label for="preferredFoot" class="form-label">
+                                <i class="bi bi-shoe"></i> Tercih Edilen Ayak
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select form-select-lg" id="preferredFoot" name="preferredFoot" asp-for="PreferredFoot" required>
+                                <option value="Left">Sol Ayak</option>
+                                <option value="Right" selected>Sağ Ayak</option>
+                                <option value="Ambidextrous">Her İki Ayak</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <!-- Boy -->
+                        <div class="col-md-6">
+                            <label for="height" class="form-label">
+                                <i class="bi bi-arrows-vertical"></i> Boy (cm)
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" class="form-control form-control-lg" id="height" name="height" 
+                                   asp-for="Height" placeholder="150-220" min="150" max="220" required>
+                            <span asp-validation-for="Height" class="text-danger small"></span>
+                            <div class="form-text">Minimum 150, maksimum 220 cm</div>
+                        </div>
+
+                        <!-- Kilo -->
+                        <div class="col-md-6">
+                            <label for="weight" class="form-label">
+                                <i class="bi bi-arrow-left-right"></i> Kilo (kg)
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" class="form-control form-control-lg" id="weight" name="weight" 
+                                   asp-for="Weight" placeholder="40-150" min="40" max="150" step="0.5" required>
+                            <span asp-validation-for="Weight" class="text-danger small"></span>
+                            <div class="form-text">Minimum 40, maksimum 150 kg</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4 border-secondary">
+
+                    <!-- Finansal Bilgiler -->
+                    <h5 class="card-title fw-bold mb-4">
+                        <i class="bi bi-cash-coin"></i> Finansal Bilgiler
+                    </h5>
+
+                    <div class="row g-3">
+                        <!-- Başlangıç Piyasa Değeri -->
+                        <div class="col-md-6">
+                            <label for="initialMarketValue" class="form-label">
+                                <i class="bi bi-tag"></i> Başlangıç Piyasa Değeri
+                            </label>
+                            <input type="number" class="form-control form-control-lg" id="initialMarketValue" 
+                                   name="initialMarketValue" asp-for="InitialMarketValue" placeholder="Örn: 40000000" 
+                                   min="0" step="1000000">
+                            <span asp-validation-for="InitialMarketValue" class="text-danger small"></span>
+                            <div class="form-text">İsteğe bağlı. Sayı olarak gir (örn: 40000000 = 40M)</div>
+                        </div>
+
+                        <!-- Para Birimi -->
+                        <div class="col-md-6">
+                            <label for="currency" class="form-label">
+                                <i class="bi bi-currency-euro"></i> Para Birimi
+                            </label>
+                            <select class="form-select form-select-lg" id="currency" name="currency" asp-for="Currency">
+                                <option value="EUR" selected>EUR (Euro)</option>
+                                <option value="USD">USD (Amerikan Doları)</option>
+                                <option value="GBP">GBP (İngiliz Sterlini)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr class="my-4 border-secondary">
+
+                    <!-- Aktif Bilgiler -->
+                    <h5 class="card-title fw-bold mb-4">
+                        <i class="bi bi-building"></i> Kulüp Bilgileri
+                    </h5>
+
+                    <div class="row g-3">
+                        <!-- Forma Numarası -->
+                        <div class="col-md-6">
+                            <label for="jerseyNumber" class="form-label">
+                                <i class="bi bi-tag-fill"></i> Forma Numarası
+                            </label>
+                            <input type="number" class="form-control form-control-lg" id="jerseyNumber" 
+                                   name="jerseyNumber" asp-for="JerseyNumber" placeholder="1-99" 
+                                   min="1" max="99">
+                            <span asp-validation-for="JerseyNumber" class="text-danger small"></span>
+                            <div class="form-text">İsteğe bağlı (1-99 arası)</div>
+                        </div>
+
+                        <!-- Kulüp (Gelecekteki Implementasyon) -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                <i class="bi bi-building"></i> Kulüp
+                            </label>
+                            <input type="text" class="form-control form-control-lg" disabled placeholder="Gelecek aşamada">
+                            <div class="form-text">Oyuncu oluşturulduktan sonra kulübe atanabilir</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4 border-secondary">
+
+                    <!-- Butonlar -->
+                    <div class="d-flex gap-2 justify-content-between">
+                        <a href="@Url.Action("Index", "Players")" class="btn btn-outline-secondary btn-lg">
+                            <i class="bi bi-arrow-left"></i> Geri
+                        </a>
+                        <button type="reset" class="btn btn-outline-warning btn-lg">
+                            <i class="bi bi-arrow-clockwise"></i> Sıfırla
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-plus-circle"></i> Oyuncu Ekle
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Hata Özeti -->
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger mt-4 border-0">
+                <h5 class="alert-heading">
+                    <i class="bi bi-exclamation-triangle"></i> Lütfen Hataları Düzeltin
+                </h5>
+                <ul class="mb-0">
+                    @foreach (var modelState in ViewData.ModelState.Values)
+                    {
+                        @foreach (var error in modelState.Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Form validasyonu
+        (() => {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+
+        // Boy/Kilo min-max uyarısı
+        document.getElementById('height').addEventListener('input', function() {
+            if (this.value < 150 || this.value > 220) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        document.getElementById('weight').addEventListener('input', function() {
+            if (this.value < 40 || this.value > 150) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+    </script>
+}

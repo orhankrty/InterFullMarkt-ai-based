@@ -5,13 +5,14 @@ using InterFullMarkt.Domain;
 using InterFullMarkt.Domain.Entities;
 using InterFullMarkt.Infrastructure.Data.Configurations;
 using InterFullMarkt.Infrastructure.Data.Seeds;
+using InterFullMarkt.Application.Abstractions;
 
 /// <summary>
 /// InterFullMarkt veritabanı konteksti.
 /// .NET 10.0 Primary Constructor ile yazılmış, Fluent API ile yapılandırılmış.
 /// Global Query Filter ile Soft Delete otomasyonu sağlar.
 /// </summary>
-public sealed class InterFullMarktDbContext(DbContextOptions<InterFullMarktDbContext> options) : DbContext(options)
+public sealed class InterFullMarktDbContext(DbContextOptions<InterFullMarktDbContext> options) : DbContext(options), IDbContext
 {
     /// <summary>
     /// Futbolcular tablosu
