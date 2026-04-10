@@ -1,8 +1,10 @@
+using InterFullMarkt.Application;
 using InterFullMarkt.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add infrastructure layer
+// Add application and infrastructure layers
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 
 // Add services to the container.
