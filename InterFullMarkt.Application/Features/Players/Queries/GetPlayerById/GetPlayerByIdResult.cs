@@ -62,6 +62,11 @@ public sealed class GetPlayerByIdResult
     /// Confidence level of AI prediction (Low, Medium, High)
     /// </summary>
     public string AiPredictionConfidence { get; set; } = "Medium";
+
+    // 🤖 AI Scouting Insights
+    public string? AiScoutingCategory { get; set; }
+    public List<string> AiPros { get; set; } = new();
+    public List<string> AiSimilarPlayers { get; set; } = new();
 }
 
 /// <summary>

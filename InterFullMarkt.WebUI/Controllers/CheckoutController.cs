@@ -31,6 +31,8 @@ public class CheckoutController : Controller
             .Include(u => u.Addresses)
             .FirstOrDefaultAsync(u => u.Username == username);
 
+        if (user == null) return RedirectToAction("Logout", "Auth");
+
         ViewBag.Cart = cart;
         return View(user);
     }
@@ -43,7 +45,7 @@ public class CheckoutController : Controller
 
         var username = User.Identity?.Name;
         var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
-        if (user == null) return Unauthorized();
+        if (user == null) return RedirectToAction("Logout", "Auth");
 
         // 1. Create Order
         var shippingAddressStr = $"{firstName} {lastName}, {addressLine}, {city}, Tel: {phoneNumber}";

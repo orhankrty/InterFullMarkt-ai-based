@@ -3,29 +3,32 @@
     ViewData["Title"] = "Mağaza";
 }
 
-<div class="row mb-5 pt-4">
-    <div class="col-12 text-center">
-        <h1 class="display-3 fw-bold text-white mb-2">InterFullMarkt <span class="text-primary">Store</span></h1>
-        <p class="text-secondary fs-5 mx-auto" style="max-width: 600px;">
-            Orijinal kulüp formaları, profesyonel ekipmanlar ve taraftar koleksiyonları ile sahaya hükmedin.
+<div class="store-hero rounded-5 mb-5 overflow-hidden position-relative">
+    <div class="store-hero-overlay"></div>
+    <div class="container position-relative z-3 py-5 text-center">
+        <span class="badge bg-primary rounded-pill px-3 py-2 mb-3 tracking-widest text-uppercase fw-bold" style="font-size: 0.7rem;">Resmi Lisanslı Ürünler</span>
+        <h1 class="display-2 fw-900 text-white mb-3">InterFullMarkt <span class="text-gradient">Store</span></h1>
+        <p class="text-secondary fs-5 mx-auto opacity-75" style="max-width: 700px;">
+            Sahadaki performansınızı zirveye taşıyacak profesyonel ekipmanlar ve kalbinizdeki takımın en yeni koleksiyonları burada.
         </p>
     </div>
 </div>
 
 <div class="row mb-4">
     <div class="col-12 d-flex justify-content-center gap-2 flex-wrap">
-        <button class="btn btn-outline-secondary rounded-pill px-4 active">Tümü</button>
-        <button class="btn btn-outline-secondary rounded-pill px-4">Forma</button>
-        <button class="btn btn-outline-secondary rounded-pill px-4">Krampon</button>
-        <button class="btn btn-outline-secondary rounded-pill px-4">Aksesuar</button>
+        <button class="btn btn-outline-secondary rounded-pill px-4 active category-btn" onclick="filterStore('All', this)">Tümü</button>
+        <button class="btn btn-outline-secondary rounded-pill px-4 category-btn" onclick="filterStore('Forma', this)">Forma</button>
+        <button class="btn btn-outline-secondary rounded-pill px-4 category-btn" onclick="filterStore('Krampon', this)">Krampon</button>
+        <button class="btn btn-outline-secondary rounded-pill px-4 category-btn" onclick="filterStore('Aksesuar', this)">Aksesuar</button>
+        <button class="btn btn-outline-secondary rounded-pill px-4 category-btn" onclick="filterStore('Giyim', this)">Giyim</button>
     </div>
 </div>
 
 <div class="row g-4 pb-5">
     @foreach (var product in Model)
     {
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-lg position-relative overflow-hidden group" style="background-color: var(--card-bg); border-radius: 24px;">
+        <div class="col-md-6 col-lg-4 product-card" data-category="@product.Category">
+            <div class="card h-100 border-0 shadow-lg position-relative overflow-hidden group glass-card" style="border-radius: 28px;">
                 @if (product.IsFeatured)
                 {
                     <div class="position-absolute top-0 end-0 m-3 z-3">
@@ -33,9 +36,9 @@
                     </div>
                 }
                 
-                <div class="overflow-hidden" style="height: 300px;">
+                <div class="img-zoom-container">
                     <img src="@(product.ImageUrl ?? "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80")" 
-                         class="card-img-top w-100 h-100 transition-transform duration-500 hover-scale-110" 
+                         class="card-img-top w-100 h-100 hover-zoom" 
                          alt="@product.Name" 
                          style="object-fit: cover;">
                 </div>
@@ -72,8 +75,68 @@
 </div>
 
 <style>
-    .hover-scale-110:hover { transform: scale(1.1); }
-    .duration-500 { transition-duration: 0.5s; }
-    .hover-translate-y-n2:hover { transform: translateY(-2px); }
-    .tracking-wider { letter-spacing: 0.1em; }
+    .store-hero {
+        background: url('https://images.unsplash.com/photo-1574629810360-7efbb2278458?w=1600&q=80') center/cover no-repeat;
+        min-height: 350px;
+        display: flex;
+        align-items: center;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+    .store-hero-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(to right, rgba(11, 14, 26, 0.95), rgba(61, 90, 254, 0.4));
+    }
+    .text-gradient {
+        background: linear-gradient(45deg, #fff, var(--accent-color));
+        -webkit-background-clip: text;
+        -webkit-fill-color: transparent;
+    }
+    .fw-900 { font-weight: 900; }
+    .tracking-widest { letter-spacing: 0.2em; }
+    
+    .glass-card {
+        background: rgba(28, 34, 66, 0.6);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.08) !important;
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .glass-card:hover {
+        transform: translateY(-12px);
+        border-color: var(--accent-color) !important;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    }
+    .img-zoom-container { overflow: hidden; height: 320px; border-radius: 20px 20px 0 0; }
+    .hover-zoom { transition: transform 0.8s ease; }
+    .product-card:hover .hover-zoom { transform: scale(1.1); }
+    
+    .category-btn {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.03);
+    }
+    .category-btn.active {
+        background: var(--accent-color) !important;
+        box-shadow: 0 8px 20px rgba(61, 90, 254, 0.3);
+        border-color: var(--accent-color);
+    }
 </style>
+
+<script>
+    function filterStore(category, btn) {
+        document.querySelectorAll('.category-btn').forEach(b => {
+            b.classList.remove('active', 'btn-primary');
+            b.classList.add('btn-outline-secondary');
+        });
+        btn.classList.remove('btn-outline-secondary');
+        btn.classList.add('active', 'btn-primary');
+
+        document.querySelectorAll('.product-card').forEach(card => {
+            if (category === 'All' || card.getAttribute('data-category') === category) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+</script>

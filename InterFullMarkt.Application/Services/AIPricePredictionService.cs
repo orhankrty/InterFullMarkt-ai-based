@@ -22,6 +22,13 @@ public sealed class AIPricePredictionService
         public string Reasoning { get; set; } = string.Empty;
     }
 
+    public class ScoutingReport
+    {
+        public string Category { get; set; } = string.Empty;
+        public List<string> Pros { get; set; } = new();
+        public List<string> SimilarArchetypes { get; set; } = new();
+    }
+
     /// <summary>
     /// Predict future market value of a player
     /// Formula: CurrentValue × AgeMultiplier × PerformanceMultiplier × PositionMultiplier × LeagueCoefficient
@@ -69,6 +76,43 @@ public sealed class AIPricePredictionService
             Confidence = confidence,
             Reasoning = reasoning
         };
+    }
+
+    /// <summary>
+    /// Generate a qualitative scouting report based on player profile
+    /// </summary>
+    public ScoutingReport GenerateScoutingReport(Player player)
+    {
+        var report = new ScoutingReport();
+        var age = CalculateAge(player.DateOfBirth);
+
+        // 1. Determine Category
+        report.Category = player.Position switch
+        {
+            InterFullMarkt.Domain.Enums.PlayerPosition.ST => age < 23 ? "Geleceğin Gol Makinesi" : "Bitirici Forvet",
+            InterFullMarkt.Domain.Enums.PlayerPosition.GK => "Kale Muhafızı",
+            InterFullMarkt.Domain.Enums.PlayerPosition.CB => player.Height > 188 ? "Hava Hakimiyeti Ustası" : "Modern Savunmacı",
+            InterFullMarkt.Domain.Enums.PlayerPosition.CM => "Orta Saha Dinamosu",
+            _ => "Çok Yönlü Oyuncu"
+        };
+
+        // 2. Determine Pros
+        if (player.Height > 185) report.Pros.Add("Yüksek Hava Hakimiyeti");
+        if (age < 22) report.Pros.Add("Yüksek Gelişim Potansiyeli");
+        if (player.Position == InterFullMarkt.Domain.Enums.PlayerPosition.ST) report.Pros.Add("Ceza Sahası Bitiriciliği");
+        if (player.Position == InterFullMarkt.Domain.Enums.PlayerPosition.CM) report.Pros.Add("Yüksek Pas İsabeti Potansiyeli");
+        if (player.Position == InterFullMarkt.Domain.Enums.PlayerPosition.GK) report.Pros.Add("Refleks ve Çeviklik");
+
+        // 3. Similar Archetypes
+        report.SimilarArchetypes = player.Position switch
+        {
+            InterFullMarkt.Domain.Enums.PlayerPosition.ST => new List<string> { "Mauro Icardi", "Erling Haaland" },
+            InterFullMarkt.Domain.Enums.PlayerPosition.GK => new List<string> { "Fernando Muslera", "Manuel Neuer" },
+            InterFullMarkt.Domain.Enums.PlayerPosition.CB => new List<string> { "Davinson Sanchez", "Virgil van Dijk" },
+            _ => new List<string> { "Lucas Torreira", "Kevin De Bruyne" }
+        };
+
+        return report;
     }
 
     /// <summary>

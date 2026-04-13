@@ -7,11 +7,22 @@
 
 <style>
     .search-hero {
-        padding: 4rem 0;
-        background: radial-gradient(circle at top right, rgba(61, 90, 254, 0.1), transparent);
-        border-radius: 24px;
-        margin-bottom: 3rem;
+        position: relative;
+        padding: 5rem 0;
+        background: linear-gradient(135deg, rgba(61, 90, 254, 0.15), rgba(11, 14, 26, 0.9));
+        border-radius: 40px;
+        margin-bottom: 4rem;
+        border: 1px solid rgba(255,255,255,0.05);
+        overflow: hidden;
     }
+    .search-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%; left: -50%; width: 200%; height: 200%;
+        background: radial-gradient(circle at center, rgba(61, 90, 254, 0.1) 0%, transparent 70%);
+        animation: pulse 10s infinite alternate;
+    }
+    @@keyframes pulse { from { transform: scale(1); } to { transform: scale(1.1); } }
 
     .search-input-wrapper {
         position: relative;
@@ -56,12 +67,13 @@
 
     /* Club Card Styles */
     .club-card {
-        background: linear-gradient(145deg, #1c2242, #161b33);
-        border-radius: 20px;
+        background: rgba(28, 34, 66, 0.6);
+        backdrop-filter: blur(12px);
+        border-radius: 28px;
         overflow: hidden;
-        border: 1px solid var(--border);
+        border: 1px solid rgba(255,255,255,0.08);
         height: 100%;
-        transition: all 0.4s ease;
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 
     .club-card:hover {
@@ -87,10 +99,17 @@
 
     /* Player Card Styles (Premium) */
     .player-card {
-        background: var(--card-bg);
-        border-radius: 16px;
-        border: 1px solid var(--border);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        border: 1px solid rgba(255,255,255,0.05);
+        transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .player-card:hover {
+        transform: translateY(-15px) scale(1.02);
+        border-color: var(--accent-color);
+        box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+        background: rgba(255, 255, 255, 0.05);
     }
 
     .player-position-badge {
@@ -126,6 +145,28 @@
         color: var(--header-bg);
         margin-bottom: 2rem;
     }
+
+    /* Comparison Bar */
+    .compare-bar {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(150%);
+        background: rgba(28, 34, 66, 0.95);
+        backdrop-filter: blur(15px);
+        padding: 15px 30px;
+        border-radius: 50px;
+        border: 1px solid var(--accent-color);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        z-index: 1000;
+        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .compare-bar.active {
+        transform: translateX(-50%) translateY(0);
+    }
 </style>
 
 <div class="container py-4">
@@ -134,7 +175,7 @@
     <div class="search-hero">
         <div class="text-center mb-5">
             <h2 class="display-6 fw-bold">Kimi Aramıştınız?</h2>
-            <p class="text-secondary">Veritabanımızdaki oyuncuları ve kulüpleri anında keşfedin.</p>
+            <p class="text-secondary">Oyuncuları ve Kulüpleri Anında Keşfedin.</p>
         </div>
         
         <form method="get" class="search-input-wrapper">
@@ -281,9 +322,14 @@
                                         <div class="market-value-tag">
                                             @player.MarketValue
                                         </div>
-                                        <a href="@Url.Action("Details", "Players", new { id = player.Id })" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
-                                            Detay <i class="bi bi-arrow-right ms-1"></i>
-                                        </a>
+                                        <div class="d-flex gap-2">
+                                            <button onclick="toggleCompare('@player.Id', '@player.FullName', this)" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                                <i class="bi bi-plus-circle me-1"></i> Kıyasla
+                                            </button>
+                                            <a href="@Url.Action("Details", "Players", new { id = player.Id })" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                                                Detay <i class="bi bi-arrow-right ms-1"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -294,3 +340,81 @@
         </div>
     }
 </div>
+
+<!-- Floating Compare Bar -->
+<div id="compareBar" class="compare-bar">
+    <div class="d-flex align-items-center gap-3">
+        <div id="comparePhotos" class="d-flex gap-2">
+            <!-- Selected player indicators go here -->
+        </div>
+        <div class="text-white border-start border-secondary ps-3">
+            <span id="compareCount" class="fw-bold">0</span> Oyuncu Seçildi
+        </div>
+    </div>
+    <button onclick="goToCompare()" class="btn btn-primary rounded-pill px-4 fw-bold">
+        Hemen Kıyasla <i class="bi bi-lightning-fill"></i>
+    </button>
+    <button onclick="clearCompare()" class="btn btn-sm btn-outline-danger border-0 rounded-circle">
+        <i class="bi bi-x-lg"></i>
+    </button>
+</div>
+
+<script>
+    let compareList = [];
+
+    function toggleCompare(id, name, btn) {
+        const index = compareList.indexOf(id);
+        
+        if (index > -1) {
+            compareList.splice(index, 1);
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline-primary');
+            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Kıyasla';
+        } else {
+            if (compareList.length >= 3) {
+                alert('En fazla 3 oyuncu kıyaslayabilirsiniz.');
+                return;
+            }
+            compareList.push(id);
+            btn.classList.remove('btn-outline-primary');
+            btn.classList.add('btn-primary');
+            btn.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Seçildi';
+        }
+
+        updateCompareBar();
+    }
+
+    function updateCompareBar() {
+        const bar = document.getElementById('compareBar');
+        const countSpan = document.getElementById('compareCount');
+        
+        countSpan.innerText = compareList.length;
+        
+        if (compareList.length >= 2) {
+            bar.classList.add('active');
+        } else {
+            bar.classList.remove('active');
+        }
+    }
+
+    function goToCompare() {
+        if (compareList.length < 2) return;
+        
+        let url = '/Players/Compare?';
+        compareList.forEach((id, idx) => {
+            url += `id${idx+1}=${id}&`;
+        });
+        
+        window.location.href = url;
+    }
+
+    function clearCompare() {
+        compareList = [];
+        document.querySelectorAll('[onclick^="toggleCompare"]').forEach(btn => {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline-primary');
+            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Kıyasla';
+        });
+        updateCompareBar();
+    }
+</script>

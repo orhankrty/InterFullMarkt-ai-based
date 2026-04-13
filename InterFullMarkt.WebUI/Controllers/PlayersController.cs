@@ -198,4 +198,33 @@ public sealed class PlayersController : Controller
             return RedirectToAction("Index");
         }
     }
+
+    [HttpGet]
+    [Route("Compare")]
+    public async Task<IActionResult> Compare(Guid? id1, Guid? id2, Guid? id3)
+    {
+        var playerIds = new List<Guid>();
+        if (id1.HasValue) playerIds.Add(id1.Value);
+        if (id2.HasValue) playerIds.Add(id2.Value);
+        if (id3.HasValue) playerIds.Add(id3.Value);
+
+        if (playerIds.Count < 2)
+        {
+            TempData["Error"] = "Kıyaslama yapmak için en az 2 oyuncu seçmelisiniz.";
+            return RedirectToAction("Index");
+        }
+
+        var results = new List<GetPlayerByIdResult>();
+        foreach (var id in playerIds)
+        {
+            try
+            {
+                var result = await _mediator.Send(new GetPlayerByIdQuery(id));
+                results.Add(result);
+            }
+            catch { /* Ignore missing or erroring players in comparison */ }
+        }
+
+        return View(results);
+    }
 }

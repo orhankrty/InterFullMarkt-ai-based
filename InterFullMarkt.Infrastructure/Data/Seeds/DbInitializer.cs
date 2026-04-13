@@ -65,35 +65,35 @@ public static class DbInitializer
             
             // === DEFANS ===
             CreatePlayer("Davinson Sánchez",     PlayerPosition.CB, "CO", new DateTime(1996, 6, 12), 187, 79, "Right", 25, 17000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/344755-1695374005.jpg"),
+                "https://images.unsplash.com/photo-1543351611-58f69d7c1781?w=400&q=80"),
             CreatePlayer("Abdülkerim Bardakcı",  PlayerPosition.CB, "TR", new DateTime(1994, 9, 7),  185, 80, "Left",  42, 9000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/270498-1694590799.jpg"),
+                "https://images.unsplash.com/photo-1518091043644-c1d445bcc97a?w=400&q=80"),
             CreatePlayer("Kaan Ayhan",           PlayerPosition.CB, "TR", new DateTime(1994, 11, 10),184, 82, "Right", 4,  5000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/103498-1694590653.jpg"),
+                "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=400&q=80"),
             CreatePlayer("Victor Nelsson",       PlayerPosition.CB, "DK", new DateTime(1998, 10, 14),186, 77, "Right", 3,  8000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/423494-1694590928.jpg"),
+                "https://images.unsplash.com/photo-1516515429572-1f9f3b8caecb?w=400&q=80"),
 
             // === ORTA SAHA ===
             CreatePlayer("Lucas Torreira",       PlayerPosition.CM, "UY", new DateTime(1996, 2, 11), 166, 65, "Right", 34, 15000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/318077-1694590876.jpg"),
+                "https://images.unsplash.com/photo-1574629810360-7efbb2278458?w=400&q=80"),
             CreatePlayer("Hakim Ziyech",         PlayerPosition.CM, "MA", new DateTime(1993, 3, 19), 181, 65, "Left",  22, 9000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/217111-1694590834.jpg"),
+                "https://images.unsplash.com/photo-1551958219-acbc608c6377?w=400&q=80"),
             CreatePlayer("Dries Mertens",        PlayerPosition.CM, "BE", new DateTime(1987, 5, 6),  169, 61, "Right", 10, 2000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/58968-1694590736.jpg"),
+                "https://images.unsplash.com/photo-1526676037777-05a232554f7a?w=400&q=80"),
             CreatePlayer("Kerem Demirbay",       PlayerPosition.CM, "TR", new DateTime(1993, 7, 3),  182, 75, "Left",  21, 3000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/130429-1694590760.jpg"),
+                "https://images.unsplash.com/photo-1510566337590-2fc1f21d0faa?w=400&q=80"),
             CreatePlayer("Sergio Oliveira",      PlayerPosition.CM, "PT", new DateTime(1992, 6, 2),  178, 73, "Right", 27, 5000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/128352-1694590805.jpg"),
+                "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=400&q=80"),
 
             // === FORVET ===
             CreatePlayer("Mauro Icardi",         PlayerPosition.ST, "AR", new DateTime(1993, 2, 19), 181, 75, "Right", 9,  18000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/68175-1694590692.jpg"),
+                "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=400&q=80"),
             CreatePlayer("Barış Alper Yılmaz",   PlayerPosition.ST, "TR", new DateTime(2000, 5, 23), 176, 70, "Right", 53, 20000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/667498-1694590974.jpg"),
+                "https://images.unsplash.com/photo-1518091043644-c1d445bcc97a?w=400&q=80"),
             CreatePlayer("Kerem Aktürkoğlu",     PlayerPosition.ST, "TR", new DateTime(1998, 10, 21),178, 72, "Right", 7,  18000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/496270-1694590945.jpg"),
+                "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&q=80"),
             CreatePlayer("Wilfried Zaha",        PlayerPosition.ST, "GB", new DateTime(1992, 11, 10),180, 72, "Right", 11, 9000000, galatasaray.Id,
-                "https://img.a.transfermarkt.technology/portrait/header/145988-1694590626.jpg"),
+                "https://images.unsplash.com/photo-1550850839-8dc894ed385a?w=400&q=80"),
         };
 
         context.Players.AddRange(players);
@@ -105,6 +105,12 @@ public static class DbInitializer
         int height, int weight, string foot, int number, decimal value, Guid clubId,
         string? imageUrl = null)
     {
+        // Fallback for missing or protected images
+        if (string.IsNullOrEmpty(imageUrl) || imageUrl.Contains("transfermarkt.technology"))
+        {
+            imageUrl = $"https://eu.ui-avatars.com/api/?name={Uri.EscapeDataString(name)}&background=random&color=fff&size=512";
+        }
+
         var player = new Player(name, pos, Nationality.CreateByCode(country), dob, height, weight)
         {
             ImageUrl = imageUrl,
@@ -129,7 +135,7 @@ public static class DbInitializer
                 "Kulübün ikonik parçalı tasarımıyla hazırlanan, en yeni teknoloji performans forması.",
                 Money.Create(120, "EUR"),
                 "Forma",
-                "https://images.unsplash.com/photo-1580087433295-ab2600c1030e?w=800&q=80",
+                "https://images.unsplash.com/photo-1543351611-58f69d7c1781?w=800&q=80",
                 100) { IsFeatured = true, CreatedByUserId = "System" },
 
             new Product(
@@ -137,7 +143,7 @@ public static class DbInitializer
                 "Üst düzey kontrol ve hız için tasarlanmış profesyonel krampon.",
                 Money.Create(249.99m, "EUR"),
                 "Krampon",
-                "https://images.unsplash.com/photo-1628803522204-6294d1d44111?w=800&q=80",
+                "https://images.unsplash.com/photo-1510566337590-2fc1f21d0faa?w=800&q=80",
                 50) { IsFeatured = true, CreatedByUserId = "System" },
 
             new Product(
@@ -145,7 +151,7 @@ public static class DbInitializer
                 "Resmi maç standartlarında, yüksek dayanıklılık ve mükemmel aerodinamik.",
                 Money.Create(150, "EUR"),
                 "Aksesuar",
-                "https://images.unsplash.com/photo-1553152531-64ebbf48bc05?w=800&q=80",
+                "https://images.unsplash.com/photo-1551958219-acbc608c6377?w=800&q=80",
                 200) { IsFeatured = true, CreatedByUserId = "System" },
                 
             new Product(
@@ -153,7 +159,7 @@ public static class DbInitializer
                 "Hafif ve terletmeyen kumaş yapısıyla profesyonel antrenman takımı.",
                 Money.Create(85, "EUR"),
                 "Giyim",
-                "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=800&q=80",
+                "https://images.unsplash.com/photo-1556816214-cb30ab0507a2?w=800&q=80",
                 75) { CreatedByUserId = "System" },
                 
             new Product(
@@ -161,7 +167,7 @@ public static class DbInitializer
                 "Galatasaray'ın efsanevi 2000 yılı başarısına ithaf edilen özel koleksiyon.",
                 Money.Create(45, "EUR"),
                 "Giyim",
-                "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+                "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=800&q=80",
                 120) { CreatedByUserId = "System" }
         };
 

@@ -2,11 +2,21 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using InterFullMarkt.Application.Abstractions;
+using InterFullMarkt.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace InterFullMarkt.WebUI.Controllers;
 
 public class AuthController : Controller
 {
+    private readonly IDbContext _dbContext;
+
+    public AuthController(IDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
     [HttpGet]
     public IActionResult Login()
     {
@@ -23,6 +33,19 @@ public class AuthController : Controller
         // Mock (Sahte) Giriş İşlemi - İleride veritabanı (Identity) ile değiştirilecek
         if (username == "admin" && password == "123456")
         {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+            {
+                user = new User(username, "admin@interfullmarkt.com", "hashed_pw", "Admin")
+                {
+                    FirstName = "System",
+                    LastName = "Admin",
+                    CreatedByUserId = "System"
+                };
+                _dbContext.Users.Add(user);
+                await _dbContext.SaveChangesAsync(CancellationToken.None);
+            }
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, username),
@@ -61,6 +84,19 @@ public class AuthController : Controller
         }
 
         // Mock (Sahte) Kayıt ve Giriş İşlemi - İleride veritabanı eklenecek
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
+        if (user == null)
+        {
+            user = new User(username, email, "hashed_pw", "User")
+            {
+                FirstName = username,
+                LastName = "User",
+                CreatedByUserId = "System"
+            };
+            _dbContext.Users.Add(user);
+            await _dbContext.SaveChangesAsync(CancellationToken.None);
+        }
+
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, username),

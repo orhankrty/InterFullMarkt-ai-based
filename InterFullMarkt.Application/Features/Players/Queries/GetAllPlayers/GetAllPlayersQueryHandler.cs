@@ -104,6 +104,7 @@ public sealed class GetAllPlayersQueryHandler : IRequestHandler<GetAllPlayersQue
             {
                 var searchLower = request.SearchTerm.ToLower().Trim();
                 var clubs = await _dbContext.Clubs
+                    .Include(c => c.Players)
                     .Where(c => c.Name.ToLower().Contains(searchLower) || c.ShortName.ToLower().Contains(searchLower))
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);

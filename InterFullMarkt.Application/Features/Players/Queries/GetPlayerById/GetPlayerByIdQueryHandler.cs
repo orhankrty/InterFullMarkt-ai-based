@@ -74,6 +74,12 @@ public sealed class GetPlayerByIdQueryHandler : IRequestHandler<GetPlayerByIdQue
         result.AiPredictionReasoning = forecast.Reasoning;
         result.AiPredictionConfidence = forecast.Confidence;
 
+        // 🤖 AI Scouting Analysis
+        var scoutingReport = aiForecastService.GenerateScoutingReport(player);
+        result.AiScoutingCategory = scoutingReport.Category;
+        result.AiPros = scoutingReport.Pros;
+        result.AiSimilarPlayers = scoutingReport.SimilarArchetypes;
+
         // 🤖 AI Forecast Calculation (UI'da göstermek üzere DTO'ya eklenebilir)
         // İpucu: GetPlayerByIdResult sınıfına 'AiForecastFormatted' özelliğini ekleyerek bunu View'e aktarabilirsiniz.
         // var aiForecast = CalculateAiForecast(player, result.MarketValueAmount);

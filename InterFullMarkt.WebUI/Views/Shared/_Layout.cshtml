@@ -145,6 +145,7 @@
                                 <i class="bi bi-person-circle fs-5"></i> @User.Identity.Name
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Account" asp-action="Index"><i class="bi bi-person-badge text-success"></i> Hesabım</a></li>
                                 @if (User.IsInRole("Admin"))
                                 {
                                     <li><a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Admin" asp-action="Index"><i class="bi bi-shield-lock text-warning"></i> Admin Paneli</a></li>
