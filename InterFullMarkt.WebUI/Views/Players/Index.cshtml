@@ -1,6 +1,6 @@
-@model InterFullMarkt.Application.Features.Players.Queries.GetAllPlayers.GetAllPlayersResult
+﻿@model InterFullMarkt.Application.Features.Players.Queries.GetAllPlayers.GetAllPlayersResult
 @{
-    ViewData["Title"] = "Oyuncular & Takımlar";
+    ViewData["Title"] = "Oyuncular & TakÄ±mlar";
     var searchTerm = ViewData["SearchTerm"]?.ToString();
     var hasSearch = !string.IsNullOrWhiteSpace(searchTerm);
 }
@@ -174,14 +174,14 @@
     <!-- Search Section -->
     <div class="search-hero">
         <div class="text-center mb-5">
-            <h2 class="display-6 fw-bold">Kimi Aramıştınız?</h2>
-            <p class="text-secondary">Oyuncuları ve Kulüpleri Anında Keşfedin.</p>
+            <h2 class="display-6 fw-bold">Kimi AramÄ±ÅŸtÄ±nÄ±z?</h2>
+            <p class="text-secondary">OyuncularÄ± ve KulÃ¼pleri AnÄ±nda KeÅŸfedin.</p>
         </div>
         
         <form method="get" class="search-input-wrapper">
             <i class="bi bi-search"></i>
             <input type="text" name="search" class="main-search-input form-control" 
-                   placeholder="Oyuncu adı, kulüp veya milliyet yazın..." 
+                   placeholder="Oyuncu adÄ±, kulÃ¼p veya milliyet yazÄ±n..." 
                    value="@searchTerm" autocomplete="off">
             <button type="submit" class="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2 rounded-pill px-4" style="height: 54px;">
                 Ara
@@ -194,9 +194,9 @@
         <!-- Default Empty State -->
         <div class="empty-state">
             <i class="bi bi-rocket-takeoff"></i>
-            <h3>Keşfetmeye Hazır mısınız?</h3>
+            <h3>KeÅŸfetmeye HazÄ±r mÄ±sÄ±nÄ±z?</h3>
             <p class="text-secondary mx-auto" style="max-width: 500px;">
-                Henüz bir arama yapmadınız. Yukarıdaki kutucuğu kullanarak Galatasaray gibi bir kulüp veya Icardi gibi bir oyuncu ismini aratarak başlayabilirsiniz.
+                HenÃ¼z bir arama yapmadÄ±nÄ±z. YukarÄ±daki kutucuÄŸu kullanarak Galatasaray gibi bir kulÃ¼p veya Icardi gibi bir oyuncu ismini aratarak baÅŸlayabilirsiniz.
             </p>
         </div>
     }
@@ -209,7 +209,7 @@
             @if (Model.Clubs != null && Model.Clubs.Any())
             {
                 <div class="mb-5">
-                    <h3 class="section-title"><i class="bi bi-shield-check text-primary me-2"></i> Takımlar</h3>
+                    <h3 class="section-title"><i class="bi bi-shield-check text-primary me-2"></i> TakÄ±mlar</h3>
                     <div class="row g-4">
                         @foreach (var club in Model.Clubs)
                         {
@@ -228,7 +228,7 @@
                                     <div class="p-4">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <h4 class="mb-0">@club.Name</h4>
-                                            <span class="badge bg-dark border border-secondary">Krl: @club.FoundingYear</span>
+                                            <span class="badge bg-white border border-secondary">Krl: @club.FoundingYear</span>
                                         </div>
                                         <div class="mb-4 small">
                                             <p class="text-secondary mb-1"><i class="bi bi-geo-alt me-2"></i> @club.StadiumName</p>
@@ -241,12 +241,12 @@
                                         </div>
                                         <div class="row g-2 border-top border-secondary pt-3">
                                             <div class="col-6">
-                                                <div class="stat-label">Kadro Sayısı</div>
+                                                <div class="stat-label">Kadro SayÄ±sÄ±</div>
                                                 <div class="stat-value">@club.SquadCount Oyuncu</div>
                                             </div>
                                             <div class="col-6">
-                                                <div class="stat-label">Kadro Değeri</div>
-                                                <div class="stat-value text-warning">€@((club.TotalSquadValue ?? 0).ToString("N0"))</div>
+                                                <div class="stat-label">Kadro DeÄŸeri</div>
+                                                <div class="stat-value text-warning">â‚¬@((club.TotalSquadValue ?? 0).ToString("N0"))</div>
                                             </div>
                                         </div>
                                     </div>
@@ -262,9 +262,9 @@
                 <h3 class="section-title"><i class="bi bi-person-bounding-box text-primary me-2"></i> Oyuncular (@Model.TotalCount)</h3>
                 @if (!Model.Players.Any())
                 {
-                    <div class="alert alert-dark border-secondary py-4 text-center">
+                    <div class="alert alert-info border-secondary py-4 text-center">
                         <i class="bi bi-search mb-2 d-block fs-2"></i>
-                        Eşleşen oyuncu bulunamadı.
+                        EÅŸleÅŸen oyuncu bulunamadÄ±.
                     </div>
                 }
                 else
@@ -277,7 +277,7 @@
                                     <span class="player-position-badge">@player.Position</span>
                                     
                                     <div class="d-flex align-items-center gap-3 mb-4">
-                                        <div class="rounded-circle bg-dark d-flex align-items-center justify-content-center overflow-hidden" style="width: 70px; height: 70px; border: 2px solid var(--accent-color);">
+                                        <div class="rounded-circle bg-white d-flex align-items-center justify-content-center overflow-hidden" style="width: 70px; height: 70px; border: 2px solid var(--accent-color);">
                                             @if (!string.IsNullOrEmpty(player.ImageUrl))
                                             {
                                                 <img src="@player.ImageUrl" alt="@player.FullName" style="width: 100%; height: 100%; object-fit: cover;">
@@ -288,14 +288,14 @@
                                             }
                                         </div>
                                         <div>
-                                            <h5 class="mb-0 text-white fw-bold">@player.FullName</h5>
+                                            <h5 class="mb-0 text-dark fw-bold">@player.FullName</h5>
                                             <small class="text-secondary">@player.Nationality</small>
                                         </div>
                                     </div>
 
                                     <div class="row g-3 mb-4">
                                         <div class="col-4">
-                                            <div class="stat-label">Yaş</div>
+                                            <div class="stat-label">YaÅŸ</div>
                                             <div class="stat-value">@player.Age</div>
                                         </div>
                                         <div class="col-4 text-center">
@@ -311,7 +311,7 @@
                                     <div class="mb-4">
                                         <div class="d-flex align-items-center gap-2 mb-2">
                                             <i class="bi bi-shield-shaded text-accent"></i>
-                                            <span class="text-white fw-bold">@(player.CurrentClubName ?? "Kulüpsüz")</span>
+                                            <span class="text-dark fw-bold">@(player.CurrentClubName ?? "KulÃ¼psÃ¼z")</span>
                                         </div>
                                         <div class="progress" style="height: 4px; background: rgba(255,255,255,0.05);">
                                             <div class="progress-bar bg-primary" style="width: 85%;"></div>
@@ -324,7 +324,7 @@
                                         </div>
                                         <div class="d-flex gap-2">
                                             <button onclick="toggleCompare('@player.Id', '@player.FullName', this)" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                                <i class="bi bi-plus-circle me-1"></i> Kıyasla
+                                                <i class="bi bi-plus-circle me-1"></i> KÄ±yasla
                                             </button>
                                             <a href="@Url.Action("Details", "Players", new { id = player.Id })" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
                                                 Detay <i class="bi bi-arrow-right ms-1"></i>
@@ -347,12 +347,12 @@
         <div id="comparePhotos" class="d-flex gap-2">
             <!-- Selected player indicators go here -->
         </div>
-        <div class="text-white border-start border-secondary ps-3">
-            <span id="compareCount" class="fw-bold">0</span> Oyuncu Seçildi
+        <div class="text-dark border-start border-secondary ps-3">
+            <span id="compareCount" class="fw-bold">0</span> Oyuncu SeÃ§ildi
         </div>
     </div>
     <button onclick="goToCompare()" class="btn btn-primary rounded-pill px-4 fw-bold">
-        Hemen Kıyasla <i class="bi bi-lightning-fill"></i>
+        Hemen KÄ±yasla <i class="bi bi-lightning-fill"></i>
     </button>
     <button onclick="clearCompare()" class="btn btn-sm btn-outline-danger border-0 rounded-circle">
         <i class="bi bi-x-lg"></i>
@@ -369,16 +369,16 @@
             compareList.splice(index, 1);
             btn.classList.remove('btn-primary');
             btn.classList.add('btn-outline-primary');
-            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Kıyasla';
+            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> KÄ±yasla';
         } else {
             if (compareList.length >= 3) {
-                alert('En fazla 3 oyuncu kıyaslayabilirsiniz.');
+                alert('En fazla 3 oyuncu kÄ±yaslayabilirsiniz.');
                 return;
             }
             compareList.push(id);
             btn.classList.remove('btn-outline-primary');
             btn.classList.add('btn-primary');
-            btn.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Seçildi';
+            btn.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> SeÃ§ildi';
         }
 
         updateCompareBar();
@@ -413,8 +413,9 @@
         document.querySelectorAll('[onclick^="toggleCompare"]').forEach(btn => {
             btn.classList.remove('btn-primary');
             btn.classList.add('btn-outline-primary');
-            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Kıyasla';
+            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> KÄ±yasla';
         });
         updateCompareBar();
     }
 </script>
+

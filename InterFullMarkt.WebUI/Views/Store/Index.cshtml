@@ -1,22 +1,22 @@
-@model List<InterFullMarkt.Domain.Entities.Product>
+﻿@model List<InterFullMarkt.Domain.Entities.Product>
 @{
-    ViewData["Title"] = "Mağaza";
+    ViewData["Title"] = "MaÄŸaza";
 }
 
 <div class="store-hero rounded-5 mb-5 overflow-hidden position-relative">
     <div class="store-hero-overlay"></div>
     <div class="container position-relative z-3 py-5 text-center">
-        <span class="badge bg-primary rounded-pill px-3 py-2 mb-3 tracking-widest text-uppercase fw-bold" style="font-size: 0.7rem;">Resmi Lisanslı Ürünler</span>
-        <h1 class="display-2 fw-900 text-white mb-3">InterFullMarkt <span class="text-gradient">Store</span></h1>
+        <span class="badge bg-primary rounded-pill px-3 py-2 mb-3 tracking-widest text-uppercase fw-bold" style="font-size: 0.7rem;">Resmi LisanslÄ± ÃœrÃ¼nler</span>
+        <h1 class="display-2 fw-900 text-dark mb-3">InterFullMarkt <span class="text-gradient">Store</span></h1>
         <p class="text-secondary fs-5 mx-auto opacity-75" style="max-width: 700px;">
-            Sahadaki performansınızı zirveye taşıyacak profesyonel ekipmanlar ve kalbinizdeki takımın en yeni koleksiyonları burada.
+            Sahadaki performansÄ±nÄ±zÄ± zirveye taÅŸÄ±yacak profesyonel ekipmanlar ve kalbinizdeki takÄ±mÄ±n en yeni koleksiyonlarÄ± burada.
         </p>
     </div>
 </div>
 
 <div class="row mb-4">
     <div class="col-12 d-flex justify-content-center gap-2 flex-wrap">
-        <button class="btn btn-outline-secondary rounded-pill px-4 active category-btn" onclick="filterStore('All', this)">Tümü</button>
+        <button class="btn btn-outline-secondary rounded-pill px-4 active category-btn" onclick="filterStore('All', this)">TÃ¼mÃ¼</button>
         <button class="btn btn-outline-secondary rounded-pill px-4 category-btn" onclick="filterStore('Forma', this)">Forma</button>
         <button class="btn btn-outline-secondary rounded-pill px-4 category-btn" onclick="filterStore('Krampon', this)">Krampon</button>
         <button class="btn btn-outline-secondary rounded-pill px-4 category-btn" onclick="filterStore('Aksesuar', this)">Aksesuar</button>
@@ -32,7 +32,7 @@
                 @if (product.IsFeatured)
                 {
                     <div class="position-absolute top-0 end-0 m-3 z-3">
-                        <span class="badge bg-primary rounded-pill px-3 py-2 shadow-lg">Popüler</span>
+                        <span class="badge bg-primary rounded-pill px-3 py-2 shadow-lg">PopÃ¼ler</span>
                     </div>
                 }
                 
@@ -55,12 +55,12 @@
                         </div>
                     </div>
                     
-                    <h4 class="card-title text-white fw-bold mb-3">@product.Name</h4>
+                    <h4 class="card-title text-dark fw-bold mb-3">@product.Name</h4>
                     <p class="text-secondary small mb-4 flex-grow-1">@product.Description</p>
                     
                     <div class="mt-auto pt-3 border-top border-secondary border-opacity-25">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="text-white fs-4 fw-bold">@product.Price.Amount.ToString("N2") @product.Price.Currency</span>
+                            <span class="text-dark fs-4 fw-bold">@product.Price.Amount.ToString("N2") @product.Price.Currency</span>
                             <small class="text-success small">Stokta Var</small>
                         </div>
                         

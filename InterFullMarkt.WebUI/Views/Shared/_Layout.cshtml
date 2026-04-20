@@ -16,16 +16,16 @@
     
     <style>
         :root {
-            --primary-bg: #0b0e1a;
-            --card-bg: #161b33;
-            --header-bg: #1c2242;
+            --primary-bg: #f4f7f6;
+            --card-bg: #ffffff;
+            --header-bg: rgba(255, 255, 255, 0.95);
             --accent-color: #3d5afe;
-            --text-main: #f8f9fa;
-            --text-secondary: #adb5bd;
-            --text-muted: #6c757d;
-            --gold: #ffd700;
-            --glass: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
+            --text-main: #212529;
+            --text-secondary: #6c757d;
+            --text-muted: #adb5bd;
+            --gold: #f8b400;
+            --glass: rgba(255, 255, 255, 0.85);
+            --border: rgba(0, 0, 0, 0.08);
         }
 
         body { 
@@ -56,7 +56,7 @@
         }
 
         .nav-link:hover {
-            color: var(--text-main) !important;
+            color: var(--accent-color) !important;
             transform: translateY(-1px);
         }
 
@@ -65,50 +65,53 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             margin-top: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
         .dropdown-item {
-            color: var(--text-secondary);
+            color: var(--text-main);
             padding: 0.75rem 1.5rem;
         }
 
         .dropdown-item:hover {
-            background-color: var(--accent-color);
-            color: white;
+            background-color: rgba(61, 90, 254, 0.1);
+            color: var(--accent-color);
         }
 
         /* Global Readability Improvements */
-        h1, h2, h3, h4, h5, h6 { color: #ffffff; font-weight: 700; }
-        .text-secondary { color: #b0b0b0 !important; }
-        .text-muted { color: #808080 !important; }
+        h1, h2, h3, h4, h5, h6 { color: #1a202c; font-weight: 700; }
+        .text-secondary { color: var(--text-secondary) !important; }
+        .text-muted { color: var(--text-muted) !important; }
         
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
         }
         
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
         }
 
         .btn-primary {
             background-color: var(--accent-color);
             border-color: var(--accent-color);
+            color: #ffffff;
             font-weight: 600;
         }
 
         /* Premium Scrollbar */
         ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: var(--primary-bg); }
-        ::-webkit-scrollbar-thumb { background: var(--header-bg); border-radius: 5px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
     </style>
 </head>
 <body>
     
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold text-primary d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
                 <i class="bi bi-globe-europe-africa fs-3"></i> InterFullMarkt
@@ -141,7 +144,7 @@
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white d-flex align-items-center gap-2" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle text-dark d-flex align-items-center gap-2" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                                 <i class="bi bi-person-circle fs-5"></i> @User.Identity.Name
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
@@ -173,11 +176,11 @@
         @RenderBody()
     </main>
 
-    <footer class="text-center py-5 text-secondary" style="background-color: #080a14; border-top: 1px solid var(--border);">
+    <footer class="text-center py-5 text-secondary" style="background-color: var(--header-bg); border-top: 1px solid var(--border);">
         <div class="container">
             <div class="row g-4 align-items-center">
                 <div class="col-md-4 text-md-start">
-                    <h5 class="text-white mb-3">InterFullMarkt</h5>
+                    <h5 class="text-dark mb-3 fw-bold">InterFullMarkt</h5>
                     <p class="small">Futbol dünyasının kalbine yolculuk yapın. Oyuncular, kulüpler ve en son haberler burada.</p>
                 </div>
                 <div class="col-md-4">

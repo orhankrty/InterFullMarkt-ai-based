@@ -1,6 +1,6 @@
-@model List<InterFullMarkt.Application.DTOs.ClubDto>
+﻿@model List<InterFullMarkt.Application.DTOs.ClubDto>
 @{
-    ViewData["Title"] = "Takım Yönetimi";
+    ViewData["Title"] = "TakÄ±m YÃ¶netimi";
 }
 
 <div class="container py-5">
@@ -8,27 +8,27 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/Admin" class="text-decoration-none text-secondary">Yönetim</a></li>
-                    <li class="breadcrumb-item active text-white" aria-current="page">Takımlar</li>
+                    <li class="breadcrumb-item"><a href="/Admin" class="text-decoration-none text-secondary">YÃ¶netim</a></li>
+                    <li class="breadcrumb-item active text-dark" aria-current="page">TakÄ±mlar</li>
                 </ol>
             </nav>
-            <h2 class="fw-bold mb-0">Takım Yönetimi</h2>
+            <h2 class="fw-bold mb-0">TakÄ±m YÃ¶netimi</h2>
         </div>
         <a href="/Admin/Teams/Create" class="btn btn-primary rounded-pill px-4 py-2">
-            <i class="bi bi-plus-lg me-2"></i> Yeni Takım Ekle
+            <i class="bi bi-plus-lg me-2"></i> Yeni TakÄ±m Ekle
         </a>
     </div>
 
-    <div class="card bg-dark border-secondary rounded-4 overflow-hidden">
+    <div class="card bg-white border-secondary rounded-4 overflow-hidden">
         <div class="table-responsive">
             <table class="table table-dark table-hover mb-0 align-middle">
                 <thead class="bg-black">
                     <tr class="text-secondary">
                         <th class="ps-4">Logo</th>
-                        <th>Takım Adı</th>
-                        <th>Kısa Ad</th>
-                        <th>Kuruluş</th>
-                        <th>Bütçe</th>
+                        <th>TakÄ±m AdÄ±</th>
+                        <th>KÄ±sa Ad</th>
+                        <th>KuruluÅŸ</th>
+                        <th>BÃ¼tÃ§e</th>
                         <th>Kadro</th>
                         <th class="text-end pe-4">Aksiyonlar</th>
                     </tr>
@@ -45,7 +45,7 @@
                             <td><span class="fw-bold">@club.Name</span></td>
                             <td><span class="badge bg-secondary">@club.ShortName</span></td>
                             <td>@club.FoundingYear</td>
-                            <td class="text-success fw-semibold">€@((club.BudgetAmount ?? 0).ToString("N0"))</td>
+                            <td class="text-success fw-semibold">â‚¬@((club.BudgetAmount ?? 0).ToString("N0"))</td>
                             <td>@club.SquadCount Oyuncu</td>
                             <td class="text-end pe-4">
                                 <div class="btn-group">
@@ -68,7 +68,7 @@
 @section Scripts {
     <script>
         function deleteTeam(id) {
-            if (confirm('Bu takımı silmek istediğinize emin misiniz?')) {
+            if (confirm('Bu takÄ±mÄ± silmek istediÄŸinize emin misiniz?')) {
                 fetch('/Admin/Teams/Delete/' + id, { method: 'POST' })
                     .then(res => res.json())
                     .then(data => {
@@ -78,3 +78,4 @@
         }
     </script>
 }
+

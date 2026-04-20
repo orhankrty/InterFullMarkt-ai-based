@@ -1,4 +1,4 @@
-<div class="offcanvas offcanvas-end bg-dark text-white border-start border-secondary" tabindex="-1" id="cartDrawer" aria-labelledby="cartDrawerLabel" style="width: 400px;">
+﻿<div class="offcanvas offcanvas-end bg-white text-dark border-start border-secondary" tabindex="-1" id="cartDrawer" aria-labelledby="cartDrawerLabel" style="width: 400px;">
     <div class="offcanvas-header border-bottom border-secondary py-4">
         <h5 class="offcanvas-title fw-bold" id="cartDrawerLabel"><i class="bi bi-cart3 text-primary me-2"></i> Sepetiniz</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -8,21 +8,21 @@
             <!-- AJAX will fill this -->
             <div class="text-center py-5 opacity-50">
                 <i class="bi bi-cart-x display-1 mb-3 d-block"></i>
-                <p>Sepetiniz şu an boş.</p>
+                <p>Sepetiniz ÅŸu an boÅŸ.</p>
             </div>
         </div>
     </div>
     <div class="offcanvas-footer p-4 border-top border-secondary bg-black bg-opacity-25">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <span class="text-secondary fs-5">Toplam:</span>
-            <span id="cartTotalText" class="fs-3 fw-bold text-warning">0.00 €</span>
+            <span id="cartTotalText" class="fs-3 fw-bold text-warning">0.00 â‚¬</span>
         </div>
         <div class="d-grid gap-2">
             <a href="/Checkout" class="btn btn-primary btn-lg rounded-pill fw-bold py-3 shadow-lg">
-                <i class="bi bi-credit-card me-2"></i> Güvenli Ödeme
+                <i class="bi bi-credit-card me-2"></i> GÃ¼venli Ã–deme
             </a>
             <button onclick="clearCart()" class="btn btn-outline-secondary btn-sm rounded-pill mt-2 border-0 opacity-50 text-decoration-underline">
-                Sepeti Boşalt
+                Sepeti BoÅŸalt
             </button>
         </div>
     </div>
@@ -54,10 +54,10 @@
             container.innerHTML = `
                 <div class="text-center py-5 opacity-50">
                     <i class="bi bi-cart-x display-1 mb-3 d-block"></i>
-                    <p>Sepetiniz şu an boş.</p>
+                    <p>Sepetiniz ÅŸu an boÅŸ.</p>
                 </div>
             `;
-            totalText.innerText = "0.00 €";
+            totalText.innerText = "0.00 â‚¬";
             if (badge) badge.innerText = "0";
             return;
         }
@@ -66,7 +66,7 @@
             <div class="cart-item p-3 d-flex align-items-center gap-3">
                 <img src="${item.imageUrl}" class="rounded-3 shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
                 <div class="flex-grow-1">
-                    <h6 class="mb-0 text-white fw-bold">${item.productName}</h6>
+                    <h6 class="mb-0 text-dark fw-bold">${item.productName}</h6>
                     <div class="d-flex justify-content-between align-items-center mt-1">
                         <small class="text-secondary">${item.quantity} x ${item.unitPrice} ${item.currency}</small>
                         <span class="text-warning fw-bold">${item.totalPrice.toFixed(2)} ${item.currency}</span>
@@ -111,7 +111,7 @@
     }
 
     async function clearCart() {
-        if (confirm('Sepeti boşaltmak istediğinize emin misiniz?')) {
+        if (confirm('Sepeti boÅŸaltmak istediÄŸinize emin misiniz?')) {
             await fetch('/Cart/ClearCart', { method: 'POST' });
             await updateCartUI();
         }
@@ -119,3 +119,4 @@
 
     document.addEventListener('DOMContentLoaded', updateCartUI);
 </script>
+

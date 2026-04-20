@@ -1,18 +1,18 @@
-<div class="list-group list-group-flush rounded-4 overflow-hidden border border-secondary border-opacity-25 shadow-sm">
-    <a href="/Account" class="list-group-item list-group-item-action bg-dark text-white py-3 @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active bg-primary border-primary" : "")">
+﻿<div class="list-group list-group-flush rounded-4 overflow-hidden border border-secondary border-opacity-25 shadow-sm">
+    <a href="/Account" class="list-group-item list-group-item-action bg-white text-dark py-3 @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active bg-primary border-primary" : "")">
         <i class="bi bi-speedometer2 me-2"></i> Dashboard
     </a>
-    <a href="/Account/Profile" class="list-group-item list-group-item-action bg-dark text-white py-3 @(ViewContext.RouteData.Values["action"]?.ToString() == "Profile" ? "active bg-primary border-primary" : "")">
+    <a href="/Account/Profile" class="list-group-item list-group-item-action bg-white text-dark py-3 @(ViewContext.RouteData.Values["action"]?.ToString() == "Profile" ? "active bg-primary border-primary" : "")">
         <i class="bi bi-person-gear me-2"></i> Profil Bilgileri
     </a>
-    <a href="/Account/Orders" class="list-group-item list-group-item-action bg-dark text-white py-3 @(ViewContext.RouteData.Values["action"]?.ToString() == "Orders" ? "active bg-primary border-primary" : "")">
-        <i class="bi bi-bag-check me-2"></i> Siparişlerim
+    <a href="/Account/Orders" class="list-group-item list-group-item-action bg-white text-dark py-3 @(ViewContext.RouteData.Values["action"]?.ToString() == "Orders" ? "active bg-primary border-primary" : "")">
+        <i class="bi bi-bag-check me-2"></i> SipariÅŸlerim
     </a>
-    <a href="/Account/Addresses" class="list-group-item list-group-item-action bg-dark text-white py-3 @(ViewContext.RouteData.Values["action"]?.ToString() == "Addresses" ? "active bg-primary border-primary" : "")">
+    <a href="/Account/Addresses" class="list-group-item list-group-item-action bg-white text-dark py-3 @(ViewContext.RouteData.Values["action"]?.ToString() == "Addresses" ? "active bg-primary border-primary" : "")">
         <i class="bi bi-geo-alt me-2"></i> Adreslerim
     </a>
-    <a href="/Auth/Logout" class="list-group-item list-group-item-action bg-dark text-danger py-3">
-        <i class="bi bi-box-arrow-right me-2"></i> Güvenli Çıkış
+    <a href="/Auth/Logout" class="list-group-item list-group-item-action bg-white text-danger py-3">
+        <i class="bi bi-box-arrow-right me-2"></i> GÃ¼venli Ã‡Ä±kÄ±ÅŸ
     </a>
 </div>
 
@@ -26,3 +26,4 @@
         padding-left: 1.5rem;
     }
 </style>
+

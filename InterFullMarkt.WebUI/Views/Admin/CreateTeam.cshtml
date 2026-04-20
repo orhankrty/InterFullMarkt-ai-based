@@ -1,6 +1,6 @@
-@model InterFullMarkt.Application.DTOs.CreateClubDto
+﻿@model InterFullMarkt.Application.DTOs.CreateClubDto
 @{
-    ViewData["Title"] = "Takım Oluştur";
+    ViewData["Title"] = "TakÄ±m OluÅŸtur";
     var leagues = ViewBag.Leagues as List<InterFullMarkt.Application.Features.Leagues.Queries.GetAllLeagues.LeagueDto>;
 }
 
@@ -36,38 +36,38 @@
         <div class="col-lg-8">
             <div class="form-card p-4 p-md-5">
                 <div class="text-center mb-5">
-                    <h2 class="fw-bold text-white mb-2">Yeni Takım Ekle</h2>
-                    <p class="text-secondary">Sisteme yeni bir futbol kulübü kaydetmek için aşağıdaki formu doldurun.</p>
+                    <h2 class="fw-bold text-dark mb-2">Yeni TakÄ±m Ekle</h2>
+                    <p class="text-secondary">Sisteme yeni bir futbol kulÃ¼bÃ¼ kaydetmek iÃ§in aÅŸaÄŸÄ±daki formu doldurun.</p>
                 </div>
 
                 <form method="post">
                     <div class="row g-4">
                         <div class="col-md-8">
-                            <label class="form-label">Kulüp Tam Adı</label>
-                            <input asp-for="Name" class="form-control" placeholder="Örn: Galatasaray Spor Kulübü" required>
+                            <label class="form-label">KulÃ¼p Tam AdÄ±</label>
+                            <input asp-for="Name" class="form-control" placeholder="Ã–rn: Galatasaray Spor KulÃ¼bÃ¼" required>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">Kısa İsim (3-4 Karakter)</label>
-                            <input asp-for="ShortName" class="form-control" placeholder="Örn: GS" required>
+                            <label class="form-label">KÄ±sa Ä°sim (3-4 Karakter)</label>
+                            <input asp-for="ShortName" class="form-control" placeholder="Ã–rn: GS" required>
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Stadyum Adı</label>
-                            <input asp-for="StadiumName" class="form-control" placeholder="Örn: Rams Park" required>
+                            <label class="form-label">Stadyum AdÄ±</label>
+                            <input asp-for="StadiumName" class="form-control" placeholder="Ã–rn: Rams Park" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Kuruluş Yılı</label>
+                            <label class="form-label">KuruluÅŸ YÄ±lÄ±</label>
                             <input asp-for="FoundingYear" type="number" class="form-control" required>
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Kulüp Renkleri</label>
-                            <input asp-for="Colors" class="form-control" placeholder="Örn: Sarı-Kırmızı" required>
+                            <label class="form-label">KulÃ¼p Renkleri</label>
+                            <input asp-for="Colors" class="form-control" placeholder="Ã–rn: SarÄ±-KÄ±rmÄ±zÄ±" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Lig</label>
                             <select asp-for="LeagueId" class="form-select" required>
-                                <option value="">Lig Seçin...</option>
+                                <option value="">Lig SeÃ§in...</option>
                                 @foreach (var league in leagues ?? new())
                                 {
                                     <option value="@league.Id">@league.Name (@league.CountryName)</option>
@@ -78,21 +78,22 @@
                         <div class="col-12">
                             <label class="form-label">Logo URL</label>
                             <input asp-for="LogoUrl" class="form-control" placeholder="https://example.com/logo.png">
-                            <div class="form-text text-secondary">Kulüp logosu için bir web bağlantısı girin.</div>
+                            <div class="form-text text-secondary">KulÃ¼p logosu iÃ§in bir web baÄŸlantÄ±sÄ± girin.</div>
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Başlangıç Bütçesi (€)</label>
+                            <label class="form-label">BaÅŸlangÄ±Ã§ BÃ¼tÃ§esi (â‚¬)</label>
                             <input asp-for="InitialBudget" type="number" class="form-control" required>
                         </div>
                     </div>
 
                     <div class="d-flex gap-3 mt-5">
-                        <a href="/Admin/Teams" class="btn btn-outline-secondary rounded-pill px-5 flex-grow-1">İptal</a>
-                        <button type="submit" class="btn btn-primary rounded-pill px-5 flex-grow-1">Takımı Kaydet</button>
+                        <a href="/Admin/Teams" class="btn btn-outline-secondary rounded-pill px-5 flex-grow-1">Ä°ptal</a>
+                        <button type="submit" class="btn btn-primary rounded-pill px-5 flex-grow-1">TakÄ±mÄ± Kaydet</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+

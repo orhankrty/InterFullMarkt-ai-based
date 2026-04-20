@@ -1,7 +1,7 @@
-@model InterFullMarkt.Application.Features.Players.Queries.GetPlayerById.GetPlayerByIdResult
+﻿@model InterFullMarkt.Application.Features.Players.Queries.GetPlayerById.GetPlayerByIdResult
 
 @{
-    ViewData["Title"] = $"{Model.FullName} - Oyuncu Detayları";
+    ViewData["Title"] = $"{Model.FullName} - Oyuncu DetaylarÄ±";
     var age = Model.Age;
 }
 
@@ -11,7 +11,7 @@
         --secondary-color: #ffd700;
         --dark-bg: #0a0e27;
         --card-bg: #1a1f3a;
-        --text-light: #e0e0e0;
+        --text-muted: #e0e0e0;
     }
 
     .player-header {
@@ -45,7 +45,7 @@
     }
 
     .stat-card h6 {
-        color: var(--text-light);
+        color: var(--text-muted);
         font-size: 0.875rem;
         text-transform: uppercase;
         letter-spacing: 0.1em;
@@ -83,7 +83,7 @@
         padding: 1rem;
         background: transparent;
         border: none;
-        color: var(--text-light);
+        color: var(--text-muted);
         cursor: pointer;
         border-bottom: 3px solid transparent;
         transition: all 0.3s ease;
@@ -116,7 +116,7 @@
     .transfer-table td {
         padding: 1rem;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        color: var(--text-light);
+        color: var(--text-muted);
     }
 
     .transfer-table tbody tr:hover {
@@ -188,7 +188,7 @@
 
 <div class="container mt-4">
     <a href="@Url.Action("Index")" class="back-button">
-        <i class="bi bi-arrow-left"></i> Oyunculara Dön
+        <i class="bi bi-arrow-left"></i> Oyunculara DÃ¶n
     </a>
 
     <!-- Player Header -->
@@ -226,7 +226,7 @@
     <div class="row mb-4">
         <div class="col-md-3">
             <div class="stat-card">
-                <h6>Yaş</h6>
+                <h6>YaÅŸ</h6>
                 <div class="value">@Model.Age</div>
                 <small class="text-muted">@Model.DateOfBirth.ToString("d MMMM yyyy")</small>
             </div>
@@ -247,9 +247,9 @@
         </div>
         <div class="col-md-3">
             <div class="stat-card market-value-highlight">
-                <h6>Piyasa Değeri</h6>
+                <h6>Piyasa DeÄŸeri</h6>
                 <div class="value">@Model.MarketValue</div>
-                <small class="text-muted">Son güncelleme: @Model.CreatedDate.ToString("d MMMM yyyy")</small>
+                <small class="text-muted">Son gÃ¼ncelleme: @Model.CreatedDate.ToString("d MMMM yyyy")</small>
             </div>
         </div>
     </div>
@@ -268,7 +268,7 @@
                 <i class="bi bi-graph-up"></i> Piyasa Tarihi
             </button>
             <button class="tab-button" onclick="showTab(event, 'transfers')">
-                <i class="bi bi-shuffle"></i> Transfer Geçmişi
+                <i class="bi bi-shuffle"></i> Transfer GeÃ§miÅŸi
             </button>
             <button class="tab-button" onclick="showTab(event, 'stats')">
                 <i class="bi bi-bar-chart"></i> Statistikler
@@ -282,7 +282,7 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="chart-container">
-                    <h3 class="mb-4">Piyasa Değeri Tarihi (Son 12 Ay)</h3>
+                    <h3 class="mb-4">Piyasa DeÄŸeri Tarihi (Son 12 Ay)</h3>
                     <canvas id="marketValueChart" style="max-height: 400px;"></canvas>
                 </div>
             </div>
@@ -299,7 +299,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <div class="stat-label mb-2">Öne Çıkan Özellikler</div>
+                        <div class="stat-label mb-2">Ã–ne Ã‡Ä±kan Ã–zellikler</div>
                         <div class="d-flex flex-wrap">
                             @foreach (var pro in Model.AiPros)
                             {
@@ -319,7 +319,7 @@
                         }
                     </div>
 
-                    <div class="mt-4 p-3 bg-dark rounded-4 border border-secondary border-opacity-25">
+                    <div class="mt-4 p-3 bg-white rounded-4 border border-secondary border-opacity-25">
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <small class="text-secondary">AI Fiyat Tahmini (12 Ay)</small>
                             <span class="badge @(Model.AiPredictionChange >= 0 ? "bg-success" : "bg-danger")">
@@ -337,17 +337,17 @@
     <!-- Transfer History -->
     <div id="transfers" class="tab-content" style="display: none;">
         <div class="chart-container">
-            <h3 class="mb-4">Transfer Geçmişi</h3>
+            <h3 class="mb-4">Transfer GeÃ§miÅŸi</h3>
             @if (Model.TransferHistory.Count > 0)
             {
                 <table class="transfer-table">
                     <thead>
                         <tr>
                             <td><strong>Tarih</strong></td>
-                            <td><strong>Kaynak Kulüp</strong></td>
-                            <td><strong>Hedef Kulüp</strong></td>
+                            <td><strong>Kaynak KulÃ¼p</strong></td>
+                            <td><strong>Hedef KulÃ¼p</strong></td>
                             <td><strong>Bedel</strong></td>
-                            <td><strong>Tür</strong></td>
+                            <td><strong>TÃ¼r</strong></td>
                         </tr>
                     </thead>
                     <tbody>
@@ -367,7 +367,7 @@
             else
             {
                 <div class="alert alert-info" style="background-color: rgba(0, 102, 255, 0.1); border-left: 4px solid var(--primary-color);">
-                    <i class="bi bi-info-circle"></i> Henüz transfer geçmişi bulunmamaktadır.
+                    <i class="bi bi-info-circle"></i> HenÃ¼z transfer geÃ§miÅŸi bulunmamaktadÄ±r.
                 </div>
             }
         </div>
@@ -376,7 +376,7 @@
     <!-- Statistics -->
     <div id="stats" class="tab-content" style="display: none;">
         <div class="chart-container">
-            <h3 class="mb-4">Detaylı Bilgiler</h3>
+            <h3 class="mb-4">DetaylÄ± Bilgiler</h3>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <strong>Milliyeti:</strong> @Model.Nationality (@Model.NationalityFlag)
@@ -391,10 +391,10 @@
                     <strong>Kilo:</strong> @Model.Weight kg
                 </div>
                 <div class="col-md-6 mb-3">
-                    <strong>Ayağı:</strong> @Model.PreferredFoot
+                    <strong>AyaÄŸÄ±:</strong> @Model.PreferredFoot
                 </div>
                 <div class="col-md-6 mb-3">
-                    <strong>Piyasa Değeri:</strong> @Model.MarketValue
+                    <strong>Piyasa DeÄŸeri:</strong> @Model.MarketValue
                 </div>
             </div>
         </div>
@@ -416,7 +416,7 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Piyasa Değeri (€M)',
+                    label: 'Piyasa DeÄŸeri (â‚¬M)',
                     data: data,
                     borderColor: '#0066ff',
                     backgroundColor: 'rgba(0, 102, 255, 0.1)',
@@ -453,7 +453,7 @@
                         ticks: {
                             color: '#e0e0e0',
                             callback: function(value) {
-                                return '€' + value + 'M';
+                                return 'â‚¬' + value + 'M';
                             }
                         }
                     },
@@ -489,3 +489,4 @@
         }
     </script>
 }
+

@@ -1,6 +1,6 @@
-@model InterFullMarkt.Application.DTOs.UpdatePlayerDto
+﻿@model InterFullMarkt.Application.DTOs.UpdatePlayerDto
 @{
-    ViewData["Title"] = "Oyuncuyu Düzenle";
+    ViewData["Title"] = "Oyuncuyu DÃ¼zenle";
 }
 
 <style>
@@ -18,8 +18,8 @@
         <div class="col-lg-10">
             <div class="form-card p-5 shadow-lg">
                 <div class="text-center mb-5">
-                    <h2 class="fw-bold text-white mb-2">Oyuncu Bilgilerini Güncelle</h2>
-                    <p class="text-secondary">@Model.FullName profilini düzenliyorsunuz.</p>
+                    <h2 class="fw-bold text-dark mb-2">Oyuncu Bilgilerini GÃ¼ncelle</h2>
+                    <p class="text-secondary">@Model.FullName profilini dÃ¼zenliyorsunuz.</p>
                 </div>
 
                 <form method="post" action="/Admin/Players/Edit/@Model.Id">
@@ -34,12 +34,12 @@
                             <input asp-for="JerseyNumber" type="number" class="form-control">
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label">Milliyet Kodu (Örn: TR, AR)</label>
+                            <label class="form-label">Milliyet Kodu (Ã–rn: TR, AR)</label>
                             <input asp-for="NationalityCode" class="form-control" required>
                         </div>
 
                         <div class="col-md-4">
-                            <label class="form-label">Doğum Tarihi</label>
+                            <label class="form-label">DoÄŸum Tarihi</label>
                             <input asp-for="DateOfBirth" type="date" class="form-control" required>
                         </div>
                         <div class="col-md-4">
@@ -52,24 +52,25 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Piyasa Değeri</label>
+                            <label class="form-label">Piyasa DeÄŸeri</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-dark border-secondary text-white">€</span>
+                                <span class="input-group-text bg-white border-secondary text-dark">â‚¬</span>
                                 <input asp-for="MarketValueAmount" type="number" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Profil Fotoğrafı URL</label>
+                            <label class="form-label">Profil FotoÄŸrafÄ± URL</label>
                             <input asp-for="ImageUrl" class="form-control" placeholder="https://...">
                         </div>
                     </div>
 
                     <div class="d-flex gap-3 mt-5">
-                        <a href="/Admin/Players" class="btn btn-outline-secondary rounded-pill px-5 flex-grow-1">Vazgeç</a>
-                        <button type="submit" class="btn btn-primary rounded-pill px-5 flex-grow-1">Güncelle</button>
+                        <a href="/Admin/Players" class="btn btn-outline-secondary rounded-pill px-5 flex-grow-1">VazgeÃ§</a>
+                        <button type="submit" class="btn btn-primary rounded-pill px-5 flex-grow-1">GÃ¼ncelle</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+

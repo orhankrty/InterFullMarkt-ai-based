@@ -1,45 +1,45 @@
-@model List<InterFullMarkt.Domain.Entities.Order>
+﻿@model List<InterFullMarkt.Domain.Entities.Order>
 @{
-    ViewData["Title"] = "Siparişlerim";
+    ViewData["Title"] = "SipariÅŸlerim";
 }
 
 <div class="container py-5">
     <div class="row g-4">
         <!-- Sidebar -->
         <div class="col-lg-3">
-            <div class="card bg-dark border-0 p-3 rounded-4">
+            <div class="card bg-white border-0 p-3 rounded-4">
                 <partial name="_AccountSidebar" />
             </div>
         </div>
 
         <!-- Main Content -->
         <div class="col-lg-9">
-            <h2 class="fw-bold mb-4">Siparişlerim</h2>
+            <h2 class="fw-bold mb-4">SipariÅŸlerim</h2>
             
             @if (!Model.Any())
             {
-                <div class="card bg-dark border-secondary border-opacity-25 rounded-4 p-5 text-center shadow-lg">
+                <div class="card bg-white border-secondary border-opacity-25 rounded-4 p-5 text-center shadow-lg">
                     <div class="opacity-25 mb-4">
                         <i class="bi bi-bag-x display-1"></i>
                     </div>
-                    <h4 class="text-white fw-bold">Henüz Siparişiniz Yok</h4>
-                    <p class="text-secondary mb-4">Mağazamızdaki harika ürünlere göz atarak ilk siparişinizi verebilirsiniz.</p>
-                    <a href="/Store" class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow-lg">Mağazayı Keşfet</a>
+                    <h4 class="text-dark fw-bold">HenÃ¼z SipariÅŸiniz Yok</h4>
+                    <p class="text-secondary mb-4">MaÄŸazamÄ±zdaki harika Ã¼rÃ¼nlere gÃ¶z atarak ilk sipariÅŸinizi verebilirsiniz.</p>
+                    <a href="/Store" class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow-lg">MaÄŸazayÄ± KeÅŸfet</a>
                 </div>
             }
             else
             {
                 @foreach (var order in Model)
                 {
-                    <div class="card bg-dark border-secondary border-opacity-25 rounded-4 overflow-hidden mb-4 shadow-sm">
+                    <div class="card bg-white border-secondary border-opacity-25 rounded-4 overflow-hidden mb-4 shadow-sm">
                         <div class="card-header bg-black bg-opacity-25 py-3 px-4 d-flex justify-content-between align-items-center">
                             <div>
-                                <span class="text-secondary small d-block">Sipariş Tarihi</span>
-                                <span class="text-white fw-bold">@order.OrderDate.ToString("dd MMMM yyyy HH:mm")</span>
+                                <span class="text-secondary small d-block">SipariÅŸ Tarihi</span>
+                                <span class="text-dark fw-bold">@order.OrderDate.ToString("dd MMMM yyyy HH:mm")</span>
                             </div>
                             <div class="text-md-end">
-                                <span class="text-secondary small d-block">Sipariş No</span>
-                                <span class="text-white fw-bold">#@order.Id.ToString().Substring(0, 8).ToUpper()</span>
+                                <span class="text-secondary small d-block">SipariÅŸ No</span>
+                                <span class="text-dark fw-bold">#@order.Id.ToString().Substring(0, 8).ToUpper()</span>
                             </div>
                             <div>
                                 <span class="badge @(order.Status == "Completed" ? "bg-success" : "bg-primary") rounded-pill px-3">@order.Status</span>
@@ -64,7 +64,7 @@
                                         <span class="text-secondary small d-block">Toplam Tutar</span>
                                         <span class="text-warning fs-4 fw-bold">@order.TotalAmount.ToString()</span>
                                     </div>
-                                    <a href="/Checkout/Success/@order.Id" class="btn btn-outline-primary btn-sm rounded-pill px-4 mt-3">Detayları Gör</a>
+                                    <a href="/Checkout/Success/@order.Id" class="btn btn-outline-primary btn-sm rounded-pill px-4 mt-3">DetaylarÄ± GÃ¶r</a>
                                 </div>
                             </div>
                         </div>
@@ -74,3 +74,4 @@
         </div>
     </div>
 </div>
+
