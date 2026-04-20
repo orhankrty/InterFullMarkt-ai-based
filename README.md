@@ -1,86 +1,110 @@
-# 🏟️ InterFullMarkt (International Football Market)
+<div align="center">
+  <img src="https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet" alt=".NET 10.0 Badge" />
+  <img src="https://img.shields.io/badge/Architecture-Clean-brightgreen?style=for-the-badge" alt="Clean Architecture Badge" />
+  <img src="https://img.shields.io/badge/Pattern-CQRS-blue?style=for-the-badge" alt="CQRS Badge" />
+  <img src="https://img.shields.io/badge/Library-MediatR-yellow?style=for-the-badge" alt="MediatR Badge" />
 
-![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet)
-![Clean Architecture](https://img.shields.io/badge/Architecture-Clean-brightgreen?style=for-the-badge)
-![CQRS](https://img.shields.io/badge/Pattern-CQRS-blue?style=for-the-badge)
-![MediatR](https://img.shields.io/badge/Library-MediatR-yellow?style=for-the-badge)
+  <h1>🏟️ InterFullMarkt <br/> <small>AI-Powered International Football Market Portal</small></h1>
 
-**InterFullMarkt**, uluslararası futbol dünyasının piyasa değerlerini, transfer dinamiklerini ve oyuncu istatistiklerini izlemek amacıyla geliştirilmiş, **AI destekli** yeni nesil bir B2B / B2C veri portalıdır. 
+  <p><strong>Yeni Nesil B2B & B2C Veri, Transfer ve Yetenek Keşif (Scouting) Platformu</strong></p>
+</div>
 
-Sistem; Rich Domain Model, CQRS Pattern ve Clean Architecture ilkeleri göz önünde bulundurularak "Enterprise-Level" standartlarda tasarlanmıştır.
+<br/>
 
-## 🌟 Temel Özellikler (Core Features)
+**InterFullMarkt**, uluslararası futbol dünyasının piyasa değerlerini, transfer dinamiklerini ve oyuncu istatistiklerini profesyonel ve yenilikçi bir perspektifle analiz etmek amacıyla geliştirilmiş, **Yapay Zeka (AI) destekli** şeffaf bir platformdur. 
 
-- **🧠 AI Market Forecast (Mock):** Oyuncunun biyometrik verileri, yaşı, performansı ve mevcut kulübünün ağırlığını baz alarak bir sonraki sezon için tahmini piyasa değeri (Market Value) sinyalleri üretir.
-- **🔄 Akıllı Transfer Motoru:** Bir kulübün bütçesini, kadro limitini ve oyuncu sözleşmelerini dikkate alan zırhlı transfer süreçleri. (MediatR Command + Domain Events üzerinden işler).
-- **🛡️ Solid & Rich Domain Models:** Anemik modellerden (Anemic Domain Models) uzak, iş kurallarını (Business Logic) kendi içinde barındıran (`CompleteTransfer`, `DeductFromBudget`) güçlü Entity ve Value Object'ler (`Money`, `Nationality`).
-- **🚀 CQRS & Mediator Pipeline:** Read/Write operasyonlarının sıkı izolasyonu, AutoMapper ve FluentValidation entegrasyonu ile merkezi doğrulama davranışı (ValidationBehavior).
-- **🌐 Global Audit & Soft Delete:** Veritabanı üzerinde global query filter'lar ile silinmiş (IsDeleted = true) verilerin izolasyonu ve SaveChanges esnasında devreye giren otomatik Audit Trail mekanizması.
+Proje, güncel yazılım mühendisliği pratikleri ışığında; tamamen **Clean Architecture (Temiz Mimari)** ve **Domain-Driven Design (DDD)** ilkelerine sadık kalınarak "Kurumsal Düzey" (Enterprise-Level) standartlarda kodlanmıştır. Ön yüzünde ise kullanıcıyı içine çeken, Premium *"Glassmorphism"* ve modern tasarım ögeleri barındırır.
+
+## ✨ Öne Çıkan Özellikler (Core Features)
+
+- 🧠 **Yapay Zeka Destekli Tahminler (AI Market Forecast):** Oyuncuların biyometrik verileri, taktiksel performans ölçümleri ve güncel forma giydikleri kulübün gücüne dayanarak; bir sonraki sezon için gerçeğe en yakın **potansiyel piyasa değeri** tahminleri (Mock) üretir.
+- 🔄 **Akıllı Transfer Motoru (Smart Transfer Engine):** Transfer süreçleri sırasında kulübün bütçesini, takım kadrosu kapasitesini ve aktif sözleşmeleri eş zamanlı olarak doğrular. İşlem, `MediatR Command` ve `Domain Events` uçları kullanılarak zırhlı ve asenkron biçimde yürütülür.
+- 🛡️ **Zengin & Katı Domain Modelleri (Rich Domain Models):** İş kurallarını (Business Logic) kendi çekirdeğinde muhafaza eden (`CompleteTransfer`, `DeductFromBudget` vb.) zengin sınıflar; böylece "Anemik Model" tuzağından uzak ve veri bütünlüğü yüksek bir mimari inşa eder.
+- 🚀 **MediatR & CQRS Pipeline:** Read (Okuma) ve Write (Yazma) operasyonlarının kesin bir şekilde izolasyonu. Ayrıca süreç `AutoMapper` ve `FluentValidation` entegrasyonu ile merkezi doğrulama davranışında işlenir.
+- 🌐 **Global Audit & Güvenli Silme (Soft Delete):** EF Core query (sorgu) filtreleri ile sistem genelinde silinmiş verilerin güvenli izolasyonu. `SaveChanges` sırasında devreye giren otomatik Loglama / Audit Trail mekanizması (Serilog destekli).
 
 ---
 
 ## 🏛️ Mimari Tasarım (Clean Architecture)
 
-Proje, bağımlılıkların yalnızca içe (Domain'e) doğru aktığı 4 temel katmandan oluşmaktadır:
+Proje, bağımlılıkların yalnızca merkeze (Domain) doğru ilerlediği, dış araçlardan izole 4 temel katmanda dizayn edilmiştir:
 
-1. **`Domain` Katmanı:** Projenin kalbi. Entity'ler (`Player`, `Club`), Enum'lar, Value Object'ler (`Money`) ve sistem arayüzleri burada yer alır. Hiçbir dış teknolojiye (EF Core vb.) bağımlılığı yoktur.
-2. **`Application` Katmanı:** İş zekası ve orkestrasyon. Use-case senaryoları CQRS (Command/Query) mantığı ile MediatR üzerinden yönetilir. DTO maplemeleri ve kural doğrulamaları buradadır.
-3. **`Infrastructure` Katmanı:** Veri erişim teknolojisi. Entity Framework Core (SQLite), Interceptor'lar, Fluent API konfigurasyonları ve dış servis implementasyonları yer alır.
-4. **`WebUI` Katmanı:** Kullanıcı etkileşiminin başladığı nokta. ASP.NET Core MVC yapısı, Controller'lar, Razor View'lar ve modern UI elementleri (Chart.js vb.).
+<details>
+<summary><b>1. 🎯 Domain Katmanı (Core)</b></summary>
+Projenin kalbi burasıdır. Varlıklar (`Player`, `Club`), Enum türleri, Değer Nesneleri (Value Objects - `Money`, `Nationality`) ve sistem arayüzleri yalnızca bu katmanda yer alır. Harici hiçbir kütüphaneye veya veritabanı sürücüsüne (EF Core vb.) bağımlılığa sahip değildir.
+</details>
+
+<details>
+<summary><b>2. 🧠 Application Katmanı (Use Cases)</b></summary>
+İş zekası ve sistemin kullanım senaryoları burada yürütülür. CQRS yaklaşımıyla ayrıştırılan sorgular/komutlar (Query/Command) ve DTO eşleştirmeleri MediatR vasıtasıyla orkestre edilir. Ayrıca Custom Pipeline Behavior ve Validation ayarları da bu katmandadır.
+</details>
+
+<details>
+<summary><b>3. 🧱 Infrastructure Katmanı (Data & External)</b></summary>
+Sistemin dış dünya ile haberleştiği bölüm. Veri erişim katmanı (Entity Framework Core 10), veritabanı interceptor'ları, Fluent API konfigürasyonları ve dış API sistem tasarımlarını ihtiva eder.
+</details>
+
+<details>
+<summary><b>4. 🌐 WebUI Katmanı (Presentation)</b></summary>
+Kullanıcı deneyiminin (UX/UI) vücut bulduğu alandır. ASP.NET Core yapısıyla kurulan Controller'lar, büyüleyici bir arayüze sahip gelişmiş Razor View'lar, Global Exception Handling mekanizması (Middleware) ile süslenmiştir.
+</details>
 
 ---
 
 ## ⚙️ Teknoloji Yığını (Tech Stack)
 
-- **Framework:** .NET 10.0 (C# 14 özellikleriyle birlikte)
-- **Frontend:** ASP.NET Core MVC, Razor Pages, Bootstrap 5, Chart.js
-- **ORM:** Entity Framework Core 10
-- **Veritabanı:** SQLite (Geliştirme / Hızlı Başlangıç için), SQL Server (Scale edilebilir)
-- **Kütüphaneler:** 
-  - `MediatR` (CQRS ve Domain Events)
-  - `AutoMapper` (Object-to-Object Mapping)
-  - `FluentValidation` (Gelişmiş kural doğrulaması)
+| Kategori         | Kullanılan Teknolojiler & Araçlar|
+| :---             | :--- |
+| **Backend**      | .NET 10.0 (C# 14), ASP.NET Core MVC |
+| **Database**     | Entity Framework Core 10, SQLite (Test/Dev), SQL Server |
+| **Architecture** | Clean Architecture, CQRS Pattern, Domain-Driven Design |
+| **Frontend**     | Razor Pages, Bootstrap 5, Chart.js, Glassmorphism Styling |
+| **Packages**     | MediatR, AutoMapper, FluentValidation, Serilog |
 
 ---
 
-## 🚀 Kurulum & Başlangıç (Getting Started)
+## 🚀 Kurulum (Getting Started)
 
-Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyin:
+Projeyi bilgisayarınızda ayağa kaldırıp derlemek için aşağıdaki adımları kullanabilirsiniz:
 
-### Ön Koşullar:
-- .NET 10.0 SDK
-- Tercihen Visual Studio 2022 veya VS Code
+### Gereksinimler:
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/)
+- Visual Studio 2022 (Tercihen) veya VS Code
 
-### Çalıştırma Adımları:
-1. Depoyu bilgisayarınıza klonlayın.
+### Adımlar:
+1. **Çalışmayı başlatmak için projeyi makinenize klonlayın:**
    ```bash
    git clone https://github.com/your-username/InterFullMarkt--ai-based-.git
    ```
-2. Uygulamanın çalışacağı ana WebUI dizinine gidin.
+
+2. **Web (UI) uygulamasının barındığı klasöre girin:**
    ```bash
    cd InterFullMarkt-ai-based/InterFullMarkt.WebUI
    ```
-3. Gerekli NuGet paketlerinin yüklenmesi ve uygulamanın Hot-Reload ile başlatılması için:
+
+3. **Gerekli bağımlılıkları indirin ve projeyi başlatın:**
    ```bash
    dotnet watch
    ```
-4. Proje çalıştığında EF Core, `FullMarkt.db` veritabanını oluşturup içine otomatik olarak Seed Data (Örn: Real Madrid, Manchester City ve elit oyuncular) ekleyecektir.
-5. Tarayıcınızda `http://localhost:5000` (veya ilgili port) adresine giderek uygulamaya erişin!
+   > 💡 *Not: Proje başarıyla başlatıldığında, Entity Framework Core otomatik bir şekilde `FullMarkt.db` veritabanını oluşturur ve arkasından Galatasaray, Real Madrid gibi efsanevi kulüpleri/oyuncuları platforma tohumlayarak (Seed Data) test için kullanımınıza sunar.*
+
+4. Açılan komut penceresinde belirtilen lokal adrese (Genellikle `https://localhost:5001` veya `http://localhost:5000`) gidip sistemi keşfetmeye başlayabilirsiniz!
 
 ---
 
-## 🔍 İleriye Dönük Yol Haritası (Roadmap)
+## 🗺️ Yol Haritası (Roadmap)
 
-- [x] Temel Entity'lerin ve Rich Domain kurallarının kurgulanması.
-- [x] CQRS Pipeline, AutoMapper ve Validation altyapısı.
-- [x] Transfer Motoru ve Domain Event Publisher mimarisi.
-- [ ] UI: Chart.js ile "Player Details" ekranında 12 aylık Market Value grafiği çizimi.
-- [ ] Testing: `xUnit` ve `Moq` kütüphaneleriyle Application katmanındaki Command Handler'lar için Unit Test yazılması.
-- [ ] Security: ASP.NET Core Identity ile Auth süreçlerinin (Admin / User) projeye dahil edilmesi.
+- [x] Temel Varlıkların (Entities) Kurulması ve Rich Domain Altyapısı.
+- [x] CQRS Pipeline, AutoMapper DTO Eşleştirmesi ve Fluent Validation Sistemi.
+- [x] Gelişmiş Transfer Motoru, MediatR Domain Event Publisher Mantığı.
+- [x] Premium (Glassmorphism & Yeni Nesil) Kullanıcı Arayüzü Tasarımı.
+- [ ] **UI Geliştirmesi:** Chart.js kütüphanesi kullanarak detay ekranlarında dinamik zaman çizelgeli Market Value grafik analizlerinin yapılması.
+- [ ] **Birim Testleri (Testing):** `xUnit` ve `Moq` kütüphanelerinin sisteme dahil edilmesi; Application/Domain modülleri için kapsamlı test süreci.
+- [ ] **Güvenlik (Security):** ASP.NET Core Identity kimlik doğrulamasının projeye dahil edilerek Admin / Kullanıcı rollerinin oturtulması.
 
 ---
 
 <div align="center">
-  <p><i>"Veri tabanından UI'a, kodun her satırı zafer için yazıldı."</i></p>
-  <p><b>Orhan & AI Team</b></p>
+  <p><i>"Veri tabanından Kullanıcı Arayüzü'ne, kodun her satırı performans, zarafet ve zafer için yazıldı."</i></p>
+  <p>Geliştiren: <b>Orhan & AI Team</b></p>
 </div>
