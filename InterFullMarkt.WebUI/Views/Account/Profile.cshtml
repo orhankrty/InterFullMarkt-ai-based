@@ -27,9 +27,9 @@
 
                 <form asp-action="Profile" method="post" class="row g-4">
                     <div class="col-md-6">
-                        <label class="form-label text-secondary small fw-bold">KullanÄ±cÄ± AdÄ±</label>
+                        <label class="form-label text-secondary small fw-bold">Kullanıcı Adı</label>
                         <input type="text" class="form-control bg-black bg-opacity-25 border-secondary border-opacity-25 text-dark py-2 rounded-3" value="@Model.Username" readonly disabled>
-                        <small class="text-muted">KullanÄ±cÄ± adÄ± deÄŸiÅŸtirilemez.</small>
+                        <small class="text-muted">Kullanıcı adı değiştirilemez.</small>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label text-secondary small fw-bold">E-Posta Adresi</label>
@@ -38,15 +38,15 @@
                     
                     <div class="col-md-6">
                         <label class="form-label text-secondary small fw-bold">Ad</label>
-                        <input type="text" name="firstName" value="@Model.FirstName" class="form-control bg-white border-secondary border-opacity-50 text-dark py-2 rounded-3 shadow-none focus-border-primary" placeholder="AdÄ±nÄ±z">
+                        <input type="text" name="firstName" value="@Model.FirstName" class="form-control bg-white border-secondary border-opacity-50 text-dark py-2 rounded-3 shadow-none focus-border-primary" placeholder="Adınız">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label text-secondary small fw-bold">Soyad</label>
-                        <input type="text" name="lastName" value="@Model.LastName" class="form-control bg-white border-secondary border-opacity-50 text-dark py-2 rounded-3 shadow-none focus-border-primary" placeholder="SoyadÄ±nÄ±z">
+                        <input type="text" name="lastName" value="@Model.LastName" class="form-control bg-white border-secondary border-opacity-50 text-dark py-2 rounded-3 shadow-none focus-border-primary" placeholder="Soyadınız">
                     </div>
                     
                     <div class="col-md-12">
-                        <label class="form-label text-secondary small fw-bold">Telefon NumarasÄ±</label>
+                        <label class="form-label text-secondary small fw-bold">Telefon Numarası</label>
                         <div class="input-group">
                             <span class="input-group-text bg-black bg-opacity-25 border-secondary border-opacity-25 text-secondary">+90</span>
                             <input type="tel" name="phoneNumber" value="@Model.PhoneNumber" class="form-control bg-white border-secondary border-opacity-50 text-dark py-2 rounded-end-3 shadow-none focus-border-primary" placeholder="5xx xxx xxxx">
@@ -55,18 +55,18 @@
 
                     <div class="col-12 pt-3">
                         <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow-lg">
-                            DeÄŸiÅŸiklikleri Kaydet
+                            Değişiklikleri Kaydet
                         </button>
                     </div>
                 </form>
             </div>
 
             <div class="card bg-white bg-opacity-50 border-danger border-opacity-10 rounded-4 p-4 mt-5">
-                <h5 class="text-dark fw-bold mb-3"><i class="bi bi-shield-lock text-danger me-2"></i> Hesap GÃ¼venliÄŸi</h5>
-                <p class="text-secondary small">Åifrenizi yenilemek veya gÃ¼venlik ayarlarÄ±nÄ±zÄ± yÃ¶netmek iÃ§in gÃ¼venlik merkezine gidebilirsiniz.</p>
+                <h5 class="text-dark fw-bold mb-3"><i class="bi bi-shield-lock text-danger me-2"></i> Hesap Güvenliği</h5>
+                <p class="text-secondary small">Åifrenizi yenilemek veya güvenlik ayarlarınızı yönetmek için güvenlik merkezine gidebilirsiniz.</p>
                 <div class="d-flex gap-3">
-                    <button class="btn btn-outline-danger btn-sm rounded-pill px-4">Åifre DeÄŸiÅŸtir</button>
-                    <button class="btn btn-outline-secondary btn-sm rounded-pill px-4">Ä°ki FaktÃ¶rlÃ¼ DoÄŸrulama</button>
+                    <button class="btn btn-outline-danger btn-sm rounded-pill px-4">Åifre Değiştir</button>
+                    <button class="btn btn-outline-secondary btn-sm rounded-pill px-4">İki Faktörlü Doğrulama</button>
                 </div>
             </div>
         </div>

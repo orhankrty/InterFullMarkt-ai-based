@@ -1,7 +1,7 @@
 ﻿@model InterFullMarkt.Application.Features.Players.Queries.GetPlayerById.GetPlayerByIdResult
 
 @{
-    ViewData["Title"] = $"{Model.FullName} - Oyuncu DetaylarÄ±";
+    ViewData["Title"] = $"{Model.FullName} - Oyuncu Detayları";
     var age = Model.Age;
 }
 
@@ -150,7 +150,7 @@
 
     /* AI Scout Styles */
     .ai-scout-card {
-        background: linear-gradient(135deg, rgba(61, 90, 254, 0.1), rgba(28, 34, 66, 0.95));
+        background: linear-gradient(135deg, rgba(61, 90, 254, 0.1), rgba(255, 255, 255, 0.95));
         border: 1px solid var(--accent-color);
         border-radius: 24px;
         padding: 2rem;
@@ -178,7 +178,7 @@
         display: inline-block;
     }
     .similar-item {
-        background: rgba(255, 255, 255, 0.03);
+        background: var(--card-bg);
         border-radius: 12px;
         padding: 10px 15px;
         margin-bottom: 10px;
@@ -188,7 +188,7 @@
 
 <div class="container mt-4">
     <a href="@Url.Action("Index")" class="back-button">
-        <i class="bi bi-arrow-left"></i> Oyunculara DÃ¶n
+        <i class="bi bi-arrow-left"></i> Oyunculara Dön
     </a>
 
     <!-- Player Header -->
@@ -226,7 +226,7 @@
     <div class="row mb-4">
         <div class="col-md-3">
             <div class="stat-card">
-                <h6>YaÅŸ</h6>
+                <h6>Yaş</h6>
                 <div class="value">@Model.Age</div>
                 <small class="text-muted">@Model.DateOfBirth.ToString("d MMMM yyyy")</small>
             </div>
@@ -247,9 +247,9 @@
         </div>
         <div class="col-md-3">
             <div class="stat-card market-value-highlight">
-                <h6>Piyasa DeÄŸeri</h6>
+                <h6>Piyasa Değeri</h6>
                 <div class="value">@Model.MarketValue</div>
-                <small class="text-muted">Son gÃ¼ncelleme: @Model.CreatedDate.ToString("d MMMM yyyy")</small>
+                <small class="text-muted">Son güncelleme: @Model.CreatedDate.ToString("d MMMM yyyy")</small>
             </div>
         </div>
     </div>
@@ -268,7 +268,7 @@
                 <i class="bi bi-graph-up"></i> Piyasa Tarihi
             </button>
             <button class="tab-button" onclick="showTab(event, 'transfers')">
-                <i class="bi bi-shuffle"></i> Transfer GeÃ§miÅŸi
+                <i class="bi bi-shuffle"></i> Transfer Geçmişi
             </button>
             <button class="tab-button" onclick="showTab(event, 'stats')">
                 <i class="bi bi-bar-chart"></i> Statistikler
@@ -282,7 +282,7 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="chart-container">
-                    <h3 class="mb-4">Piyasa DeÄŸeri Tarihi (Son 12 Ay)</h3>
+                    <h3 class="mb-4">Piyasa Değeri Tarihi (Son 12 Ay)</h3>
                     <canvas id="marketValueChart" style="max-height: 400px;"></canvas>
                 </div>
             </div>
@@ -299,7 +299,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <div class="stat-label mb-2">Ã–ne Ã‡Ä±kan Ã–zellikler</div>
+                        <div class="stat-label mb-2">Öne Çıkan Özellikler</div>
                         <div class="d-flex flex-wrap">
                             @foreach (var pro in Model.AiPros)
                             {
@@ -337,17 +337,17 @@
     <!-- Transfer History -->
     <div id="transfers" class="tab-content" style="display: none;">
         <div class="chart-container">
-            <h3 class="mb-4">Transfer GeÃ§miÅŸi</h3>
+            <h3 class="mb-4">Transfer Geçmişi</h3>
             @if (Model.TransferHistory.Count > 0)
             {
                 <table class="transfer-table">
                     <thead>
                         <tr>
                             <td><strong>Tarih</strong></td>
-                            <td><strong>Kaynak KulÃ¼p</strong></td>
-                            <td><strong>Hedef KulÃ¼p</strong></td>
+                            <td><strong>Kaynak Kulüp</strong></td>
+                            <td><strong>Hedef Kulüp</strong></td>
                             <td><strong>Bedel</strong></td>
-                            <td><strong>TÃ¼r</strong></td>
+                            <td><strong>Tür</strong></td>
                         </tr>
                     </thead>
                     <tbody>
@@ -367,7 +367,7 @@
             else
             {
                 <div class="alert alert-info" style="background-color: rgba(0, 102, 255, 0.1); border-left: 4px solid var(--primary-color);">
-                    <i class="bi bi-info-circle"></i> HenÃ¼z transfer geÃ§miÅŸi bulunmamaktadÄ±r.
+                    <i class="bi bi-info-circle"></i> Henüz transfer geçmişi bulunmamaktadır.
                 </div>
             }
         </div>
@@ -376,7 +376,7 @@
     <!-- Statistics -->
     <div id="stats" class="tab-content" style="display: none;">
         <div class="chart-container">
-            <h3 class="mb-4">DetaylÄ± Bilgiler</h3>
+            <h3 class="mb-4">Detaylı Bilgiler</h3>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <strong>Milliyeti:</strong> @Model.Nationality (@Model.NationalityFlag)
@@ -391,10 +391,10 @@
                     <strong>Kilo:</strong> @Model.Weight kg
                 </div>
                 <div class="col-md-6 mb-3">
-                    <strong>AyaÄŸÄ±:</strong> @Model.PreferredFoot
+                    <strong>Ayağı:</strong> @Model.PreferredFoot
                 </div>
                 <div class="col-md-6 mb-3">
-                    <strong>Piyasa DeÄŸeri:</strong> @Model.MarketValue
+                    <strong>Piyasa Değeri:</strong> @Model.MarketValue
                 </div>
             </div>
         </div>
@@ -416,7 +416,7 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Piyasa DeÄŸeri (â‚¬M)',
+                    label: 'Piyasa Değeri (â‚¬M)',
                     data: data,
                     borderColor: '#0066ff',
                     backgroundColor: 'rgba(0, 102, 255, 0.1)',

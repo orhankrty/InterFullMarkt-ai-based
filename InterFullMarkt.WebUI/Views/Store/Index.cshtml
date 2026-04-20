@@ -1,22 +1,22 @@
 ﻿@model List<InterFullMarkt.Domain.Entities.Product>
 @{
-    ViewData["Title"] = "MaÄŸaza";
+    ViewData["Title"] = "Mağaza";
 }
 
 <div class="store-hero rounded-5 mb-5 overflow-hidden position-relative">
     <div class="store-hero-overlay"></div>
     <div class="container position-relative z-3 py-5 text-center">
-        <span class="badge bg-primary rounded-pill px-3 py-2 mb-3 tracking-widest text-uppercase fw-bold" style="font-size: 0.7rem;">Resmi LisanslÄ± ÃœrÃ¼nler</span>
+        <span class="badge bg-primary rounded-pill px-3 py-2 mb-3 tracking-widest text-uppercase fw-bold" style="font-size: 0.7rem;">Resmi Lisanslı Ürünler</span>
         <h1 class="display-2 fw-900 text-dark mb-3">InterFullMarkt <span class="text-gradient">Store</span></h1>
         <p class="text-secondary fs-5 mx-auto opacity-75" style="max-width: 700px;">
-            Sahadaki performansÄ±nÄ±zÄ± zirveye taÅŸÄ±yacak profesyonel ekipmanlar ve kalbinizdeki takÄ±mÄ±n en yeni koleksiyonlarÄ± burada.
+            Sahadaki performansınızı zirveye taşıyacak profesyonel ekipmanlar ve kalbinizdeki takımın en yeni koleksiyonları burada.
         </p>
     </div>
 </div>
 
 <div class="row mb-4">
     <div class="col-12 d-flex justify-content-center gap-2 flex-wrap">
-        <button class="btn btn-outline-secondary rounded-pill px-4 active category-btn" onclick="filterStore('All', this)">TÃ¼mÃ¼</button>
+        <button class="btn btn-outline-secondary rounded-pill px-4 active category-btn" onclick="filterStore('All', this)">Tümü</button>
         <button class="btn btn-outline-secondary rounded-pill px-4 category-btn" onclick="filterStore('Forma', this)">Forma</button>
         <button class="btn btn-outline-secondary rounded-pill px-4 category-btn" onclick="filterStore('Krampon', this)">Krampon</button>
         <button class="btn btn-outline-secondary rounded-pill px-4 category-btn" onclick="filterStore('Aksesuar', this)">Aksesuar</button>
@@ -32,7 +32,7 @@
                 @if (product.IsFeatured)
                 {
                     <div class="position-absolute top-0 end-0 m-3 z-3">
-                        <span class="badge bg-primary rounded-pill px-3 py-2 shadow-lg">PopÃ¼ler</span>
+                        <span class="badge bg-primary rounded-pill px-3 py-2 shadow-lg">Popüler</span>
                     </div>
                 }
                 
@@ -80,7 +80,7 @@
         min-height: 350px;
         display: flex;
         align-items: center;
-        border: 1px solid rgba(255,255,255,0.05);
+        border: 1px solid var(--border);
     }
     .store-hero-overlay {
         position: absolute;
@@ -96,9 +96,9 @@
     .tracking-widest { letter-spacing: 0.2em; }
     
     .glass-card {
-        background: rgba(28, 34, 66, 0.6);
+        background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.08) !important;
+        border: 1px solid var(--border) !important;
         transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
     .glass-card:hover {

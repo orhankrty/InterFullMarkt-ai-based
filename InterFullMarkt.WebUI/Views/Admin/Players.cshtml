@@ -1,6 +1,6 @@
 ﻿@model List<InterFullMarkt.Application.DTOs.PlayerDto>
 @{
-    ViewData["Title"] = "Oyuncu YÃ¶netimi";
+    ViewData["Title"] = "Oyuncu Yönetimi";
 }
 
 <div class="container py-5">
@@ -8,11 +8,11 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/Admin" class="text-decoration-none text-secondary">YÃ¶netim</a></li>
+                    <li class="breadcrumb-item"><a href="/Admin" class="text-decoration-none text-secondary">Yönetim</a></li>
                     <li class="breadcrumb-item active text-dark" aria-current="page">Oyuncular</li>
                 </ol>
             </nav>
-            <h2 class="fw-bold mb-0">Oyuncu YÃ¶netimi</h2>
+            <h2 class="fw-bold mb-0">Oyuncu Yönetimi</h2>
         </div>
         <a href="/Players/Create" class="btn btn-primary rounded-pill px-4 py-2">
             <i class="bi bi-plus-lg me-2"></i> Yeni Oyuncu Ekle
@@ -28,9 +28,9 @@
                         <th>Ad Soyad</th>
                         <th>Pozisyon</th>
                         <th>Milliyet</th>
-                        <th>YaÅŸ</th>
-                        <th>KulÃ¼p</th>
-                        <th>Piyasa DeÄŸeri</th>
+                        <th>Yaş</th>
+                        <th>Kulüp</th>
+                        <th>Piyasa Değeri</th>
                         <th class="text-end pe-4">Aksiyonlar</th>
                     </tr>
                 </thead>
@@ -54,12 +54,12 @@
                             <td><span class="badge bg-white border border-secondary">@player.Position</span></td>
                             <td>@player.Nationality</td>
                             <td>@player.Age</td>
-                            <td>@(player.CurrentClubName ?? "KulÃ¼psÃ¼z")</td>
+                            <td>@(player.CurrentClubName ?? "Kulüpsüz")</td>
                             <td class="text-warning fw-bold">@player.MarketValue</td>
                             <td class="text-end pe-4">
                                 <div class="btn-group">
                                     <a href="/Admin/Players/Edit/@player.Id" class="btn btn-sm btn-outline-info rounded-start-pill px-3">
-                                        <i class="bi bi-pencil"></i> DÃ¼zenle
+                                        <i class="bi bi-pencil"></i> Düzenle
                                     </a>
                                     <button onclick="deletePlayer('@player.Id')" class="btn btn-sm btn-outline-danger rounded-end-pill px-3">
                                         <i class="bi bi-trash"></i> Sil
@@ -77,7 +77,7 @@
 @section Scripts {
     <script>
         function deletePlayer(id) {
-            if (confirm('Bu oyuncuyu silmek istediÄŸinize emin misiniz?')) {
+            if (confirm('Bu oyuncuyu silmek istediğinize emin misiniz?')) {
                 fetch('/Admin/Players/Delete/' + id, { method: 'POST' })
                     .then(res => res.json())
                     .then(data => {

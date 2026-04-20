@@ -11,6 +11,6 @@ public class ClubProfile : Profile
         CreateMap<Club, ClubDto>()
             .ForMember(dest => dest.BudgetAmount, opt => opt.MapFrom(src => src.Budget != null ? src.Budget.Amount : (decimal?)null))
             .ForMember(dest => dest.SquadCount, opt => opt.MapFrom(src => src.Players.Count))
-            .ForMember(dest => dest.TotalSquadValue, opt => opt.MapFrom(src => src.CalculateTotalSquadValue() != null ? src.CalculateTotalSquadValue().Amount : (decimal?)null));
+            .ForMember(dest => dest.TotalSquadValue, opt => opt.MapFrom(src => src.CalculateTotalSquadValue() != null ? (decimal?)src.CalculateTotalSquadValue()!.Amount : null));
     }
 }

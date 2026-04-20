@@ -1,6 +1,6 @@
 ﻿@model InterFullMarkt.Domain.Entities.User
 @{
-    ViewData["Title"] = "HesabÄ±m";
+    ViewData["Title"] = "Hesabım";
 }
 
 <div class="container py-5">
@@ -21,7 +21,7 @@
 
         <!-- Main Content -->
         <div class="col-lg-9">
-            <h2 class="fw-bold mb-4">Hesap Ã–zeti</h2>
+            <h2 class="fw-bold mb-4">Hesap Özeti</h2>
             
             <div class="row g-4 mb-5">
                 <div class="col-md-4">
@@ -31,11 +31,11 @@
                                 <i class="bi bi-box-seam fs-4"></i>
                             </div>
                             <div>
-                                <h6 class="text-secondary mb-0">Toplam SipariÅŸ</h6>
+                                <h6 class="text-secondary mb-0">Toplam Sipariş</h6>
                                 <h4 class="text-dark fw-bold mb-0">@Model.Orders.Count</h4>
                             </div>
                         </div>
-                        <a href="/Account/Orders" class="text-decoration-none small text-primary">DetaylÄ± GÃ¶r <i class="bi bi-arrow-right"></i></a>
+                        <a href="/Account/Orders" class="text-decoration-none small text-primary">Detaylı Gör <i class="bi bi-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -45,16 +45,16 @@
                                 <i class="bi bi-geo-alt fs-4"></i>
                             </div>
                             <div>
-                                <h6 class="text-secondary mb-0">KayÄ±tlÄ± Adres</h6>
+                                <h6 class="text-secondary mb-0">Kayıtlı Adres</h6>
                                 <h4 class="text-dark fw-bold mb-0">@Model.Addresses.Count</h4>
                             </div>
                         </div>
-                        <a href="/Account/Addresses" class="text-decoration-none small text-success">YÃ¶net <i class="bi bi-arrow-right"></i></a>
+                        <a href="/Account/Addresses" class="text-decoration-none small text-success">Yönet <i class="bi bi-arrow-right"></i></a>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card h-100 bg-white border-secondary border-opacity-25 p-4 rounded-4 shadow-sm text-center d-flex align-items-center justify-content-center">
-                        <p class="text-secondary small mb-2">Ãœyelik Tarihi</p>
+                        <p class="text-secondary small mb-2">Üyelik Tarihi</p>
                         <h6 class="text-dark fw-bold">12 Mart 2024</h6>
                     </div>
                 </div>
@@ -63,15 +63,15 @@
             <!-- Recent Orders -->
             <div class="card bg-white border-secondary border-opacity-25 rounded-4 overflow-hidden">
                 <div class="card-header bg-black bg-opacity-25 py-3 px-4 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold">Son SipariÅŸleriniz</h5>
-                    <a href="/Account/Orders" class="btn btn-sm btn-outline-secondary rounded-pill">TÃ¼mÃ¼nÃ¼ GÃ¶r</a>
+                    <h5 class="mb-0 fw-bold">Son Siparişleriniz</h5>
+                    <a href="/Account/Orders" class="btn btn-sm btn-outline-secondary rounded-pill">Tümünü Gör</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-dark table-hover mb-0 align-middle">
                             <thead class="bg-black bg-opacity-25">
                                 <tr class="text-secondary small">
-                                    <th class="ps-4">SipariÅŸ No</th>
+                                    <th class="ps-4">Sipariş No</th>
                                     <th>Tarih</th>
                                     <th>Tutar</th>
                                     <th>Durum</th>
@@ -83,7 +83,7 @@
                                 {
                                     <tr>
                                         <td colspan="5" class="py-5 text-center text-secondary opacity-50">
-                                            HenÃ¼z bir sipariÅŸiniz bulunmuyor.
+                                            Henüz bir siparişiniz bulunmuyor.
                                         </td>
                                     </tr>
                                 }

@@ -93,7 +93,7 @@ public class AccountController : Controller
         
         if (user == null) return RedirectToAction("Logout", "Auth");
 
-        var address = new InterFullMarkt.Domain.Entities.Address(user.Id, title, user.FirstName ?? username, user.LastName ?? "User", user.PhoneNumber ?? "0000000000", city, district, addressLine)
+        var address = new InterFullMarkt.Domain.Entities.Address(user.Id, title, user.FirstName ?? username ?? "User", user.LastName ?? "User", user.PhoneNumber ?? "0000000000", city, district, addressLine)
         {
             CreatedByUserId = user.Id.ToString()
         };

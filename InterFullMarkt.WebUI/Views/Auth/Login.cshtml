@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "GiriÅŸ Yap";
+    ViewData["Title"] = "Giriş Yap";
 }
 
 <div class="container mt-5">
@@ -7,7 +7,7 @@
         <div class="col-lg-5 col-md-7">
             <div class="card shadow-lg border-0 rounded-4 mt-5 overflow-hidden">
                 <div class="card-header bg-primary text-dark text-center py-4">
-                    <h3 class="font-weight-light mb-0"><i class="bi bi-person-circle me-2"></i> HesabÄ±nÄ±za GiriÅŸ YapÄ±n</h3>
+                    <h3 class="font-weight-light mb-0"><i class="bi bi-person-circle me-2"></i> Hesabınıza Giriş Yapın</h3>
                 </div>
                 <div class="card-body p-5 bg-light">
                     
@@ -23,8 +23,8 @@
                         @Html.AntiForgeryToken()
                         
                         <div class="form-floating mb-4">
-                            <input type="text" class="form-control rounded-3" id="username" name="username" placeholder="KullanÄ±cÄ± AdÄ±" required autofocus />
-                            <label for="username" class="text-muted"><i class="bi bi-person me-1"></i> KullanÄ±cÄ± AdÄ±</label>
+                            <input type="text" class="form-control rounded-3" id="username" name="username" placeholder="Kullanıcı Adı" required autofocus />
+                            <label for="username" class="text-muted"><i class="bi bi-person me-1"></i> Kullanıcı Adı</label>
                         </div>
                         
                         <div class="form-floating mb-4">
@@ -36,29 +36,29 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="rememberMe">
                                 <label class="form-check-label text-muted" for="rememberMe">
-                                    Beni HatÄ±rla
+                                    Beni Hatırla
                                 </label>
                             </div>
-                            <a href="javascript:void(0)" onclick="alert('Åifre sÄ±fÄ±rlama baÄŸlantÄ±sÄ± e-posta adresinize gÃ¶nderilecektir. BakÄ±m Ã§alÄ±ÅŸmasÄ± devam ediyor.')" class="text-decoration-none small text-primary">Åifremi Unuttum?</a>
+                            <a href="javascript:void(0)" onclick="alert('Åifre sıfırlama bağlantısı e-posta adresinize gönderilecektir. Bakım çalışması devam ediyor.')" class="text-decoration-none small text-primary">Åifremi Unuttum?</a>
                         </div>
                         
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm fw-bold">
-                                GiriÅŸ Yap <i class="bi bi-box-arrow-in-right ms-1"></i>
+                                Giriş Yap <i class="bi bi-box-arrow-in-right ms-1"></i>
                             </button>
                         </div>
                     </form>
                 </div>
                 <div class="card-footer text-center py-4 bg-white border-top-0">
                     <div class="small">
-                        <span class="text-muted">HesabÄ±nÄ±z yok mu?</span> 
-                        <a asp-controller="Auth" asp-action="Register" class="text-decoration-none fw-bold ms-1">Hemen KayÄ±t Ol!</a>
+                        <span class="text-muted">Hesabınız yok mu?</span> 
+                        <a asp-controller="Auth" asp-action="Register" class="text-decoration-none fw-bold ms-1">Hemen Kayıt Ol!</a>
                     </div>
                 </div>
             </div>
             
             <div class="text-center mt-4">
-                <p class="text-muted small">Demo GiriÅŸi iÃ§in: <b>admin</b> / <b>123456</b></p>
+                <p class="text-muted small">Demo Girişi için: <b>admin</b> / <b>123456</b></p>
             </div>
         </div>
     </div>

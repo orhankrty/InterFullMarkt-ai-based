@@ -34,7 +34,7 @@ public sealed class UpdatePlayerCommandHandler : IRequestHandler<UpdatePlayerCom
         player.DateOfBirth = data.DateOfBirth;
         player.Height = data.Height;
         player.Weight = data.Weight;
-        player.PreferredFoot = data.PreferredFoot;
+        player.PreferredFoot = data.PreferredFoot ?? "Right";
         player.JerseyNumber = data.JerseyNumber;
         player.ImageUrl = data.ImageUrl;
         player.UpdatedByUserId = request.UpdatedByUserId;

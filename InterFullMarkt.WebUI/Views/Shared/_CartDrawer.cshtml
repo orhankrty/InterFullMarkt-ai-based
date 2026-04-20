@@ -8,7 +8,7 @@
             <!-- AJAX will fill this -->
             <div class="text-center py-5 opacity-50">
                 <i class="bi bi-cart-x display-1 mb-3 d-block"></i>
-                <p>Sepetiniz ÅŸu an boÅŸ.</p>
+                <p>Sepetiniz şu an boş.</p>
             </div>
         </div>
     </div>
@@ -19,10 +19,10 @@
         </div>
         <div class="d-grid gap-2">
             <a href="/Checkout" class="btn btn-primary btn-lg rounded-pill fw-bold py-3 shadow-lg">
-                <i class="bi bi-credit-card me-2"></i> GÃ¼venli Ã–deme
+                <i class="bi bi-credit-card me-2"></i> Güvenli Ödeme
             </a>
             <button onclick="clearCart()" class="btn btn-outline-secondary btn-sm rounded-pill mt-2 border-0 opacity-50 text-decoration-underline">
-                Sepeti BoÅŸalt
+                Sepeti Boşalt
             </button>
         </div>
     </div>
@@ -32,7 +32,7 @@
     .cart-item {
         transition: all 0.3s ease;
         border-radius: 12px;
-        background: rgba(255, 255, 255, 0.03);
+        background: var(--card-bg);
         margin-bottom: 1rem;
     }
     .cart-item:hover {
@@ -54,7 +54,7 @@
             container.innerHTML = `
                 <div class="text-center py-5 opacity-50">
                     <i class="bi bi-cart-x display-1 mb-3 d-block"></i>
-                    <p>Sepetiniz ÅŸu an boÅŸ.</p>
+                    <p>Sepetiniz şu an boş.</p>
                 </div>
             `;
             totalText.innerText = "0.00 â‚¬";
@@ -111,7 +111,7 @@
     }
 
     async function clearCart() {
-        if (confirm('Sepeti boÅŸaltmak istediÄŸinize emin misiniz?')) {
+        if (confirm('Sepeti boşaltmak istediğinize emin misiniz?')) {
             await fetch('/Cart/ClearCart', { method: 'POST' });
             await updateCartUI();
         }

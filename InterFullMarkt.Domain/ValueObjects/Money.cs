@@ -107,11 +107,15 @@ public sealed class Money : IEquatable<Money>
     public override string ToString()
         => $"{Amount:F2} {Currency}";
 
-    public static bool operator ==(Money left, Money right)
-        => left.Equals(right);
+    public static bool operator ==(Money? left, Money? right)
+    {
+        if (ReferenceEquals(left, right)) return true;
+        if (left is null) return false;
+        return left.Equals(right);
+    }
 
-    public static bool operator !=(Money left, Money right)
-        => !left.Equals(right);
+    public static bool operator !=(Money? left, Money? right)
+        => !(left == right);
 
     public static bool operator >(Money left, Money right)
     {

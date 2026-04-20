@@ -1,6 +1,6 @@
 ﻿@model InterFullMarkt.Domain.Entities.Order
 @{
-    ViewData["Title"] = "SipariÅŸ BaÅŸarÄ±lÄ±";
+    ViewData["Title"] = "Sipariş Başarılı";
 }
 
 <div class="container py-5 text-center">
@@ -9,15 +9,15 @@
         <div class="bg-success rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-lg mb-4" style="width: 100px; height: 100px;">
             <i class="bi bi-check-lg text-dark display-4"></i>
         </div>
-        <h1 class="display-4 fw-bold text-dark">SipariÅŸiniz <span class="text-success">AlÄ±ndÄ±!</span></h1>
-        <p class="text-secondary fs-5 mt-3">TeÅŸekkÃ¼r ederiz. SipariÅŸ numaranÄ±z: <span class="text-dark fw-bold">#@Model.Id.ToString().Substring(0, 8).ToUpper()</span></p>
+        <h1 class="display-4 fw-bold text-dark">Siparişiniz <span class="text-success">Alındı!</span></h1>
+        <p class="text-secondary fs-5 mt-3">Teşekkür ederiz. Sipariş numaranız: <span class="text-dark fw-bold">#@Model.Id.ToString().Substring(0, 8).ToUpper()</span></p>
     </div>
 
     <!-- Order Summary -->
     <div class="row justify-content-center mb-5">
         <div class="col-lg-6">
             <div class="card bg-white border-secondary border-opacity-25 rounded-4 p-4 text-start shadow-lg">
-                <h5 class="text-dark fw-bold mb-4 border-bottom border-secondary border-opacity-25 pb-3">SipariÅŸ DetayÄ±</h5>
+                <h5 class="text-dark fw-bold mb-4 border-bottom border-secondary border-opacity-25 pb-3">Sipariş Detayı</h5>
                 
                 @foreach (var item in Model.OrderItems)
                 {
@@ -46,8 +46,8 @@
     </div>
 
     <div class="d-flex justify-content-center gap-3">
-        <a href="/Store" class="btn btn-outline-secondary rounded-pill px-4">AlÄ±ÅŸveriÅŸe Devam Et</a>
-        <a href="/Account/Orders" class="btn btn-primary rounded-pill px-5 fw-bold shadow-lg">SipariÅŸlerime Git</a>
+        <a href="/Store" class="btn btn-outline-secondary rounded-pill px-4">Alışverişe Devam Et</a>
+        <a href="/Account/Orders" class="btn btn-primary rounded-pill px-5 fw-bold shadow-lg">Siparişlerime Git</a>
     </div>
 </div>
 

@@ -1,6 +1,6 @@
 ﻿@model InterFullMarkt.Application.Features.Players.Queries.GetAllPlayers.GetAllPlayersResult
 @{
-    ViewData["Title"] = "Oyuncular & TakÄ±mlar";
+    ViewData["Title"] = "Oyuncular & Takımlar";
     var searchTerm = ViewData["SearchTerm"]?.ToString();
     var hasSearch = !string.IsNullOrWhiteSpace(searchTerm);
 }
@@ -9,10 +9,10 @@
     .search-hero {
         position: relative;
         padding: 5rem 0;
-        background: linear-gradient(135deg, rgba(61, 90, 254, 0.15), rgba(11, 14, 26, 0.9));
+        background: linear-gradient(135deg, rgba(61, 90, 254, 0.15), rgba(244, 247, 246, 0.9));
         border-radius: 40px;
         margin-bottom: 4rem;
-        border: 1px solid rgba(255,255,255,0.05);
+        border: 1px solid var(--border);
         overflow: hidden;
     }
     .search-hero::before {
@@ -45,7 +45,7 @@
         border-radius: 50px;
         background: var(--header-bg) !important;
         border: 2px solid var(--border) !important;
-        color: white !important;
+        color: var(--text-main) !important;
         font-size: 1.25rem;
         transition: all 0.3s ease;
         box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -67,11 +67,11 @@
 
     /* Club Card Styles */
     .club-card {
-        background: rgba(28, 34, 66, 0.6);
+        background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(12px);
         border-radius: 28px;
         overflow: hidden;
-        border: 1px solid rgba(255,255,255,0.08);
+        border: 1px solid var(--border);
         height: 100%;
         transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
@@ -87,7 +87,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(0,0,0,0.2);
+        background: rgba(0,0,0,0.03);
         padding: 2rem;
     }
 
@@ -99,10 +99,10 @@
 
     /* Player Card Styles (Premium) */
     .player-card {
-        background: rgba(255, 255, 255, 0.03);
+        background: var(--card-bg);
         backdrop-filter: blur(10px);
         border-radius: 24px;
-        border: 1px solid rgba(255,255,255,0.05);
+        border: 1px solid var(--border);
         transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
     .player-card:hover {
@@ -123,8 +123,8 @@
         font-weight: 700;
     }
 
-    .stat-label { color: #8a8fb0; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
-    .stat-value { color: #ffffff; font-weight: 700; }
+    .stat-label { color: var(--text-secondary); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .stat-value { color: var(--text-main); font-weight: 700; }
 
     .market-value-tag {
         background: rgba(255, 215, 0, 0.1);
@@ -152,7 +152,7 @@
         bottom: 30px;
         left: 50%;
         transform: translateX(-50%) translateY(150%);
-        background: rgba(28, 34, 66, 0.95);
+        background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(15px);
         padding: 15px 30px;
         border-radius: 50px;
@@ -174,14 +174,14 @@
     <!-- Search Section -->
     <div class="search-hero">
         <div class="text-center mb-5">
-            <h2 class="display-6 fw-bold">Kimi AramÄ±ÅŸtÄ±nÄ±z?</h2>
-            <p class="text-secondary">OyuncularÄ± ve KulÃ¼pleri AnÄ±nda KeÅŸfedin.</p>
+            <h2 class="display-6 fw-bold">Kimi Aramıştınız?</h2>
+            <p class="text-secondary">Oyuncuları ve Kulüpleri Anında Keşfedin.</p>
         </div>
         
         <form method="get" class="search-input-wrapper">
             <i class="bi bi-search"></i>
             <input type="text" name="search" class="main-search-input form-control" 
-                   placeholder="Oyuncu adÄ±, kulÃ¼p veya milliyet yazÄ±n..." 
+                   placeholder="Oyuncu adı, kulüp veya milliyet yazın..." 
                    value="@searchTerm" autocomplete="off">
             <button type="submit" class="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2 rounded-pill px-4" style="height: 54px;">
                 Ara
@@ -194,9 +194,9 @@
         <!-- Default Empty State -->
         <div class="empty-state">
             <i class="bi bi-rocket-takeoff"></i>
-            <h3>KeÅŸfetmeye HazÄ±r mÄ±sÄ±nÄ±z?</h3>
+            <h3>Keşfetmeye Hazır mısınız?</h3>
             <p class="text-secondary mx-auto" style="max-width: 500px;">
-                HenÃ¼z bir arama yapmadÄ±nÄ±z. YukarÄ±daki kutucuÄŸu kullanarak Galatasaray gibi bir kulÃ¼p veya Icardi gibi bir oyuncu ismini aratarak baÅŸlayabilirsiniz.
+                Henüz bir arama yapmadınız. Yukarıdaki kutucuğu kullanarak Galatasaray gibi bir kulüp veya Icardi gibi bir oyuncu ismini aratarak başlayabilirsiniz.
             </p>
         </div>
     }
@@ -209,7 +209,7 @@
             @if (Model.Clubs != null && Model.Clubs.Any())
             {
                 <div class="mb-5">
-                    <h3 class="section-title"><i class="bi bi-shield-check text-primary me-2"></i> TakÄ±mlar</h3>
+                    <h3 class="section-title"><i class="bi bi-shield-check text-primary me-2"></i> Takımlar</h3>
                     <div class="row g-4">
                         @foreach (var club in Model.Clubs)
                         {
@@ -241,11 +241,11 @@
                                         </div>
                                         <div class="row g-2 border-top border-secondary pt-3">
                                             <div class="col-6">
-                                                <div class="stat-label">Kadro SayÄ±sÄ±</div>
+                                                <div class="stat-label">Kadro Sayısı</div>
                                                 <div class="stat-value">@club.SquadCount Oyuncu</div>
                                             </div>
                                             <div class="col-6">
-                                                <div class="stat-label">Kadro DeÄŸeri</div>
+                                                <div class="stat-label">Kadro Değeri</div>
                                                 <div class="stat-value text-warning">â‚¬@((club.TotalSquadValue ?? 0).ToString("N0"))</div>
                                             </div>
                                         </div>
@@ -264,7 +264,7 @@
                 {
                     <div class="alert alert-info border-secondary py-4 text-center">
                         <i class="bi bi-search mb-2 d-block fs-2"></i>
-                        EÅŸleÅŸen oyuncu bulunamadÄ±.
+                        Eşleşen oyuncu bulunamadı.
                     </div>
                 }
                 else
@@ -295,7 +295,7 @@
 
                                     <div class="row g-3 mb-4">
                                         <div class="col-4">
-                                            <div class="stat-label">YaÅŸ</div>
+                                            <div class="stat-label">Yaş</div>
                                             <div class="stat-value">@player.Age</div>
                                         </div>
                                         <div class="col-4 text-center">
@@ -311,7 +311,7 @@
                                     <div class="mb-4">
                                         <div class="d-flex align-items-center gap-2 mb-2">
                                             <i class="bi bi-shield-shaded text-accent"></i>
-                                            <span class="text-dark fw-bold">@(player.CurrentClubName ?? "KulÃ¼psÃ¼z")</span>
+                                            <span class="text-dark fw-bold">@(player.CurrentClubName ?? "Kulüpsüz")</span>
                                         </div>
                                         <div class="progress" style="height: 4px; background: rgba(255,255,255,0.05);">
                                             <div class="progress-bar bg-primary" style="width: 85%;"></div>
@@ -324,7 +324,7 @@
                                         </div>
                                         <div class="d-flex gap-2">
                                             <button onclick="toggleCompare('@player.Id', '@player.FullName', this)" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                                <i class="bi bi-plus-circle me-1"></i> KÄ±yasla
+                                                <i class="bi bi-plus-circle me-1"></i> Kıyasla
                                             </button>
                                             <a href="@Url.Action("Details", "Players", new { id = player.Id })" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
                                                 Detay <i class="bi bi-arrow-right ms-1"></i>
@@ -348,11 +348,11 @@
             <!-- Selected player indicators go here -->
         </div>
         <div class="text-dark border-start border-secondary ps-3">
-            <span id="compareCount" class="fw-bold">0</span> Oyuncu SeÃ§ildi
+            <span id="compareCount" class="fw-bold">0</span> Oyuncu Seçildi
         </div>
     </div>
     <button onclick="goToCompare()" class="btn btn-primary rounded-pill px-4 fw-bold">
-        Hemen KÄ±yasla <i class="bi bi-lightning-fill"></i>
+        Hemen Kıyasla <i class="bi bi-lightning-fill"></i>
     </button>
     <button onclick="clearCompare()" class="btn btn-sm btn-outline-danger border-0 rounded-circle">
         <i class="bi bi-x-lg"></i>
@@ -369,16 +369,16 @@
             compareList.splice(index, 1);
             btn.classList.remove('btn-primary');
             btn.classList.add('btn-outline-primary');
-            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> KÄ±yasla';
+            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Kıyasla';
         } else {
             if (compareList.length >= 3) {
-                alert('En fazla 3 oyuncu kÄ±yaslayabilirsiniz.');
+                alert('En fazla 3 oyuncu kıyaslayabilirsiniz.');
                 return;
             }
             compareList.push(id);
             btn.classList.remove('btn-outline-primary');
             btn.classList.add('btn-primary');
-            btn.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> SeÃ§ildi';
+            btn.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Seçildi';
         }
 
         updateCompareBar();
@@ -413,7 +413,7 @@
         document.querySelectorAll('[onclick^="toggleCompare"]').forEach(btn => {
             btn.classList.remove('btn-primary');
             btn.classList.add('btn-outline-primary');
-            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> KÄ±yasla';
+            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Kıyasla';
         });
         updateCompareBar();
     }
