@@ -1,83 +1,118 @@
-<div align="center">
-  <img src="https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet" alt=".NET 10.0" />
-  <img src="https://img.shields.io/badge/Architecture-Clean-brightgreen?style=for-the-badge" alt="Clean Architecture" />
-  <img src="https://img.shields.io/badge/Pattern-CQRS-blue?style=for-the-badge" alt="CQRS" />
-  <img src="https://img.shields.io/badge/Library-MediatR-yellow?style=for-the-badge" alt="MediatR" />
+# InterFullMarkt: Yapay Zekâ Destekli Kurumsal Web Ekosistemi
 
-  <h1>🏟️ InterFullMarkt <br/> <small>AI-Powered International Football Market Portal</small></h1>
-
-  <p><strong>Yeni Nesil B2B & B2C Veri, Transfer ve Yetenek Keşif (Scouting) Platformu</strong></p>
-</div>
-
-<br/>
-
-**InterFullMarkt**, uluslararası futbol dünyasının piyasa değerlerini ve transfer dinamiklerini analiz eden **Yapay Zeka (AI) destekli** şeffaf bir platformdur. 
-
-Proje, güncel yazılım mühendisliği pratikleri ışığında; **Clean Architecture (Temiz Mimari)** ve **Domain-Driven Design (DDD)** ilkelerine sadık kalınarak kurumsal standartlarda geliştirilmiştir. Arayüzünde modern ve premium *"Glassmorphism"* tasarım ögeleri barındırır.
-
-## ✨ Öne Çıkan Özellikler (Core Features)
-
-- 🧠 **Yapay Zeka Destekli Tahminler:** Oyuncuların biyometrik verileri, taktiksel ölçümleri ve kulüp gücüne dayanarak gerçeğe en yakın potansiyel piyasa değeri (Mock) üretir.
-- 🔄 **Akıllı Transfer Motoru:** Transfer süreçlerinde bütçe, kapasite ve sözleşmeleri eş zamanlı doğrular. Süreç, `MediatR Command` ve `Domain Events` ile asenkron yürütülür.
-- 🛡️ **Zengin Domain Modelleri:** İş kurallarını (Business Logic) kendi çekirdeğinde muhafaza eden zengin varlıklar sınıfıyla (Rich Domain) veri bütünlüğünü sağlar.
-- 🚀 **MediatR & CQRS Pipeline:** Read ve Write operasyonlarının kesin izolasyonu; `AutoMapper` ve `FluentValidation` entegrasyonu ile merkezi doğrulama.
-- 🌐 **Global Audit & Soft Delete:** Sistem genelinde silinmiş verilerin izolasyonu ve `SaveChanges` sırasında çalışan otomatik Audit Trail (Serilog destekli).
+> Yeni Nesil, Ölçeklenebilir ve AI-Driven B2B/B2C Platform Çözümü
 
 ---
 
-## 🏛️ Mimari Tasarım (Clean Architecture)
+## 📌 Proje Bağlamı ve Vizyon
 
-Proje, bağımlılıkların yalnızca merkeze (Domain) doğru ilerlediği 4 temel katmanda dizayn edilmiştir:
+**InterFullMarkt**, **BTK Akademi** ve **Samsun Teknopark** iş birliğiyle hayata geçirilen *"Yapay Zekâ Destekli ASP.NET Core Web Uygulamaları Geliştirme Atölyesi"* kapsamında, endüstri standartlarında bir mühendislik yaklaşımıyla tasarlanmış kurumsal bir web ekosistemidir. 
 
-1. **🎯 Domain Katmanı (Core):** Projenin kalbi. Varlıklar, Enum'lar ve Değer Nesneleri (`Money`) harici bağımlılık olmadan burada yer alır.
-2. **🧠 Application Katmanı (Use Cases):** CQRS yaklaşımıyla ayrıştırılan komut/sorgular ve DTO eşleştirmeleri MediatR vasıtasıyla orkestre edilir.
-3. **🧱 Infrastructure Katmanı (Data):** Veri erişim modülü (EF Core 10), interceptor'lar ve dış sistem bağlantılarını içerir.
-4. **🌐 WebUI Katmanı (Presentation):** ASP.NET Core MVC ile tasarlanmış modern bir yapı. Büyüleyici Controller ve Global Exception Handling mekanizmalarıyla doğrudan kullanıcı deneyimine (UX/UI) odaklanır.
+Bu proje, geleneksel e-ticaret ve pazar yeri kavramlarının ötesine geçerek; modern yazılım mimarisi prensiplerini (*Clean Architecture, SOLID, Design Patterns*) ve yapay zekâ entegrasyonlarını harmanlayan, yüksek performanslı ve vizyoner bir altyapı sunmayı hedeflemektedir.
 
----
+## 🎓 Akademik Rehberlik ve Teşekkür
 
-## ⚙️ Teknoloji Yığını (Tech Stack)
-
-| Kategori         | Kullanılan Teknolojiler |
-| :---             | :--- |
-| **Backend**      | .NET 10.0 (C# 14), ASP.NET Core MVC |
-| **Database**     | Entity Framework Core 10, SQLite, SQL Server |
-| **Architecture** | Clean Architecture, CQRS, DDD |
-| **Frontend**     | Razor Pages, Bootstrap 5, Chart.js, Glassmorphism |
+Bu projenin fikri temellerinin atılmasından, mimari kararların şekillenmesine ve geliştirme sürecinin her aşamasına kadar bizlere eşsiz akademik vizyonuyla liderlik eden **Prof. Dr. Zafer Cömert** hocamıza en derin şükranlarımızı sunarız. Atölye boyunca sağladığı değerli akademik katkılar ve sektörel rehberlik, projenin yenilikçi bir teknoloji ürününe dönüşmesinde temel taş olmuştur.
 
 ---
 
-## 🚀 Kurulum (Getting Started)
+## 🚀 Proje Tanımı
 
-1. Projeyi bilgisayarınıza klonlayın:
-   ```bash
-   git clone https://github.com/your-username/InterFullMarkt--ai-based-.git
-   ```
-2. Web uygulaması klasörüne geçiş yapın:
-   ```bash
-   cd InterFullMarkt-ai-based/InterFullMarkt.WebUI
-   ```
-3. Projeyi başlatın:
-   ```bash
-   dotnet watch
-   ```
-   > 💡 *Sistem başlatıldığında `FullMarkt.db` veritabanı otomatik oluşturulur ve test/deneyim verileri (Galatasaray, Real Madrid vb.) doğrudan tohumlanarak (Seed) sisteme eklenir.*
+**InterFullMarkt**, standart bir pazar yeri uygulamasından ziyade; **ölçeklenebilirlik (Scalability)**, **yüksek erişilebilirlik (High Availability)** ve veri odaklı karar mekanizmaları üzerine inşa edilmiş, yapay zekâ destekli analizler sunan bir **ASP.NET Core** çözümüdür. 
+
+Platform, karmaşık iş süreçlerini optimize etmek, kullanıcı deneyimini zenginleştirmek ve büyük veri yığınlarını anlamlı içgörülere dönüştürmek amacıyla *AI-Assisted Development* metodolojileriyle donatılmıştır.
 
 ---
 
-## 🗺️ Yol Haritası (Roadmap)
+## 🏗 Teknik Mimari (Architectural Excellence)
 
-- [x] Temel varlıkların kurulması ve Rich Domain altyapısı.
-- [x] CQRS Pipeline, DTO eşleştirmesi ve Fluent Validation konfigürasyonu.
-- [x] Akıllı transfer motoru ve MediatR Domain Event mantığı.
-- [x] Premium (Glassmorphism) kullanıcı arayüzü tasarımı.
-- [ ] **Grafiksel Analiz:** Chart.js kullanarak detay ekranlarında dinamik piyasa zaman çizelgelerinin görüntülenmesi.
-- [ ] **Birim Testleri:** `xUnit` ve `Moq` kütüphaneleriyle kapsamlı birim (Unit) test süreçleri.
-- [ ] **Güvenlik & Rolleme:** ASP.NET Core Identity ile Admin / Kullanıcı kimlik doğrulamasının projeye kazandırılması.
+Proje, sürdürülebilirlik, test edilebilirlik ve modülerlik ilkeleri gözetilerek **N-Layer Architecture (Çok Katmanlı Mimari)** prensipleriyle geliştirilmiştir. 
+
+### Çok Katmanlı Yapı (Layered Architecture)
+- **Domain/Entities Layer:** Sistemin kalbi niteliğindedir. İş nesneleri (Entities) ve temel kısıtlamalar burada izole edilmiştir.
+- **Data Access Layer (DAL):** Veritabanı operasyonlarının soyutlandığı katmandır. EF Core üzerinden veri erişimi sağlanır.
+- **Business Logic Layer (BLL):** Temel iş kurallarının (Business Rules), validasyonların ve servis orkestrasyonunun yürütüldüğü katmandır.
+- **Presentation/API Layer:** İstemcilerle iletişimin kurulduğu, RESTful standartlarında tasarlanmış dışa açılan kapıdır.
+
+### 🧠 Yapay Zekâ Entegrasyonu (AI-Assisted Ecosystem)
+Geleneksel modüllerin yanı sıra proje, aşağıdaki alanlarda AI desteği sunar:
+- **Akıllı Veri Analizi ve Öngörücü Modeller:** Satış verileri ve kullanıcı etkileşimlerinden öğrenerek dinamik stratejiler geliştirilmesi.
+- **Gelişmiş Arama ve Filtreleme (Smart Search):** Doğal dil işleme yetenekleriyle zenginleştirilmiş ürün keşif deneyimi.
+- **Otomatize Edilmiş İçerik Üretimi:** Ürün tanımlamaları, otomatik kod üretimi ve etiketleme süreçlerinde makine öğrenmesi destekli asistan mekanizmaları.
 
 ---
 
-<div align="center">
-  <p><i>"Veri tabanından Kullanıcı Arayüzü'ne, kodun her satırı performans, zarafet ve zafer için yazıldı."</i></p>
-  <p>Tasarım ve Geliştirme: <b>Hüseyin Orhan Kırtay</b></p>
-</div>
+## 🛠 Teknoloji Yığını (Tech Stack)
+
+Uygulamanın omurgası, güncel ve robust teknolojilerle oluşturulmuştur:
+
+| Kategori | Teknoloji / Araç | Açıklama / Seçim Nedeni |
+| :--- | :--- | :--- |
+| **Backend** | `ASP.NET Core 8/9` | Yüksek performanslı, cross-platform ve modern API geliştirme altyapısı. |
+| **ORM** | `Entity Framework Core` | Code-First yaklaşımı ile nesne-ilişkisel eşleme (Object-Relational Mapping). |
+| **Database** | `PostgreSQL` | Katı veri tutarlılığı (ACID compliance) ve karmaşık sorgulardaki üstün performansı sebebiyle tercih edilmiştir. |
+| **Frontend** | `Modern Web UI` | Responsive (duyarlı), kullanıcı odaklı ve akıcı bir modern arayüz tasarımı. |
+| **Mimari Desenler** | `Repository`, `Unit of Work` | Veri erişiminin merkezi yönetimi ve transaction güvenliği. |
+| **IoC/DI** | `Dependency Injection` | Loosely coupled (gevşek bağlı) bileşenler ve kolay test edilebilirlik. |
+
+---
+
+## ✨ Öne Çıkan Özellikler
+
+- 🔐 **Kapsamlı Kullanıcı ve Yetki Yönetimi:** Güvenli ve yapılandırılabilir kimlik yönetimi.
+- 📦 **Dinamik Ürün Kataloğu:** Esnek veri modeliyle yönetilebilir kompleks ürün hiyerarşisi.
+- 🤖 **AI Destekli İçerik ve Filtreleme:** Kullanıcı davranışlarına ve veri paternlerine göre akıllı liste optimizasyonu.
+- 📈 **Kurumsal Ölçeklenebilirlik:** Yüksek trafiği yönetebilecek dayanıklı altyapı.
+
+---
+
+## ⚙️ Kurulum ve Konfigürasyon (Guide)
+
+Projeyi yerel ortamınızda (Local Environment) ayağa kaldırmak ve yayına almak (Deployment) için aşağıdaki adımları izleyiniz.
+
+### Ön Koşullar (Prerequisites)
+- [.NET 8/9 SDK](https://dotnet.microsoft.com/download)
+- [PostgreSQL](https://www.postgresql.org/download/)
+- [Git](https://git-scm.com/)
+
+### 1. Repoyu Klonlama
+```bash
+git clone https://github.com/your-username/InterFullMarkt.git
+cd InterFullMarkt
+```
+
+### 2. Veritabanı Konfigürasyonu
+Uygulamanın başlangıç projesinde yer alan `appsettings.json` dosyasına PostgreSQL bağlantı dizesini ekleyin:
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Host=localhost;Database=InterFullMarktDb;Username=postgres;Password=YourSecurePassword"
+}
+```
+
+### 3. EF Core Migrasyonları (Data Migrations)
+Veritabanı şemasını oluşturmak ve kurumsal veritabanı altyapısını başlatmak için .NET CLI kullanarak migration adımlarını uygulayın:
+```bash
+# Uygulamayı derleyin ve bağımlılıkları yükleyin
+dotnet restore
+
+# Migration uygulayın (Proje adlarınızı kendi yapınıza göre düzenleyin)
+dotnet ef database update --project InterFullMarkt.DataAccess --startup-project InterFullMarkt.API
+```
+
+### 4. Uygulamayı Başlatma (Deployment)
+Tüm konfigürasyonlar tamamlandıktan sonra uygulamayı çalıştırın:
+```bash
+dotnet build
+dotnet run --project InterFullMarkt.API
+```
+Servisler başarıyla başlatıldığında, tanımlanan port (örn: `https://localhost:5001`) üzerinden RESTful API uç noktalarına erişebilirsiniz.
+
+---
+
+## 👨‍💻 Geliştirici Bilgisi
+
+**Hüseyin Orhan Kırtay**  
+*Kıdemli Full-Stack Yazılım Mimarı & Proje Yöneticisi*
+
+---
+*Bu proje, akademik vizyon ile endüstriyel standartların kesişim noktasında, inovatif teknolojilere yön vermek amacıyla tasarlanmıştır.*
